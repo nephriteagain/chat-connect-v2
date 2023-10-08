@@ -40,66 +40,7 @@ const rooms = [
       message: 'Infestestion of rats is a major problem between cities'
     }
   },
-  {
-    id: 1,
-    name: 'Binance',
-    lastMessage: {
-      id: 1,
-      date: Date.now(),
-      sender: 'Jade',
-      message: 'Dog is a dog'
-    }
-  },
-  {
-    id: 2,
-    name: 'Bitget',
-    lastMessage: {
-      id: 2,
-      date: Date.now(),
-      sender: 'KidneyGod',
-      message: 'Cat is Cat'
-    }
-  },
-  {
-    id: 3,
-    name: 'CoinBase',
-    lastMessage: {
-      id: 3,
-      date: Date.now(),
-      sender: 'Helios',
-      message: 'Infestestion of rats is a major problem between cities'
-    }
-  },
-  {
-    id: 1,
-    name: 'Binance',
-    lastMessage: {
-      id: 1,
-      date: Date.now(),
-      sender: 'Jade',
-      message: 'Dog is a dog'
-    }
-  },
-  {
-    id: 2,
-    name: 'Bitget',
-    lastMessage: {
-      id: 2,
-      date: Date.now(),
-      sender: 'KidneyGod',
-      message: 'Cat is Cat'
-    }
-  },
-  {
-    id: 3,
-    name: 'CoinBase',
-    lastMessage: {
-      id: 3,
-      date: Date.now(),
-      sender: 'Helios',
-      message: 'Infestestion of rats is a major problem between cities'
-    }
-  },
+
 
 ]
 
@@ -145,7 +86,7 @@ export default function RootLayout({
                 <ChatRooms rooms={rooms} />
             </div>
         </nav>
-        <div>
+        <div className='flex-grow'>
             {children}
         </div>
       </body>

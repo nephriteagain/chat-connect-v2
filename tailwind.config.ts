@@ -36,6 +36,9 @@ module.exports = {
         myPrimary: '#4F709C',
         mySecondary: '#072b3b',
         myAccent: '#E5D283'
+      },
+      backgroundImage: {
+        'background': "url('/bg.jpg')"
       }
     },
   },
