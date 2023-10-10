@@ -9,6 +9,8 @@ import {
 
 import { RxHamburgerMenu } from 'react-icons/rx'
 
+import { signOut } from "firebase/auth"
+import { auth } from "@/db/firebase"
 
 export default function Settings() {
     return (
@@ -23,6 +25,9 @@ export default function Settings() {
             <DropdownMenuItem>Billing</DropdownMenuItem>
             <DropdownMenuItem>Team</DropdownMenuItem>
             <DropdownMenuItem>Subscription</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => signOut(auth)}>
+                Logout
+            </DropdownMenuItem>
         </DropdownMenuContent>
         </DropdownMenu>
     )

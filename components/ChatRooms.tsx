@@ -1,19 +1,11 @@
 import { format } from 'date-fns';
+import type { room } from '@/types';
 
 interface ChatRoomsProps {
     rooms: room[]
 }
 
-type room = {
-    id: number;
-    name: string;
-    lastMessage: {
-        id:number;
-        date: number;
-        sender: string;        
-        message: string;
-    }
-}
+
 
 
 
@@ -32,7 +24,9 @@ function ChatRoom({room}: {room: room}) {
     return (
         <div className="flex flex-row gap-1 relative hover:bg-[#e6e6e6] rounded-lg p-2">
             <div className='basis-1/6 flex items-center justify-center'>
-                <div className="w-[85%] aspect-square rounded-full bg-neutral-700" />                
+                <div className="w-[85%] aspect-square rounded-full bg-neutral-700 text-white text-2xl flex items-center justify-center">                
+                    {room.name[0]}
+                </div>
             </div>
             <div className='overflow-hidden flex-grow w-1/2'>
                 <p className='font-semibold text-lg'>
