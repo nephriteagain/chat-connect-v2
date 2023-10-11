@@ -1,17 +1,24 @@
 import { useState } from "react"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { BiArrowBack } from 'react-icons/bi'
 import { TbCameraPlus } from 'react-icons/tb'
+import { AiOutlineArrowRight } from 'react-icons/ai'
 import { Dispatch, SetStateAction } from 'react'
-
+import { createNewChannel } from "@/redux/thunks"
 
 export default function NewChannel({setShowNewChannel}: {setShowNewChannel: Dispatch<SetStateAction<boolean>>}) {
     const [ nameFocused, setNameFocused ] = useState(false)
     const [ descFocused, setDescFocused ] = useState(false)
     const [ name, setName ] = useState('')
     const [ desc, setDesc ] = useState('')
+    const [ showInvite, setShowInvite ] = useState(false)
+    const [ nameLength, setNameLength ] = useState(0)
 
+    const { user } = useAppSelector(s => s.user)
+    const dispatch = useAppDispatch()
+    
     return (
         <motion.div 
             initial={{x:'100%'}}
@@ -45,8 +52,15 @@ export default function NewChannel({setShowNewChannel}: {setShowNewChannel: Disp
                         type="text" 
                         className="px-6 w-full border border-gray-200 py-4 text-lg rounded-lg focus:outline-blue-600" 
                         onFocus={() => setNameFocused(true)}
-                        onBlur={() => setNameFocused(false)}
-                        onChange={(e) => setName(e.currentTarget.value)}
+                        onBlur={(e) => {
+                            if (e.currentTarget.value.length === 0) {
+                                setNameFocused(false)
+                            }
+                        }}
+                        onChange={(e) => {
+                            setName(e.currentTarget.value)
+                            setNameLength(e.currentTarget.value.length)
+                        }}
 
                     />
                 </div>
@@ -61,11 +75,73 @@ export default function NewChannel({setShowNewChannel}: {setShowNewChannel: Disp
                         type="text" 
                         className="px-6 w-full border border-gray-200 py-4 text-lg rounded-lg focus:outline-blue-600" 
                         onFocus={() => setDescFocused(true)}
-                        onBlur={() => setDescFocused(false)}
+                        onBlur={(e) => {
+                            if (e.currentTarget.value.length === 0) {
+                                setDescFocused(false)
+                            }
+                        }}
                         onChange={(e) => setDesc(e.currentTarget.value)}
                     />
                 </div>
             </div>
+            <AnimatePresence>
+                {
+                    Boolean(nameLength) &&
+                    <motion.div 
+                        initial={{x: '110%'}}
+                        animate={{x: 6}}
+                        exit={{x: '110%'}}
+                        transition={{duration: 0.2}}
+                        className="w-fit text-3xl absolute p-4 right-6 bottom-6 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer"
+                        onClick={() => setShowInvite(true)}
+                        >
+                    <AiOutlineArrowRight  className="fill-white" />
+                    </motion.div>
+                }
+                
+            </AnimatePresence>
+            <AnimatePresence>
+            {showInvite &&
+            <motion.div
+                className="px-5 py-2 absolute top-0 left-0 w-full h-full z-[60] bg-white"
+                initial={{x: '100%'}}
+                animate={{x:'0%'}}
+                exit={{x: '100%'}}
+                transition={{duration: 0.2}}
+                >
+                <div className="border-b border-gray-200">
+                    <div className="flex flex-row gap-4 items-center text-xl">
+                        <div 
+                            onClick={() => setShowInvite(false)} 
+                            className="text-3xl opacity-60 p-2 rounded-full hover:bg-gray-200">
+                        <BiArrowBack />
+                        </div>
+                        <p className="font-semibold">Add Members</p>
+                    </div>
+                    <div className="py-3">
+                        <input 
+                            type="text" 
+                            placeholder="Add people..."
+                            className="outline-none text-lg" />
+                    </div>
+                </div>
+                <div className="border-t mt-4 border-gray-200" />
+                <div
+                    className="w-fit text-3xl absolute p-4 right-6 bottom-6 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer"        
+                    onClick={async () => {
+                        const makerId = user?.id as string;                        
+                        console.log(makerId, name, desc)
+                        await dispatch(createNewChannel({makerId, name, desc}))
+                        setShowInvite(false)
+                        setShowNewChannel(false)
+                    }}
+                >
+                    <AiOutlineArrowRight className="fill-white" />
+                </div>                
+            </motion.div>
+            }
+            </AnimatePresence>
+                        
         </motion.div>
     )
 }

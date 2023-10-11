@@ -17,40 +17,6 @@ import { store } from '@/redux/store'
 import { Provider } from 'react-redux/es/exports'
 
 
-const rooms = [
-  {
-    id: 1,
-    name: 'Binance',
-    lastMessage: {
-      id: 1,
-      date: Date.now(),
-      sender: 'Jade',
-      message: 'Dog is a dog'
-    }
-  },
-  {
-    id: 2,
-    name: 'Bitget',
-    lastMessage: {
-      id: 2,
-      date: Date.now(),
-      sender: 'KidneyGod',
-      message: 'Cat is Cat'
-    }
-  },
-  {
-    id: 3,
-    name: 'CoinBase',
-    lastMessage: {
-      id: 3,
-      date: Date.now(),
-      sender: 'Helios',
-      message: 'Infestestion of rats is a major problem between cities'
-    }
-  },
-
-
-]
 
 
 export default function RootLayout({
@@ -97,7 +63,7 @@ export default function RootLayout({
                     </div>
                     <div>
                         <CreateChatRoom setShowNewChannel={setShowNewChannel} />
-                        <ChatRooms rooms={rooms} />
+                        <ChatRooms />
                     </div>
                 </nav>
                 <div className='flex-grow'>

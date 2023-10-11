@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { db } from "@/db/firebase";
-import { collection, addDoc, getDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDoc, doc, writeBatch, } from "firebase/firestore";
 
+import { generateRandomId } from "@/lib/helpers/randomIdGen";
 
 export const createNewChannel = createAsyncThunk(
     'user/newChannel', 
@@ -13,18 +14,30 @@ export const createNewChannel = createAsyncThunk(
         makerId: string; 
         name: string; 
         desc?: string;}) => {
-        const colRef = collection(db, 'channels')
-        const data = await addDoc(colRef, {
-            makerId,
-            name,
-            desc,
-            createAt: Date.now()
-        })
-        const docRef = doc(db, 'channels', data.id)
-        const document = await getDoc(docRef)
-        return {
-            id: document.id,
-            ...document.data()
-        }
+        const rId = generateRandomId(15)
+        const bannerRef = doc(db,'roomBanners', rId)
+        const roomRef = doc(db, 'rooms', rId)
+        const now = Date.now()
+        try {
+            const batch = writeBatch(db)
+            batch.set(bannerRef, {
+                name,
+                id: rId,
+                createdAt: now,
+                type: 'channel'
+            })
+            batch.set(roomRef, {
+                name,
+                desc,
+                createdAt: now,
+                makerId,
+                type: 'channel',
+                members: [{id:makerId, role:"admin"}],
+                messages: [],
+            })
+            await batch.commit()
+        } catch (error) {
+            console.error(error)
+        }        
     }
 )

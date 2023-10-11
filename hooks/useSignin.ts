@@ -23,10 +23,12 @@ export  function useSignin() {
                     createdAt: Date.now()
                 })
                 const userData = await getDoc(docRef)
-                dispatch(getUser(userData.data()))
+                const payload = {...userData.data(), id: userData.id}
+                dispatch(getUser(payload))
                 return
             }
-            dispatch(getUser(userData.data()))
+            const payload = {...userData.data(), id: userData.id}
+            dispatch(getUser(payload))
         } catch (error) {
             console.error(error)
         }
@@ -41,7 +43,8 @@ export  function useSignin() {
         const docRef = doc(db, 'users', uid)
         const document = await getDoc(docRef)
         if (document.exists()) {
-            dispatch(getUser(document.data()))
+            const payload = {...document.data(), id: document.id}
+            dispatch(getUser(payload))
         }
         return
     }

@@ -1,8 +1,8 @@
 
 import { createSlice } from '@reduxjs/toolkit'
-import { User } from 'firebase/auth'
+import { userData } from '@/types'
 
-const initialState : {user: User|null} = {
+const initialState : {user: userData|null} = {
     user: null
 } 
 

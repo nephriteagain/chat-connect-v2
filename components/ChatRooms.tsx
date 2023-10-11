@@ -1,15 +1,16 @@
+"use client"
+
 import { format } from 'date-fns';
-import type { room } from '@/types';
-
-interface ChatRoomsProps {
-    rooms: room[]
-}
+import type { roomBanner } from '@/types';
+import { useListenRooms } from '@/hooks/useListenRooms';
 
 
 
 
 
-export default function ChatRooms({rooms}: ChatRoomsProps) {
+export default function ChatRooms() {
+    const rooms = useListenRooms()
+
     return (
         <div className='overflow-y-scroll'>
             {rooms.map(room => {
@@ -20,7 +21,7 @@ export default function ChatRooms({rooms}: ChatRoomsProps) {
     )
 }
 
-function ChatRoom({room}: {room: room}) {    
+function ChatRoom({room}: {room: roomBanner}) {    
     return (
         <div className="flex flex-row gap-1 relative hover:bg-[#e6e6e6] rounded-lg p-2">
             <div className='basis-1/6 flex items-center justify-center'>
@@ -33,18 +34,27 @@ function ChatRoom({room}: {room: room}) {
                     {room.name}
                 </p>
                 <p className='whitespace-nowrap text-ellipsis'>
-                    <span className='me-1'>
-                        {room.lastMessage.sender}:
-                    </span>
-                    <span className='opacity-80'>
-                    {room.lastMessage.message}
-                    </span>
+                    {
+                        room?.lastMessage ?
+                        <>
+                        <span className='me-1'>
+                            {room?.lastMessage?.sender || ''}:
+                        </span>
+                        <span className='opacity-80'>
+                        {room?.lastMessage?.message || ''}
+                        </span>
+                        </> :
+                        'Channel created'
+                    }
+                    
                 </p>
             </div>
             <div className="">
-                <p className='text-sm opacity-60 font-semibold'>
-                {format(room.lastMessage.date, 'hh:mm a')}
-                </p>
+                {room?.lastMessage?.date &&
+                    <p className='text-sm opacity-60 font-semibold'>
+                    {format(room.lastMessage.date, 'hh:mm a')}
+                   </p>
+                }                
             </div>
         </div>
     )

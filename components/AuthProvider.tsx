@@ -22,6 +22,7 @@ export default function AuthProvider({children}: {children: ReactNode}) {
                         height={100} 
                         className="cursor-pointer hover:drop-shadow-lg"
                         onClick={signIn}
+                        priority={true}
                     />
                 </div>
             </body>
