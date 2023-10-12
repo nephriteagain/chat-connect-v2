@@ -2,11 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import userSlice  from "./userSlice";
 import roomsSlice from "./roomsSlice";
+import channelSlice from "./channelSlice";
 
 export const store = configureStore({
     reducer: {
         user: userSlice,
-        rooms: roomsSlice
+        rooms: roomsSlice,
+        channel: channelSlice
     }
 })
 

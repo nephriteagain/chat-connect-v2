@@ -18,7 +18,7 @@ export default function Home() {
 
 
 function Header({channelName, memberCount}: {channelName: string; memberCount: number}) {
-    const link = useListenRoom()
+    const channel = useListenRoom()
 
   return (
     <div className="py-1 px-4 flex flex-row items-center gap-2 border-b border-slate-300 shadow-sm drop-shadow-sm">
@@ -26,10 +26,10 @@ function Header({channelName, memberCount}: {channelName: string; memberCount: n
         </div>
         <div className='me-auto'>
             <p className='font-semibold'>
-            {channelName}
+            {channel?.name ||  channelName}
             </p>
             <p className='text-sm font-light opacity-80'>
-            {memberCount} members
+            {channel?.members.length || memberCount} members
             </p>
         </div>
         <div className='flex flex-row gap-2 text-2xl'>

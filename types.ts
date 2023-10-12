@@ -12,6 +12,8 @@ export type room = {
     type: 'channel'|'group'|'private';
     members: member[]
     messages: message[]
+    createdAt: number;
+    makerId: string;
 }
 
 export type message = {

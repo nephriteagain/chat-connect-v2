@@ -3,7 +3,7 @@
 import { format } from 'date-fns';
 import type { roomBanner } from '@/types';
 import { useListenRooms } from '@/hooks/useListenRooms';
-
+import { useRouter } from 'next/navigation';
 
 
 
@@ -22,8 +22,14 @@ export default function ChatRooms() {
 }
 
 function ChatRoom({room}: {room: roomBanner}) {    
+    const router = useRouter()
+    const { id } = room
     return (
-        <div className="flex flex-row gap-1 relative hover:bg-[#e6e6e6] rounded-lg p-2">
+        <div className="flex flex-row gap-1 relative hover:bg-[#e6e6e6] rounded-lg p-2"
+            onClick={() => {
+                router.push(`/c/${id}`)
+            }}
+        >
             <div className='basis-1/6 flex items-center justify-center'>
                 <div className="w-[85%] aspect-square rounded-full bg-neutral-700 text-white text-2xl flex items-center justify-center">                
                     {room.name[0]}
