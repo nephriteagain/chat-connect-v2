@@ -3,12 +3,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import userSlice  from "./userSlice";
 import roomsSlice from "./roomsSlice";
 import channelSlice from "./channelSlice";
+import namesSlice from "./namesSlice";
 
 export const store = configureStore({
     reducer: {
         user: userSlice,
         rooms: roomsSlice,
-        channel: channelSlice
+        channel: channelSlice,
+        names: namesSlice
     }
 })
 

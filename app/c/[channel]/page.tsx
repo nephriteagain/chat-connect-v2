@@ -9,8 +9,8 @@ import { useListenRoom } from '@/hooks/useListenRoom'
 export default function Home() {
     return (
         <main className='w-full h-screen flex flex-col'>
-            <Header channelName='kidneygod' memberCount={10_000} />
-            <Chat />
+                <Header channelName='kidneygod' memberCount={10_000} />
+                <Chat />            
         </main>
     )
 }

@@ -23,15 +23,17 @@ export default function ChatBox() {
                 channelId: channel.id,
                 message: inputText
             }))
-            setInputText(() => '')
+            setInputText("")
         } catch (error) {
             console.error(error)   
-        }  
+        }  finally {
+            
+        }
     }
 
     return (
-        <div className='absolute flex flex-row bottom-6 left-1/2 -translate-x-1/2 gap-2'>
-            <form onSubmit={handleSubmit}>
+        <div className='absolute  bottom-[12vh] left-1/2 -translate-x-1/2 '>
+            <form onSubmit={handleSubmit} className='flex flex-row gap-2'>
                 <div className='relative'>
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 z-20 text-2xl rounded-full p-1 hover:bg-neutral-200">
                         <FaRegSmile   />
@@ -41,6 +43,7 @@ export default function ChatBox() {
                         className='px-12 py-4 w-[450px] focus:outline-none rounded-lg shadow-md drop-shadow-md' 
                         placeholder='Message'
                         onChange={(e) => setInputText(e.currentTarget.value)}
+                        value={inputText}
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 z-20 text-2xl rounded-full p-1 hover:bg-neutral-200">
                         
