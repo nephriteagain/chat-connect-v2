@@ -3,6 +3,7 @@
 import { format } from 'date-fns';
 import type { roomBanner } from '@/types';
 import { useListenRooms } from '@/hooks/useListenRooms';
+import { useGetSenderName } from '@/hooks/useGetSenderName';
 import { useRouter } from 'next/navigation';
 
 
@@ -21,9 +22,15 @@ export default function ChatRooms() {
     )
 }
 
-function ChatRoom({room}: {room: roomBanner}) {    
+function ChatRoom({room}: {room: roomBanner}) {
+
+
+
     const router = useRouter()
     const { id } = room
+
+    const name = useGetSenderName(room?.lastMessage?.sender, [room?.lastMessage?.sender])
+
     return (
         <div className="flex flex-row gap-1 relative hover:bg-[#e6e6e6] rounded-lg p-2"
             onClick={() => {
@@ -44,7 +51,7 @@ function ChatRoom({room}: {room: roomBanner}) {
                         room?.lastMessage ?
                         <>
                         <span className='me-1'>
-                            {room?.lastMessage?.sender || ''}:
+                            {name || ''}:
                         </span>
                         <span className='opacity-80'>
                         {room?.lastMessage?.message || ''}

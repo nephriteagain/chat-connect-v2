@@ -16,9 +16,8 @@ export function useListenRoom() {
         const docRef = doc(db, 'rooms', channel) 
         const unsub = onSnapshot(docRef,  (snapshot) => {
             if (!snapshot.exists()) return;
-            const doc = snapshot.data()
-            const data = {...doc, id: doc.id} as room
-            console.log(data)
+            const doc = snapshot.data()            
+            const data = {...doc, id: channel} as room
             dispatch(getChannel(data))
         })
         return () => unsub()
