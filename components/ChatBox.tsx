@@ -32,7 +32,7 @@ export default function ChatBox() {
     }
 
     return (
-        <div className='absolute  bottom-[12vh] left-1/2 -translate-x-1/2 '>
+        <div className='w-full flex items-center justify-center'>
             <form onSubmit={handleSubmit} className='flex flex-row gap-2'>
                 <div className='relative'>
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 z-20 text-2xl rounded-full p-1 hover:bg-neutral-200">
@@ -59,6 +59,6 @@ export default function ChatBox() {
                     }
                 </button>
             </form>
-            </div>
+        </div>
     )
 }

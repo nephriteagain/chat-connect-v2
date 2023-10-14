@@ -32,7 +32,7 @@ export const createNewChannel = createAsyncThunk(
             makerId,
             type: 'channel',
             members: [{id:makerId, role:"admin"}],
-            messages: [],
+            messages: rId,
         })
         try {            
             await batch.commit()
@@ -54,18 +54,17 @@ export const sendMessage = createAsyncThunk(
         channelId: string
     }) => {
         if (message.length === 0) return;
-        const roomRef = doc(db, 'rooms', channelId)
+        const id = generateRandomId(15)
+        const msgRef = doc(db, channelId, id)
         const bannerRef = doc(db, 'roomBanners', channelId)
         const batch = writeBatch(db)
         const msg = {
-            id: generateRandomId(15),
+            id,
             date: Date.now(),
             sender,
             message
         }
-        batch.update(roomRef, {
-            messages: arrayUnion(msg)
-        })
+        batch.set(msgRef, msg)
         batch.update(bannerRef, {
             lastMessage: msg
         })
