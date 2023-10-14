@@ -17,6 +17,7 @@ export const createNewChannel = createAsyncThunk(
         const rId = generateRandomId(15)
         const bannerRef = doc(db,'roomBanners', rId)
         const roomRef = doc(db, 'rooms', rId)
+        const userRef = doc(db, 'users', makerId)
         const now = Date.now()
         const batch = writeBatch(db)
         batch.set(bannerRef, {
@@ -34,8 +35,12 @@ export const createNewChannel = createAsyncThunk(
             members: [{id:makerId, role:"admin"}],
             messages: rId,
         })
+        batch.update(userRef, {
+            channels: arrayUnion(rId)
+        })
         try {            
             await batch.commit()
+            return rId
         } catch (error) {
             console.error(error)
         }        

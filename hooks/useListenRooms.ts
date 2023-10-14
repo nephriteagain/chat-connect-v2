@@ -1,18 +1,24 @@
 import { useEffect } from "react";
 import { db } from "@/db/firebase";
-import { onSnapshot, collection } from "firebase/firestore";
+import { onSnapshot, collection, query, where } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getRooms } from "@/redux/roomsSlice";
 import { roomBanner } from "@/types";
 
 export function useListenRooms() {
 
+
     const dispatch = useAppDispatch()
     const { rooms } = useAppSelector(s => s.rooms)
+    const { user } = useAppSelector(s => s.user)
 
     useEffect(() => {
+        if (user === null || user?.channels === undefined) return
+        const channels = user.channels
+        if (channels.length === 0) return
         const colRef = collection(db, 'roomBanners')
-        const unsub = onSnapshot(colRef, snapshot => {
+        const q = query(colRef, where('id', 'in', channels))
+        const unsub = onSnapshot(q, snapshot => {
             if (snapshot.empty) {
                 dispatch(getRooms([]))
                 return
@@ -26,7 +32,7 @@ export function useListenRooms() {
             dispatch(getRooms(roomList))
         })
         return () => unsub()
-    }, [])
+    }, [user?.channels])
 
     return rooms
 }

@@ -20,7 +20,8 @@ export  function useSignin() {
                     name: displayName,
                     email,
                     userName: email?.slice(0,email.indexOf('@')),
-                    createdAt: Date.now()
+                    createdAt: Date.now(),
+                    channels: []
                 })
                 const userData = await getDoc(docRef)
                 const payload = {...userData.data(), id: userData.id}

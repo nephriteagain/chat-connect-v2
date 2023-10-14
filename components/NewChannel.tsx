@@ -18,6 +18,17 @@ export default function NewChannel({setShowNewChannel}: {setShowNewChannel: Disp
 
     const { user } = useAppSelector(s => s.user)
     const dispatch = useAppDispatch()
+
+    async function handleClick() {
+        const makerId = user?.id as string;
+        try {
+            await dispatch(createNewChannel({makerId, name, desc}))
+            setShowInvite(false)
+            setShowNewChannel(false)
+        } catch (error) {
+            console.error(error)
+        }
+    }
     
     return (
         <motion.div 
@@ -128,13 +139,7 @@ export default function NewChannel({setShowNewChannel}: {setShowNewChannel: Disp
                 <div className="border-t mt-4 border-gray-200" />
                 <div
                     className="w-fit text-3xl absolute p-4 right-6 bottom-6 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer"        
-                    onClick={async () => {
-                        const makerId = user?.id as string;                        
-                        console.log(makerId, name, desc)
-                        await dispatch(createNewChannel({makerId, name, desc}))
-                        setShowInvite(false)
-                        setShowNewChannel(false)
-                    }}
+                    onClick={handleClick}
                 >
                     <AiOutlineArrowRight className="fill-white" />
                 </div>                

@@ -33,4 +33,5 @@ export type userData = {
     email: string;
     createdAt: number;
     id: string;
+    channels: string[];
 }
