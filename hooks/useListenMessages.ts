@@ -24,7 +24,7 @@ export function useListenMessages() {
                 const data = doc.data() as message
                 msgList.push(data)
             })
-            dispatch(getMessages(msgList))            
+            dispatch(getMessages(msgList.sort((a,b) => a.date - b.date)))            
         })
         return () => unsub()
     }, [channel])

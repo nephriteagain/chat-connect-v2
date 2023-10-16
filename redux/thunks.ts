@@ -80,3 +80,21 @@ export const sendMessage = createAsyncThunk(
         }
     }
 )
+
+export const searchChannels = createAsyncThunk(
+    'rooms/search',
+    async (q: string) => {
+        if (q.length === 0) {
+            return
+        }
+        const response = await fetch('/api/search', {
+            method: 'POST',
+            body: JSON.stringify({search: q}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const data = await response.json()        
+        return data.result
+    }
+)
