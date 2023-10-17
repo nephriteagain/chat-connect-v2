@@ -1,38 +1,26 @@
 import { BiSearch, BiArrowBack } from 'react-icons/bi'
 
-import { Dispatch, ForwardedRef, SetStateAction } from "react"
+import {  Dispatch, ForwardedRef, SetStateAction, } from "react"
 import { useAppDispatch } from '@/redux/hooks'
 import { searchChannels } from '@/redux/thunks'
 import Settings from './Settings'
 import { forwardRef } from 'react'
 
-function withDelay(fn: (arg:any) => any) {    
-    let running = false
-    let timeout : any;
 
-    return function (arg:any) {
-        if (running === true) {
-            clearTimeout(timeout)
-        }        
-        running = true
-        timeout = setTimeout(() => {
-            running = false
-            fn(arg)
-        }, 300)
-                
-    }
-}   
 
 export default forwardRef(function SearchChannel(
     {inputFocused, setInputFocused, inputVal, setInputVal}: 
     {inputFocused: boolean; setInputFocused: Dispatch<SetStateAction<boolean>>; inputVal: string; setInputVal: Dispatch<SetStateAction<string>>}, 
     ref: ForwardedRef<HTMLInputElement>) {
+
     const dispatch = useAppDispatch()
-    
+
     function handleSearch(query:string) {
         dispatch(searchChannels(query))
     }
-    const delayedDSearch = withDelay(handleSearch)
+
+
+    
 
     return (
         <div className='flex flex-row text-lg py-1 items-center gap-2'>
@@ -44,7 +32,7 @@ export default forwardRef(function SearchChannel(
                             }}
                         >
                             {
-                                (inputFocused || Boolean(inputVal)) ? 
+                                (inputFocused || inputVal.length > 0) ? 
                                 <BiArrowBack /> :
                                 <Settings />
                             }
@@ -54,6 +42,7 @@ export default forwardRef(function SearchChannel(
                                 <BiSearch  className={inputFocused ? 'text-blue-600' : 'text-gray-600'} />
                             </div>
                             <input 
+                                id='search'
                                 type='text' 
                                 placeholder='Search' 
                                 className='w-full ps-10 py-2 rounded-3xl border border-slate-200 focus:outline-blue-600'
@@ -61,8 +50,9 @@ export default forwardRef(function SearchChannel(
                                 onBlur={() => setInputFocused(false)}
                                 // TODO: edit this
                                 onChange={(e) => {
-                                    setInputVal(e.currentTarget.value)
-                                    delayedDSearch(e.currentTarget.value)
+                                    const text=  e.currentTarget.value
+                                    setInputVal(text)
+                                    handleSearch(text)
                                 }}
                                 ref={ref}
                                 value={inputVal}

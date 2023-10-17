@@ -19,7 +19,9 @@ const roomsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(searchChannels.fulfilled, (state, action) => {
-            state.searches = action.payload
+            if (typeof action.payload === 'object' && Array.isArray(action.payload)) {
+                state.searches = action.payload
+            }
         })
     }
 })

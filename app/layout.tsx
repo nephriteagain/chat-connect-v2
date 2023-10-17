@@ -1,7 +1,7 @@
 "use client"
 import './globals.css'
 import { Inter } from 'next/font/google'
-import { useState, useRef } from 'react'
+import { useState, useRef,   } from 'react'
 import { AnimatePresence } from 'framer-motion'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -32,7 +32,7 @@ export default function RootLayout({
     const inputRef = useRef<HTMLInputElement>(null)
 
 
-
+    
     return (
       
 
@@ -47,14 +47,14 @@ export default function RootLayout({
                     <SearchChannel                        
                       inputFocused={inputFocused} 
                       setInputFocused={setInputFocused}  
-                      ref={inputRef}                     
-                      inputVal={inputVal}
+                      ref={inputRef}     
+                      inputVal={inputVal}                
                       setInputVal={setInputVal}
                     />
                     
                     <div>
                         {
-                        (inputFocused || Boolean(inputVal.length > 0)) ? 
+                        (inputFocused || inputVal.length > 0) ? 
                         <SearchListUI /> :
                         <ChatRoomUI setShowNewChannel={setShowNewChannel} />
                         }
