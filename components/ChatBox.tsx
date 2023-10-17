@@ -30,6 +30,12 @@ export default function ChatBox() {
             
         }
     }
+    // only the channel creator can message in a room with type channel
+    if (channel?.type === 'channel' && channel?.makerId !== user?.id) {
+        return null
+    }
+
+    // if you did not join the channel you cannot message
     if (!user?.channels.some(c => c === channel?.id)) {
         return null
     }

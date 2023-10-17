@@ -8,7 +8,7 @@ import { AiOutlineArrowRight } from 'react-icons/ai'
 import { Dispatch, SetStateAction } from 'react'
 import { createNewChannel } from "@/redux/thunks"
 
-export default function NewChannel({setShowNewChannel}: {setShowNewChannel: Dispatch<SetStateAction<boolean>>}) {
+export default function NewChannel({setShowNewChannel, channelType}: {setShowNewChannel: Dispatch<SetStateAction<boolean>>; channelType: 'channel'|'group'|'private'}) {
     const [ nameFocused, setNameFocused ] = useState(false)
     const [ descFocused, setDescFocused ] = useState(false)
     const [ name, setName ] = useState('')
@@ -22,7 +22,7 @@ export default function NewChannel({setShowNewChannel}: {setShowNewChannel: Disp
     async function handleClick() {
         const makerId = user?.id as string;
         try {
-            await dispatch(createNewChannel({makerId, name, desc, type: 'channel'}))
+            await dispatch(createNewChannel({makerId, name, desc, type: channelType}))
             setShowInvite(false)
             setShowNewChannel(false)
         } catch (error) {
@@ -40,7 +40,9 @@ export default function NewChannel({setShowNewChannel}: {setShowNewChannel: Disp
         >
             <div className="flex flex-row gap-6 text-xl items-center">
                 <div className="text-3xl text-gray-500 rounded-full p-2 hover:bg-gray-100"
-                    onClick={() => setShowNewChannel(false)}
+                    onClick={() => {
+                        setShowNewChannel(false)
+                    }}
                 >
                     <BiArrowBack />
                 </div>
