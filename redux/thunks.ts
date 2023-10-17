@@ -24,7 +24,7 @@ export const createNewChannel = createAsyncThunk(
             name,
             id: rId,
             createdAt: now,
-            type: 'channel'
+            type: 'channel',
         })
         batch.set(roomRef, {
             name,

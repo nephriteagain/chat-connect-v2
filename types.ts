@@ -3,9 +3,11 @@ export type roomBanner = {
     name: string;
     type: 'channel'|'group'|'private'
     lastMessage?: message
+    at: string;
 }
 
 export type room = {
+    at: string;
     id: string;
     name: string;
     desc: string;

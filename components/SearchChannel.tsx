@@ -1,20 +1,50 @@
 import { BiSearch, BiArrowBack } from 'react-icons/bi'
 
-import { useState } from "react"
+import { Dispatch, ForwardedRef, SetStateAction } from "react"
 import { useAppDispatch } from '@/redux/hooks'
 import { searchChannels } from '@/redux/thunks'
-
 import Settings from './Settings'
+import { forwardRef } from 'react'
 
-export default function SearchChannel() {
-    const [ inputFocused, setInputFocused ] = useState(false)
+function withDelay(fn: (arg:any) => any) {    
+    let running = false
+    let timeout : any;
+
+    return function (arg:any) {
+        if (running === true) {
+            clearTimeout(timeout)
+        }        
+        running = true
+        timeout = setTimeout(() => {
+            running = false
+            fn(arg)
+        }, 300)
+                
+    }
+}   
+
+export default forwardRef(function SearchChannel(
+    {inputFocused, setInputFocused, inputVal, setInputVal}: 
+    {inputFocused: boolean; setInputFocused: Dispatch<SetStateAction<boolean>>; inputVal: string; setInputVal: Dispatch<SetStateAction<string>>}, 
+    ref: ForwardedRef<HTMLInputElement>) {
     const dispatch = useAppDispatch()
+    
+    function handleSearch(query:string) {
+        dispatch(searchChannels(query))
+    }
+    const delayedDSearch = withDelay(handleSearch)
 
     return (
         <div className='flex flex-row text-lg py-1 items-center gap-2'>
-                        <div className='text-2xl p-2 rounded-full hover:bg-neutral-100'>
+                        <div className='text-2xl p-2 rounded-full hover:bg-neutral-100'
+                            onClick={() => {
+                                if (inputVal.length > 0) {
+                                    setInputVal('')
+                                }
+                            }}
+                        >
                             {
-                                inputFocused ? 
+                                (inputFocused || Boolean(inputVal)) ? 
                                 <BiArrowBack /> :
                                 <Settings />
                             }
@@ -30,9 +60,15 @@ export default function SearchChannel() {
                                 onFocus={() => setInputFocused(true)}                  
                                 onBlur={() => setInputFocused(false)}
                                 // TODO: edit this
-                                onChange={(e) => dispatch(searchChannels(e.currentTarget.value))}
+                                onChange={(e) => {
+                                    setInputVal(e.currentTarget.value)
+                                    delayedDSearch(e.currentTarget.value)
+                                }}
+                                ref={ref}
+                                value={inputVal}
+                                
                             />
                         </div>                        
                     </div>
     )
-}
+})

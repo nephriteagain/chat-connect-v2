@@ -1,11 +1,12 @@
 
 import { createSlice } from "@reduxjs/toolkit";
-import { roomBanner } from "@/types";
+import { roomBanner, room } from "@/types";
 
 import { searchChannels } from "./thunks";
 
-const initialState : {rooms: roomBanner[]} = {
-    rooms: []
+const initialState : {rooms: roomBanner[]; searches: room[]} = {
+    rooms: [],
+    searches: []
 }
 
 const roomsSlice = createSlice({
@@ -18,7 +19,7 @@ const roomsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(searchChannels.fulfilled, (state, action) => {
-            state.rooms = action.payload
+            state.searches = action.payload
         })
     }
 })
