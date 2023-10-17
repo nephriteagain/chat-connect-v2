@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { db } from "@/db/firebase";
-import { collection, addDoc, getDoc, doc, writeBatch, arrayUnion } from "firebase/firestore";
+import {  doc, writeBatch, arrayUnion } from "firebase/firestore";
 
 import { generateRandomId } from "@/lib/helpers/randomIdGen";
 
@@ -9,11 +9,17 @@ export const createNewChannel = createAsyncThunk(
     async ({
         makerId,
         name,
-        desc = ''
+        desc = '',
+        type,
+        members = []
     }: {
         makerId: string; 
         name: string; 
-        desc?: string;}) => {
+        type: 'channel'|'group'|'private';
+        desc?: string;
+        members?: {id:string; role:string}[]
+    }) => {
+        members.push({id: makerId, role: 'admin'})
         const rId = generateRandomId(15)
         const bannerRef = doc(db,'roomBanners', rId)
         const roomRef = doc(db, 'rooms', rId)
@@ -24,15 +30,15 @@ export const createNewChannel = createAsyncThunk(
             name,
             id: rId,
             createdAt: now,
-            type: 'channel',
+            type,
         })
         batch.set(roomRef, {
             name,
             desc,
             createdAt: now,
             makerId,
-            type: 'channel',
-            members: [{id:makerId, role:"admin"}],
+            type,
+            members,
             messages: rId,
         })
         batch.update(userRef, {
@@ -46,6 +52,8 @@ export const createNewChannel = createAsyncThunk(
         }        
     }
 )
+
+
 
 export const sendMessage = createAsyncThunk(
     'channel/sendMessage',
@@ -96,5 +104,27 @@ export const searchChannels = createAsyncThunk(
         })
         const data = await response.json()        
         return data.result
+    }
+)
+
+export const joinRoom = createAsyncThunk(
+    'room/join',
+    async ({userId, roomId}: {userId: string; roomId:string}) => {
+        const roomRef = doc(db, 'rooms', roomId)
+        const userRef =doc(db, 'users', userId)
+        const batch = writeBatch(db)
+
+        batch.update(roomRef, {
+            members: arrayUnion({id:userId, role: 'member'})
+        })
+        batch.update(userRef, {
+            channels: arrayUnion(roomId)
+        })
+        try {
+            await batch.commit()
+            return roomId
+        } catch (error) {
+            console.error(error)
+        }
     }
 )

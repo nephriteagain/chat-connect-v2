@@ -1,7 +1,7 @@
 
 import { createSlice } from '@reduxjs/toolkit'
 import { userData } from '@/types'
-import { createNewChannel } from './thunks'
+import { createNewChannel, joinRoom } from './thunks'
 
 const initialState : {user: userData|null} = {
     user: null
@@ -24,7 +24,16 @@ const userSlice = createSlice({
                     state.user.channels = [...channels, id]
                 }
             }
-        })        
+        }),
+        builder.addCase(joinRoom.fulfilled, (state, action) => {
+            if (typeof action.payload === 'string') {
+                const id = action.payload
+                if (state.user?.channels) {
+                    const channels = state.user.channels
+                    state.user.channels = [...channels, id]
+                }
+            }
+        }) 
     
     }
 })

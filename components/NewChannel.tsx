@@ -22,7 +22,7 @@ export default function NewChannel({setShowNewChannel}: {setShowNewChannel: Disp
     async function handleClick() {
         const makerId = user?.id as string;
         try {
-            await dispatch(createNewChannel({makerId, name, desc}))
+            await dispatch(createNewChannel({makerId, name, desc, type: 'channel'}))
             setShowInvite(false)
             setShowNewChannel(false)
         } catch (error) {

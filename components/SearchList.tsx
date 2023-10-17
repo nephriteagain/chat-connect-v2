@@ -24,7 +24,7 @@ function SearchItem({name, members, id}: {name: string; members: number; id: str
     const router = useRouter()
     return (
         <div className="w-full p-2 flex flex-row gap-4 hover:bg-gray-200 rounded-lg cursor-pointer"
-            onClick={() => console.log(id)}
+            onClick={() => router.push(`/c/${id}`)}
         >            
             <div className="w-12 aspect-square bg-blue-400 rounded-full shadow-md flex items-center justify-center font-bold">                
                 {name[0].toLocaleUpperCase()}

@@ -30,6 +30,9 @@ export default function ChatBox() {
             
         }
     }
+    if (!user?.channels.some(c => c === channel?.id)) {
+        return null
+    }
 
     return (
         <div className='w-full flex items-center justify-center'>
