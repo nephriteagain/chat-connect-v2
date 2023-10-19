@@ -20,7 +20,7 @@ export  function useSignin() {
                 await setDoc(docRef, {
                     name: displayName,
                     email,
-                    userName: email?.slice(0,email.indexOf('@')) + '_' + generateRandomId(10),
+                    userName: (email?.slice(0,email.indexOf('@')) + '_' + generateRandomId(10)).toLowerCase(),
                     createdAt: Date.now(),
                     channels: []
                 })

@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+    * {
+        box-sizing: border-box;
+    }
+
     /* Style the scrollbar track */
     ::-webkit-scrollbar {
         width: 6px; /* Set the width of the scrollbar */

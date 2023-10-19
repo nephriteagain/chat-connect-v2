@@ -6,8 +6,8 @@ export default function SearchList() {
 
     return (
         <div className="flex flex-col gap-1">
-            <p className="text-sm opacity-60 italic">rooms</p>
-            <hr />
+            <p className="text-sm opacity-60 italic" key={'rooms'}>rooms</p>
+            <hr key={'hr-1'} />
             {roomSearches?.map(s => {                
                 const { id, name, members } = s
                 return <RoomSearchItem 
@@ -17,9 +17,9 @@ export default function SearchList() {
                     members={members.length} 
                 />                                    
             })}
-            <hr />
-            <p className="text-sm opacity-60 italic">users</p>
-            <hr/>
+            <hr key={'h2-2'} />
+            <p className="text-sm opacity-60 italic" key={'users'}>users</p>
+            <hr key={'hr-3'} />
             {userSearches.map(s => {
                 const { id, name, userName } = s
                 return <UserSearchItems 

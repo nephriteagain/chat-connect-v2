@@ -64,7 +64,7 @@ export default forwardRef(function SearchChannel(
             </div>
             <button 
                 type='submit' 
-                className='p-2 hover:bg-neutral-200 rounded-full text-2xl'
+                className='p-2 hover:bg-gray-100 rounded-full text-2xl'
             >
                 <BiSolidSend className="fill-blue-400" />
             </button>

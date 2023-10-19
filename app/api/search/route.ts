@@ -14,14 +14,19 @@ export async function POST(req: Request) {
         const rq = query(roomsColRef, 
             where('name', '==', search)
         )
-        const uq = query(userColRef, 
-            or(
-                where('email', '==', search),
-                where('name', '==', search),
-                where('userName', '==', search),
-                // searches with the first char "@"
-                where(`userName`, '==', `${search.substring(1)}`)
-            )
+        // checks is a string is email-like
+        const matcher = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+
+        // search with the '@' symbol
+        const uq = search[0] === '@' ? 
+            query(userColRef, where(`userName`, '==', `${search.substring(1)}`)) : 
+            (search.length < 320 && matcher.test(search)) ?
+            query(userColRef, where('email', '==', search)) :
+            query(userColRef, 
+                or(
+                    where('name', '==', search),
+                    where('userName', '==', search),
+                )
         )
         const roomDocs = await getDocs(rq)
         const userDocs = await getDocs(uq)        
@@ -34,8 +39,8 @@ export async function POST(req: Request) {
             rooms.push({...item, id: doc.id})
         })
         userDocs.forEach(doc => {
-            const item = doc.data() as userData
-            users.push(item)
+            const item = doc.data() as Omit<userData,'id'>
+            users.push({...item, id: doc.id})
         })
         return NextResponse.json({rooms, users}, {status: 200})
     }
