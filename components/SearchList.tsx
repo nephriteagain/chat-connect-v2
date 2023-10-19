@@ -55,14 +55,14 @@ function UserSearchItems({name, userName, id}: {name:string; userName:string; id
     const router = useRouter()
     return (
         <div className="w-full p-2 flex flex-row gap-4 hover:bg-gray-200 rounded-lg cursor-pointer"
-            onClick={() => router.push(`/c/${id}`)}
+            onClick={() => router.push(`/u/${id}`)}
         >            
             <div className="w-12 aspect-square bg-blue-400 rounded-full shadow-md flex items-center justify-center font-bold">                
                 {userName[0].toLocaleUpperCase()}
             </div>
             <div className="flex flex-col">
                 <p className="font-semibold text-lg">{name}</p>
-                <p className="opacity-60 text-sm">{userName}</p>
+                <p className="opacity-60 text-sm">@{userName}</p>
             </div>
         </div>
     )

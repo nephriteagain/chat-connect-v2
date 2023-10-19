@@ -5,6 +5,7 @@ import { getDoc, doc, setDoc } from 'firebase/firestore'
 import { useAppDispatch } from '@/redux/hooks';
 import { getUser } from '@/redux/userSlice';
 import { User } from 'firebase/auth';
+import { generateRandomId } from '@/lib/helpers/randomIdGen';
 
 export  function useSignin() {
     const dispatch = useAppDispatch()
@@ -19,7 +20,7 @@ export  function useSignin() {
                 await setDoc(docRef, {
                     name: displayName,
                     email,
-                    userName: email?.slice(0,email.indexOf('@')),
+                    userName: email?.slice(0,email.indexOf('@')) + '_' + generateRandomId(10),
                     createdAt: Date.now(),
                     channels: []
                 })

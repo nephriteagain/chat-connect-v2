@@ -18,7 +18,9 @@ export async function POST(req: Request) {
             or(
                 where('email', '==', search),
                 where('name', '==', search),
-                where('userName', '==', search)
+                where('userName', '==', search),
+                // searches with the first char "@"
+                where(`userName`, '==', `${search.substring(1)}`)
             )
         )
         const roomDocs = await getDocs(rq)
