@@ -1,14 +1,16 @@
 
 import { createSlice } from "@reduxjs/toolkit";
-import { message, room } from "@/types";
+import { message, room, userData } from "@/types";
 import { deleteRoom, leaveRoom } from "./thunks";
 
 const initialState : {
     channel: null|room;
-    messages: message[]
+    messages: message[];
+    user: null|userData
 } = {
-    channel: null,
-    messages: []
+    channel: null,    
+    user: null,
+    messages: [],
 }
     
 
@@ -18,6 +20,9 @@ const channel = createSlice({
     reducers: {
         getChannel: (state, action) => {            
             state.channel = action.payload
+        },
+        getUserData: (state, action) => {
+            state.user = action.payload
         },
         getMessages: (state, action) => {
             state.messages = action.payload
@@ -34,6 +39,6 @@ const channel = createSlice({
         })
     }
 })
-export const { getChannel, getMessages } = channel.actions
+export const { getChannel, getMessages, getUserData } = channel.actions
 
 export default channel.reducer

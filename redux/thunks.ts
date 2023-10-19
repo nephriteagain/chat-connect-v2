@@ -20,37 +20,19 @@ export const createNewChannel = createAsyncThunk(
         desc?: string;
         members?: {id:string; role:string}[]
     }) => {
-        members.push({id: makerId, role: 'admin'})
-        const rId = generateRandomId(15)
-        const bannerRef = doc(db,'roomBanners', rId)
-        const roomRef = doc(db, 'rooms', rId)
-        const userRef = doc(db, 'users', makerId)
-        const now = Date.now()
-        const batch = writeBatch(db)
-        batch.set(bannerRef, {
-            name,
-            id: rId,
-            createdAt: now,
-            type,
-        })
-        batch.set(roomRef, {
-            name,
-            desc,
-            createdAt: now,
-            makerId,
-            type,
-            members,
-            messages: rId,
-        })
-        batch.update(userRef, {
-            channels: arrayUnion(rId)
-        })
-        try {            
-            await batch.commit()
-            return rId
+        try {
+            const response = await fetch('/api/channel/new', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({makerId, name, desc, type, members})
+            })
+            const data = await response.json() as Awaited<{id:string}>
+            return data.id
         } catch (error) {
             console.error(error)
-        }        
+        }       
     }
 )
 
@@ -69,7 +51,7 @@ export const sendMessage = createAsyncThunk(
     }) => {
         if (message.length === 0) return;
         const id = generateRandomId(15)
-        const msgRef = doc(db, channelId, id)
+        const msgRef = doc(db, `public:${channelId}`, id)
         const bannerRef = doc(db, 'roomBanners', channelId)
         const batch = writeBatch(db)
         const msg = {
@@ -111,49 +93,37 @@ export const searchChannels = createAsyncThunk(
 export const joinRoom = createAsyncThunk(
     'room/join',
     async ({userId, roomId}: {userId: string; roomId:string}) => {
-        const roomRef = doc(db, 'rooms', roomId)
-        const userRef =doc(db, 'users', userId)
-        const batch = writeBatch(db)
-
-        batch.update(roomRef, {
-            members: arrayUnion({id:userId, role: 'member'})
-        })
-        batch.update(userRef, {
-            channels: arrayUnion(roomId)
-        })
         try {
-            await batch.commit()
-            return roomId
+            const response = await fetch('/api/channel/join', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({userId, roomId})
+            })
+            const data = await response.json() as Awaited<{roomId:string}>
+            return data.roomId
         } catch (error) {
             console.error(error)
         }
+        
     }
 )
 
 export const deleteRoom = createAsyncThunk(
     'room/delete',
     async ({userId, roomId}: {userId: string; roomId:string}) => {
-        const roomRef = doc(db, 'rooms', roomId)
-        const bannerRef = doc(db, 'roomBanners', roomId)
-        const userRef = doc(db, 'users', )
-
-        const document = await getDoc(roomRef)
-        if (!document.exists()) {
-            return
-        }
-        const data = document.data() as room
-        if (data.makerId !== userId) {
-            return
-        }
-        const batch = writeBatch(db)
-        batch.delete(roomRef)
-        batch.delete(bannerRef)
-        batch.update(userRef, {
-            channels: arrayRemove(roomId)
-        })
         try {
-            await batch.commit()
-            return roomId
+            const response = await fetch('/api/channel/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({userId, roomId})
+            })
+            const data = await response.json() as Awaited<{roomId:string}>
+            return data.roomId
+
         } catch (error) {
             console.error(error)
         }
@@ -163,32 +133,16 @@ export const deleteRoom = createAsyncThunk(
 export const leaveRoom =  createAsyncThunk(
     'room/leaveRoom',
     async ({userId, roomId}: {userId: string; roomId: string}) => {
-        const roomRef = doc(db, 'rooms', roomId)
-        const userRef = doc(db, 'users', userId)
-
-        const document = await getDoc(roomRef)
-        if (!document.exists()) {
-            return
-        }
-        const data = document.data() as room
-        const members = data.members
-
-        const user = members.find(u => u.id === userId)
-        if (!user) {
-            return
-        }
-
-        const batch = writeBatch(db)
-        // does this work?
-        batch.update(roomRef, {
-            members: arrayRemove(members)
-        })
-        batch.update(userRef, {
-            channels: arrayRemove(roomId)
-        })
         try {
-            await batch.commit()
-            return roomId
+            const response = await fetch('api/channel/leave', {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify({userId, roomId})
+            })
+            const data = await response.json() as Awaited<{roomId:string}>
+            return data.roomId
         } catch (error) {
             console.error(error)
         }

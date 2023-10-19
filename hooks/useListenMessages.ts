@@ -13,7 +13,7 @@ export function useListenMessages() {
 
     useEffect(() => {
         if (typeof channel !== 'string') return
-        const colRef = collection(db, channel)
+        const colRef = collection(db, `public:${channel}`)
         const unsub = onSnapshot(colRef, snapshot => {
             if (snapshot.empty) {
                 dispatch(getMessages([]))

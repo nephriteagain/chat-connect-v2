@@ -48,6 +48,3 @@ export async function POST(req: Request) {
     return NextResponse.json({status: 400})
 }
 
-function getAllRooms(result:(room|userData)[]) {
-    return result
-}
