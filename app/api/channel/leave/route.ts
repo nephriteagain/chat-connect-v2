@@ -30,10 +30,12 @@ export async function POST(req:Request) {
     // does this work?
     // if it doesnt just send a new array without ur name in it
     batch.update(roomRef, {
-        members: arrayRemove(user)
+        members: members.filter(m => {
+            return m.id !== userId
+        })
     })
     batch.update(userRef, {
-        channels: arrayRemove(roomId)
+        channels: arrayRemove(`public:${roomId}`)
     })
     try {
         await batch.commit()

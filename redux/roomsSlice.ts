@@ -1,5 +1,5 @@
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice,  } from "@reduxjs/toolkit";
 import { roomBanner, room, userData } from "@/types";
 
 import { searchChannels } from "./thunks";

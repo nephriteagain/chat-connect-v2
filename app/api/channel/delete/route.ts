@@ -11,13 +11,13 @@ export async function POST(req: Request) {
     }
     const roomRef = doc(db, 'rooms', roomId)
     const bannerRef = doc(db, 'roomBanners', roomId)
-    const userRef = doc(db, 'users', )
+    const userRef = doc(db, 'users', userId)
 
     const document = await getDoc(roomRef)
     if (!document.exists()) {
         return NextResponse.json({error: 'document does not exist'}, {status: 404})
     }
-    const data = document.data() as room
+    const data = document.data() as room    
     if (data.makerId !== userId) {
         return NextResponse.json({error: 'user not admin'}, {status: 403})
     }
@@ -25,7 +25,14 @@ export async function POST(req: Request) {
     batch.delete(roomRef)
     batch.delete(bannerRef)
     batch.update(userRef, {
-        channels: arrayRemove(roomId)
+        channels: arrayRemove(`public${roomId}`)
+    })
+    // delete the room record for each user
+    data.members.forEach(m => {
+        const userRef = doc(db, 'users', m.id)
+        batch.update(userRef, {
+            channels: arrayRemove(`public:${roomId}`)
+        })
     })
     try {
         await batch.commit()
