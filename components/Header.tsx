@@ -1,10 +1,11 @@
 import { BiSearch } from 'react-icons/bi'
 import { MdVoiceChat } from 'react-icons/md'
-import { CiMenuKebab } from 'react-icons/ci'
 
 import { useListenRoom } from "@/hooks/useListenRoom";
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { joinRoom } from '@/redux/thunks';
+
+import RoomSettings from './RoomSettings';
 
 export default function Header() {
     const channel = useListenRoom()
@@ -13,7 +14,7 @@ export default function Header() {
 
     const joinedRoom = Boolean(user?.channels.some(c => c === channel?.id))
 
-  return (
+   return (
     <div className="py-1 px-4 flex flex-row items-center gap-2 border-b border-slate-300 shadow-sm drop-shadow-sm">
         <div className="w-[45px] aspect-square rounded-full bg-green-500 flex items-center justify-center text-white">K
         </div>
@@ -40,9 +41,7 @@ export default function Header() {
             <span className='aspect-square p-2 hover:bg-[#e6e6e6] rounded-full flex items-center justify-center'>
                 <BiSearch />
             </span>            
-            <span className='aspect-square p-2 hover:bg-[#e6e6e6] rounded-full flex items-center justify-center'>
-                <CiMenuKebab />    
-            </span>
+            <RoomSettings />
         </div>
     </div>
   )

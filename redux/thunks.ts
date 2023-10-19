@@ -1,8 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { db } from "@/db/firebase";
-import {  doc, writeBatch, arrayUnion } from "firebase/firestore";
+import {  doc, writeBatch, arrayUnion, getDoc, arrayRemove } from "firebase/firestore";
 
 import { generateRandomId } from "@/lib/helpers/randomIdGen";
+import type { room, userData } from "@/types";
 
 export const createNewChannel = createAsyncThunk(
     'user/newChannel', 
@@ -102,8 +103,8 @@ export const searchChannels = createAsyncThunk(
                 'Content-Type': 'application/json'
             }
         })
-        const data = await response.json()        
-        return data.result
+        const data = await response.json() as Awaited<{rooms: room[]; users:userData[]}>
+        return data
     }
 )
 
@@ -119,6 +120,71 @@ export const joinRoom = createAsyncThunk(
         })
         batch.update(userRef, {
             channels: arrayUnion(roomId)
+        })
+        try {
+            await batch.commit()
+            return roomId
+        } catch (error) {
+            console.error(error)
+        }
+    }
+)
+
+export const deleteRoom = createAsyncThunk(
+    'room/delete',
+    async ({userId, roomId}: {userId: string; roomId:string}) => {
+        const roomRef = doc(db, 'rooms', roomId)
+        const bannerRef = doc(db, 'roomBanners', roomId)
+        const userRef = doc(db, 'users', )
+
+        const document = await getDoc(roomRef)
+        if (!document.exists()) {
+            return
+        }
+        const data = document.data() as room
+        if (data.makerId !== userId) {
+            return
+        }
+        const batch = writeBatch(db)
+        batch.delete(roomRef)
+        batch.delete(bannerRef)
+        batch.update(userRef, {
+            channels: arrayRemove(roomId)
+        })
+        try {
+            await batch.commit()
+            return roomId
+        } catch (error) {
+            console.error(error)
+        }
+    }
+)
+
+export const leaveRoom =  createAsyncThunk(
+    'room/leaveRoom',
+    async ({userId, roomId}: {userId: string; roomId: string}) => {
+        const roomRef = doc(db, 'rooms', roomId)
+        const userRef = doc(db, 'users', userId)
+
+        const document = await getDoc(roomRef)
+        if (!document.exists()) {
+            return
+        }
+        const data = document.data() as room
+        const members = data.members
+
+        const user = members.find(u => u.id === userId)
+        if (!user) {
+            return
+        }
+
+        const batch = writeBatch(db)
+        // does this work?
+        batch.update(roomRef, {
+            members: arrayRemove(members)
+        })
+        batch.update(userRef, {
+            channels: arrayRemove(roomId)
         })
         try {
             await batch.commit()
