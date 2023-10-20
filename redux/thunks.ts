@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { db } from "@/db/firebase";
-import {  doc, writeBatch, arrayUnion, getDoc, arrayRemove } from "firebase/firestore";
+import {  doc, writeBatch } from "firebase/firestore";
 
 import { generateRandomId } from "@/lib/helpers/randomIdGen";
-import type { room, userData } from "@/types";
+import type { message, room, userData } from "@/types";
 
 export const createNewChannel = createAsyncThunk(
     'user/newChannel', 
@@ -50,22 +50,15 @@ export const sendMessage = createAsyncThunk(
         channelId: string
     }) => {
         if (message.length === 0) return;
-        const id = generateRandomId(15)
-        const msgRef = doc(db, `public:${channelId}`, id)
-        const bannerRef = doc(db, 'roomBanners', channelId)
-        const batch = writeBatch(db)
-        const msg = {
-            id,
-            date: Date.now(),
-            sender,
-            message
-        }
-        batch.set(msgRef, msg)
-        batch.update(bannerRef, {
-            lastMessage: msg
-        })
         try {
-            await batch.commit()        
+            const response = await fetch('/api/message/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({sender, message, channelId})
+            })
+            const data = await response.json()            
         } catch (error) {
             console.error(error)
         }
@@ -78,13 +71,7 @@ export const searchChannels = createAsyncThunk(
         if (q.length === 0) {
             return
         }
-        const response = await fetch('/api/search', {
-            method: 'POST',
-            body: JSON.stringify({search: q}),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+        const response = await fetch(`/api/search?search=${q}`)
         const data = await response.json() as Awaited<{rooms: room[]; users:userData[]}>
         return data
     }
@@ -146,5 +133,52 @@ export const leaveRoom =  createAsyncThunk(
         } catch (error) {
             console.error(error)
         }
+    }
+)
+
+export const editMessage = createAsyncThunk(
+    'channel/editMessage',
+    async ({userId, roomId, message, newMessage
+    } : {
+        userId: string;
+        roomId: string;
+        message: message;
+        newMessage:string;
+    }) => {
+        // editing msg that's not yours?
+        if (message.id !== userId) return
+
+        try {
+            const payload = {
+                sender: userId,
+                channelId: roomId,
+                message : newMessage,
+                messageId: message.id
+            }
+            const response = await fetch('/api/message/edit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            const data = await response.json()            
+        } catch (error) {
+            console.error(error)           
+        }
+    }
+)
+
+export const searchUsers = createAsyncThunk(
+    'rooms/userSearch',
+    async (q:string) => {
+        if (q.length === 0 || q.length > 150) return
+        try {
+            const response = await fetch(`/api/search/user?search=${q}`)
+            const data = await response.json() as Awaited<{users:userData[]}>
+            return data.users
+        } catch (error) {
+            console.error(error)
+        }        
     }
 )

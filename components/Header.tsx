@@ -25,10 +25,10 @@ export default function Header() {
             </div>
             <div className='me-auto'>
                 <p className='font-semibold'>
-                {channel?.name}
+                {channel?.name || 'loading...'}
                 </p>
                 <p className='text-sm font-light opacity-80'>
-                {channel?.members.length} members
+                {channel?.members?.length || 'loading...'} members
                 </p>
             </div>
             <div className='flex flex-row items-center gap-2 text-2xl'>

@@ -22,6 +22,7 @@ export type message = {
     date: number;
     sender: string;
     message: string;
+    edited?: boolean;
 }
 
 export type member = {

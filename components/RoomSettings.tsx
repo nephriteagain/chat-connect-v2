@@ -25,7 +25,7 @@ export default function RoomSettings() {
             user.id === channel.makerId) {
             try {
                 await dispatch(deleteRoom({userId: user.id, roomId: channel.id}))
-                router.push('/')
+                router.replace('/')
             } catch (error) {
                 console.error(error    )
             }
@@ -34,7 +34,7 @@ export default function RoomSettings() {
             user.id !== channel.makerId) {
             try {
                 await dispatch(leaveRoom({userId: user.id, roomId: channel.id}))                    
-                router.push('/')
+                router.replace('/')
             } catch (error) {
                 console.error(error)
             }

@@ -27,12 +27,10 @@ export async function POST(req:Request) {
     }
 
     const batch = writeBatch(db)
-    // does this work?
-    // if it doesnt just send a new array without ur name in it
+    const membersUpdated = members.filter(m => m.id !== userId)
+
     batch.update(roomRef, {
-        members: members.filter(m => {
-            return m.id !== userId
-        })
+        members: membersUpdated
     })
     batch.update(userRef, {
         channels: arrayRemove(`public:${roomId}`)
