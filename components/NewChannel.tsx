@@ -8,6 +8,8 @@ import { AiOutlineArrowRight } from 'react-icons/ai'
 import { Dispatch, SetStateAction } from 'react'
 import { createNewChannel } from "@/redux/thunks"
 
+import InviteUsers from "./InviteUsers"
+
 export default function NewChannel({setShowNewChannel, channelType}: {setShowNewChannel: Dispatch<SetStateAction<boolean>>; channelType: 'channel'|'group'|'private'}) {
     const [ nameFocused, setNameFocused ] = useState(false)
     const [ descFocused, setDescFocused ] = useState(false)
@@ -114,38 +116,12 @@ export default function NewChannel({setShowNewChannel, channelType}: {setShowNew
                 
             </AnimatePresence>
             <AnimatePresence>
-            {showInvite &&
-            <motion.div
-                className="px-5 py-2 absolute top-0 left-0 w-full h-full z-[60] bg-white"
-                initial={{x: '100%'}}
-                animate={{x:'0%'}}
-                exit={{x: '100%'}}
-                transition={{duration: 0.2}}
-                >
-                <div className="border-b border-gray-200">
-                    <div className="flex flex-row gap-4 items-center text-xl">
-                        <div 
-                            onClick={() => setShowInvite(false)} 
-                            className="text-3xl opacity-60 p-2 rounded-full hover:bg-gray-200">
-                        <BiArrowBack />
-                        </div>
-                        <p className="font-semibold">Add Members</p>
-                    </div>
-                    <div className="py-3">
-                        <input 
-                            type="text" 
-                            placeholder="Add people..."
-                            className="outline-none text-lg" />
-                    </div>
-                </div>
-                <div className="border-t mt-4 border-gray-200" />
-                <div
-                    className="w-fit text-3xl absolute p-4 right-6 bottom-6 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer"        
-                    onClick={handleClick}
-                >
-                    <AiOutlineArrowRight className="fill-white" />
-                </div>                
-            </motion.div>
+            {
+                showInvite && 
+                <InviteUsers 
+                    setShowInvite={setShowInvite} 
+                    handleClick={handleClick} 
+                />            
             }
             </AnimatePresence>
                         

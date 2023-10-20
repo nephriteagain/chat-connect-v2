@@ -176,6 +176,6 @@ export const searchUsers = createAsyncThunk(
             return data.users
         } catch (error) {
             console.error(error)
-        }        
+        }
     }
 )

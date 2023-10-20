@@ -1,6 +1,8 @@
 import { useAppSelector } from "@/redux/hooks"
 import { useRouter } from "next/navigation"
 
+import type { room, userData } from "@/types"
+
 export default function SearchList() {
     const { roomSearches, userSearches } = useAppSelector(s => s.rooms)
 
@@ -8,29 +10,29 @@ export default function SearchList() {
         <div className="flex flex-col gap-1">
             <p className="text-sm opacity-60 italic" key={'rooms'}>rooms</p>
             <hr key={'hr-1'} />
-            {roomSearches?.map(s => {                
-                const { id, name, members } = s
-                return <RoomSearchItem 
-                    key={id} 
-                    id={id}
-                    name={name} 
-                    members={members.length} 
-                />                                    
-            })}
+            <RoomList rooms={roomSearches} />
             <hr key={'h2-2'} />
             <p className="text-sm opacity-60 italic" key={'users'}>users</p>
             <hr key={'hr-3'} />
-            {userSearches.map(s => {
-                const { id, name, userName } = s
-                return <UserSearchItems 
-                    key={id}
-                    id={id}
-                    name={name}
-                    userName={userName}
-                />
-            })}
+            <UserList users={userSearches} />
         </div>
 
+    )
+}
+
+function RoomList({rooms}: {rooms: room[]}) {
+    return (
+        <>
+        {rooms.map(s => {
+            const { id, name, members } = s
+                return <RoomSearchItem 
+                key={id} 
+                id={id}
+                name={name} 
+                members={members.length} 
+                />        
+            })}
+        </>
     )
 }
 
@@ -49,6 +51,23 @@ function RoomSearchItem({name, members, id}: {name: string; members: number; id:
             </div>
         </div>
     )
+}
+
+export function UserList({users}:{users: userData[]}) {
+    return (
+        <>
+        {users.map(s => {
+            const { id, name, userName } = s
+            return <UserSearchItems 
+            key={id}
+            id={id}
+            name={name}
+            userName={userName}
+            />
+        })}
+        </>
+    )
+    
 }
 
 function UserSearchItems({name, userName, id}: {name:string; userName:string; id:string}) {
