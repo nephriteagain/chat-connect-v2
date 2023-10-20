@@ -17,6 +17,7 @@ export default function NewChannel({setShowNewChannel, channelType}: {setShowNew
     const [ desc, setDesc ] = useState('')
     const [ showInvite, setShowInvite ] = useState(false)
     const [ nameLength, setNameLength ] = useState(0)
+    const [ members, setMembers ] = useState<{id:string; role:'admin'|'mod'|'member'}[]>([])
 
     const { user } = useAppSelector(s => s.user)
     const dispatch = useAppDispatch()
@@ -24,7 +25,7 @@ export default function NewChannel({setShowNewChannel, channelType}: {setShowNew
     async function handleClick() {
         const makerId = user?.id as string;
         try {
-            await dispatch(createNewChannel({makerId, name, desc, type: channelType}))
+            await dispatch(createNewChannel({makerId, name, desc, type: channelType, members}))
             setShowInvite(false)
             setShowNewChannel(false)
         } catch (error) {
@@ -121,6 +122,7 @@ export default function NewChannel({setShowNewChannel, channelType}: {setShowNew
                 <InviteUsers 
                     setShowInvite={setShowInvite} 
                     handleClick={handleClick} 
+                    setMembers={setMembers}
                 />            
             }
             </AnimatePresence>

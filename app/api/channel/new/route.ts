@@ -16,7 +16,7 @@ export async function POST(req: Request) {
         name: string;
         type: 'channel'|'group'|'private';
         desc: string;
-        members: {id:string;role:string}[]
+        members: {id:string;role:'admin'|'mod'|'member'}[]
     } = await req.json()
 
     if (!makerId || !name || !type || !members) {

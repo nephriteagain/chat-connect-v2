@@ -2,22 +2,36 @@ import { useAppSelector } from "@/redux/hooks"
 import { userData } from "@/types";
 
 import { useAppDispatch } from "@/redux/hooks";
+import { Dispatch, SetStateAction } from "react";
 
-export default function UserSearchList() {
+export default function UserSearchList({setMembers}: {
+    setMembers: Dispatch<SetStateAction<{id:string;role:'admin'|'mod'|'member'}[]>>
+}) {
     const { userSearches } = useAppSelector(s => s.rooms)
-    const dipatch = useAppDispatch()
+    const dispatch = useAppDispatch()
+
+    function handleClick(id:string, isChecked: boolean) {
+        if (isChecked) {
+            setMembers(m => [...m, {id, role: 'member'}])
+            return
+        }
+        setMembers(m => m.filter(u => u.id !== id))
+    }
 
     return (
         <div className="flex flex-col gap-1 w-full">            
             <p className="text-sm opacity-60 italic pt-2" key={'users'}>users</p>
             <div className="flex flex-row gap-1 w-full">
-                <UserList users={userSearches} />
+                <UserList 
+                    users={userSearches} 
+                    handleClick={handleClick}
+                />
             </div>
         </div>
     )
 }
 
-function UserList({users}: {users: userData[]}) {
+function UserList({users, handleClick}: {users: userData[]; handleClick: (id:string,isChecked: boolean) => void}) {
     
     return (
         <>
@@ -30,7 +44,8 @@ function UserList({users}: {users: userData[]}) {
                             name={name}
                             userName={userName}
                             id={id}
-                        />
+                            handleClick={handleClick}
+                        />     
                 )
             })
         }
@@ -39,7 +54,8 @@ function UserList({users}: {users: userData[]}) {
 }
 
 
-function UserSearchItems({name, userName, id}: {name:string; userName:string; id:string}) {
+function UserSearchItems({name, userName, id, handleClick}: {
+    name:string; userName:string; id:string; handleClick: (id:string, isChecked: boolean) => void}) {
     return (
         <div className="w-full flex-grow p-2 flex flex-row gap-4 hover:bg-gray-200 rounded-lg cursor-pointer"
         >            
@@ -53,6 +69,10 @@ function UserSearchItems({name, userName, id}: {name:string; userName:string; id
             <div className="ms-auto flex items-center justify-center p-2">
                 <input type="checkbox" value={id} 
                     className="scale-[2] aspect-square"
+                    onClick={(e) => {
+                        const checked = e.currentTarget.checked
+                        handleClick(id, checked)
+                    }}
                 />        
             </div>
         </div>

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-context-menu": "^2.1.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@reduxjs/toolkit": "^1.9.7",
     "@types/lodash": "^4.14.199",
