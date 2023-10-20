@@ -1,8 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { db } from "@/db/firebase";
-import {  doc, writeBatch } from "firebase/firestore";
 
-import { generateRandomId } from "@/lib/helpers/randomIdGen";
 import type { message, room, userData } from "@/types";
 
 export const createNewChannel = createAsyncThunk(
