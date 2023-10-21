@@ -16,7 +16,7 @@ export default function Messages() {
     )
 }
 
-function Message({message}: {message: message}) {
+export function Message({message}: {message: message}) {
     const { id, date, sender, message: msg } =  message
 
     const name = useGetSenderName(sender, [sender])

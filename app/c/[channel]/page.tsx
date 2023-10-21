@@ -1,7 +1,7 @@
 "use client"
-import Header from '@/components/Header'
+import Header from '@/components/channel/Header'
 
-import Chat from '@/components/Chat'
+import Chat from '@/components/channel/Chat'
 
 export default function Home() {
     return (

@@ -1,6 +1,6 @@
 "use client"
 
-import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 import { ReactNode } from "react";
 import Image from "next/image";

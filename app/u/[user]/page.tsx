@@ -1,5 +1,6 @@
 "use client"
-import UserHeader from "@/components/UserHeader"
+import UserHeader from "@/components/userChannel/UserHeader"
+import UserChat from "@/components/userChannel/UserChat"
 
 export default function Page() {
 
@@ -7,7 +8,7 @@ export default function Page() {
     return (
         <main className='w-full h-screen flex flex-col'>
                 <UserHeader />
-                {/* <Chat /> */}
+                <UserChat />
         </main>
     )
 }

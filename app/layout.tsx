@@ -7,11 +7,11 @@ import { AnimatePresence } from 'framer-motion'
 const inter = Inter({ subsets: ['latin'] })
 
 
-import AuthProvider from '@/components/AuthProvider'
-import NewChannel from '@/components/NewChannel'
-import SearchChannel from '@/components/SearchChannel'
-import ChatRoomUI from '@/components/ChatRoomUI'
-import SearchListUI from '@/components/SearchListUI'
+import AuthProvider from '@/components/layout/AuthProvider'
+import NewChannel from '@/components/layout/NewChannel'
+import SearchChannel from '@/components/layout/SearchChannel'
+import ChatRoomUI from '@/components/layout/ChatRoomUI'
+import SearchListUI from '@/components/layout/SearchListUI'
 
 import { store } from '@/redux/store'
 import { Provider } from 'react-redux/es/exports'

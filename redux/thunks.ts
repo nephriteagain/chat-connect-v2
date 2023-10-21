@@ -193,3 +193,25 @@ export const getUser = createAsyncThunk(
         }       
     }
 )
+
+export const sendPrivateMessage = createAsyncThunk(
+    'userChannel/sendMessage',
+    async ({senderId, receiverId, message}: {
+        senderId:string; receiverId:string; message:string
+    }) => {
+        if (message.length === 0) return
+        try {
+            const response = await fetch('api/message/sendPrivate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({senderId, receiverId, message})
+            })
+            const data = await response.json()
+        } catch (error) {
+            console.error(error)
+        }
+
+    }
+)
