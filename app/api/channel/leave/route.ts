@@ -33,7 +33,7 @@ export async function POST(req:Request) {
         members: membersUpdated
     })
     batch.update(userRef, {
-        channels: arrayRemove(`public:${roomId}`)
+        channels: arrayRemove(`${roomId}`)
     })
     try {
         await batch.commit()

@@ -16,7 +16,7 @@ export async function POST(req:Request) {
     }
 
     const id = generateRandomId(15)
-    const msgRef = doc(db, `public:${channelId}`, id)
+    const msgRef = doc(db, `${channelId}`, id)
     const bannerRef = doc(db, 'roomBanners', channelId)
     const batch = writeBatch(db)
     const msg = {

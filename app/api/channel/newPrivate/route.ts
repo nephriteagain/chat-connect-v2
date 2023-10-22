@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
         makerId: userId,
         type: 'private',
         members,
-        messages: `private:${userId}${otherUserId}`
+        messages: `${userId}${otherUserId}`
     })
     batch.set(room2Ref, {
         name: userName,
@@ -55,13 +55,13 @@ export async function POST(req: NextRequest) {
         makerId: otherUserId,
         type: 'private',
         members,
-        messages: `private:${otherUserId}${userId}`
+        messages: `${otherUserId}${userId}`
     })
     batch.update(user1Ref, {
-        channels: arrayUnion(`private:${userId}${otherUserId}`)
+        channels: arrayUnion(`${userId}${otherUserId}`)
     })
     batch.update(user2Ref, {
-        channels: arrayUnion(`private:${otherUserId}${userId}`)
+        channels: arrayUnion(`${otherUserId}${userId}`)
     })
     try {
         await batch.commit()

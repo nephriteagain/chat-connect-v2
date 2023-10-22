@@ -19,7 +19,7 @@ export async function POST(req: Request) {
         members: arrayUnion({id:userId, role: 'member'})
     })
     batch.update(userRef, {
-        channels: arrayUnion(`public:${roomId}`)
+        channels: arrayUnion(`${roomId}`)
     })
     try {
         await batch.commit()

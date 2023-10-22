@@ -16,7 +16,7 @@ export function useListenUserMessages() {
     useEffect(() => {
         if (typeof user !== 'string' || !userData?.id) return
         // your id, then other id
-        const colRef = collection(db, `private:${user}${userData.id}`)
+        const colRef = collection(db, `${user}${userData.id}`)
         const unsub = onSnapshot(colRef, snapshot => {
             if (snapshot.empty) {
                 dispatch(getMessages([]))

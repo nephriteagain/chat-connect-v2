@@ -14,7 +14,7 @@ export async  function POST(req:Request) {
         return NextResponse.json({error: 'missing data'}, {status:400})
     }
 
-    const msgRef = doc(db, `public:${channelId}`,messageId)
+    const msgRef = doc(db, `${channelId}`,messageId)
     const bannerRef = doc(db, 'roomBanners', channelId)
     const batch = writeBatch(db)
        

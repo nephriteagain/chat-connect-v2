@@ -46,9 +46,7 @@ export async function POST(req: Request) {
         messages: rId,
     })
     batch.update(userRef, {
-        channels: type === 'private' ? 
-            arrayUnion(`private:${rId}`) : 
-            arrayUnion(`public:${rId}`)
+        channels: arrayUnion(rId)
     })
     try {            
         await batch.commit()        

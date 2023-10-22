@@ -15,8 +15,7 @@ export default function ChatRooms() {
     return (
         <div className='overflow-y-scroll'>
             {rooms.map(room => {
-                return <ChatRoom key={room.id} room={room} />
-                                    
+                return <ChatRoom key={room.id} room={room} />                                    
             })}
         </div>
     )

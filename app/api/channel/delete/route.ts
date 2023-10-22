@@ -25,13 +25,13 @@ export async function POST(req: Request) {
     batch.delete(roomRef)
     batch.delete(bannerRef)
     batch.update(userRef, {
-        channels: arrayRemove(`public${roomId}`)
+        channels: arrayRemove(`${roomId}`)
     })
     // delete the room record for each user
     data.members.forEach(m => {
         const userRef = doc(db, 'users', m.id)
         batch.update(userRef, {
-            channels: arrayRemove(`public:${roomId}`)
+            channels: arrayRemove(`${roomId}`)
         })
     })
     try {

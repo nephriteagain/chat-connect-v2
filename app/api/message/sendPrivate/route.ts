@@ -12,8 +12,8 @@ export async function POST(req:NextRequest) {
         return NextResponse.json({error: 'missing data'}, {status: 400})
     }
     const id = generateRandomId(15)
-    const msg1Ref = doc(db, `private:${senderId}${receiverId}`, id)
-    const msg2Ref = doc(db, `private:${receiverId}${senderId}`, id)
+    const msg1Ref = doc(db, `${senderId}${receiverId}`, id)
+    const msg2Ref = doc(db, `${receiverId}${senderId}`, id)
     const banner1Ref = doc(db, 'roomBanners', `${senderId}${receiverId}`)
     const banner2Ref = doc(db, 'roomBanners', `${receiverId}${senderId}`)
 
