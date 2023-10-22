@@ -1,7 +1,7 @@
 import { useEffect,  } from 'react';
 import { auth, provider, db } from "@/db/firebase";
 import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
-import { getDoc, doc, setDoc } from 'firebase/firestore'
+import { getDoc, doc, runTransaction } from 'firebase/firestore'
 import { useAppDispatch } from '@/redux/hooks';
 import { getUser } from '@/redux/userSlice';
 import { User } from 'firebase/auth';
@@ -13,24 +13,28 @@ export  function useSignin() {
     async function signIn() {
         try {
             const data = await signInWithPopup(auth, provider)
-            const { uid, displayName, email, } = data.user
+            const { uid, displayName, email, } = data.user            
             const docRef = doc(db, 'users', uid)
-            const userData = await getDoc(docRef)
-            if (!userData.exists()) {
-                await setDoc(docRef, {
-                    name: displayName,
-                    email,
-                    userName: (email?.slice(0,email.indexOf('@')) + '_' + generateRandomId(10)).toLowerCase(),
-                    createdAt: Date.now(),
-                    channels: []
-                })
-                const userData = await getDoc(docRef)
-                const payload = {...userData.data(), id: userData.id}
+
+            await runTransaction(db, async transaction => {
+                const document = await transaction.get(docRef)
+                if (!document.exists()) {
+                     transaction.set(docRef, {
+                        name: displayName,
+                        email,
+                        userName: (email?.slice(0,email.indexOf('@')) + '_' + generateRandomId(10)).toLowerCase(),
+                        createdAt: Date.now(),
+                        channels: []
+                    })
+                    const userData = await transaction.get(docRef)
+                    const payload = {...userData.data(), id: userData.id}
+                    dispatch(getUser(payload))
+                    return
+                }
+                const payload = {...document.data(), id: document.id}
                 dispatch(getUser(payload))
                 return
-            }
-            const payload = {...userData.data(), id: userData.id}
-            dispatch(getUser(payload))
+            })
         } catch (error) {
             console.error(error)
         }
