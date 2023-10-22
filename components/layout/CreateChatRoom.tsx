@@ -12,7 +12,12 @@ import {
 
 
 
-export default function CreateChatRoom({setShowNewChannel, setChannelType}: {setShowNewChannel: Dispatch<SetStateAction<boolean>>; setChannelType: Dispatch<SetStateAction<'channel'|'group'|'private'>>}) {
+export default function CreateChatRoom({
+    setShowNewChannel, setChannelType, setShowInvite}: {
+    setShowNewChannel: Dispatch<SetStateAction<boolean>>; 
+    setChannelType: Dispatch<SetStateAction<'channel'|'group'|'private'>>
+    setShowInvite: Dispatch<SetStateAction<boolean>>;
+    }) {
 
     return (
         <DropdownMenu>
@@ -45,6 +50,7 @@ export default function CreateChatRoom({setShowNewChannel, setChannelType}: {set
             <DropdownMenuItem onClick={() => {
                 setShowNewChannel(true)
                 setChannelType('private')
+                setShowInvite(true)
             }}>
                 <span className="me-4 text-lg">
                     <MdOutlinePersonOutline />

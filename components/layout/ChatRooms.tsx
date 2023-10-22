@@ -27,14 +27,18 @@ function ChatRoom({room}: {room: roomBanner}) {
 
 
     const router = useRouter()
-    const { id } = room
+    const { id, type } = room
 
     const name = useGetSenderName(room?.lastMessage?.sender, [room?.lastMessage?.sender])
 
     return (
         <div className="flex flex-row gap-1 relative hover:bg-[#e6e6e6] rounded-lg p-2 cursor-pointer"
             onClick={() => {
-                router.push(`/c/${id}`)
+                if (type !== 'private') {
+                    router.push(`/c/${id}`)                    
+                } else {
+                    router.push(`/u/${id}`)
+                }
             }}
         >
             <div className='basis-1/6 flex items-center justify-center'>

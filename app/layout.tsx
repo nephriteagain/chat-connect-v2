@@ -26,6 +26,7 @@ export default function RootLayout({
 }) {
 
     const [ showNewChannel, setShowNewChannel ] = useState(false)
+    const [ showInvite, setShowInvite ] = useState(false)
     const [ inputFocused, setInputFocused ] = useState(false)
     const [ inputVal, setInputVal ] = useState('')
     const [ channelType, setChannelType ] = useState<'channel'|'group'|'private'>('group')
@@ -43,7 +44,13 @@ export default function RootLayout({
             <body className={`${inter.className} flex flex-row overflow-y-hidden`}>
                 <nav className='relative w-[420px] h-screen px-1 border border-slate-300 overflow-x-hidden'>
                     <AnimatePresence>
-                    { showNewChannel && <NewChannel setShowNewChannel={setShowNewChannel} channelType={channelType} /> }
+                    { showNewChannel && 
+                        <NewChannel 
+                          setShowNewChannel={setShowNewChannel} 
+                          channelType={channelType} 
+                          showInvite={showInvite} 
+                          setShowInvite={setShowInvite} 
+                    /> }
                     </AnimatePresence>
                     <SearchChannel                        
                       inputFocused={inputFocused} 
@@ -57,7 +64,11 @@ export default function RootLayout({
                         {
                         (inputFocused || inputVal.length > 0) ? 
                         <SearchListUI /> :
-                        <ChatRoomUI setShowNewChannel={setShowNewChannel} setChannelType={setChannelType} />
+                        <ChatRoomUI 
+                          setShowNewChannel={setShowNewChannel} 
+                          setChannelType={setChannelType} 
+                          setShowInvite={setShowInvite}
+                        />
                         }
                     </div>
                 </nav>

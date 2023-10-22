@@ -8,10 +8,12 @@ import { searchUsers } from "@/redux/thunks";
 
 import UserSearchList from "./UserSearchList";
 
-export default function InviteUsers({setShowInvite, handleClick, setMembers}: {
+export default function InviteUsers({setShowInvite, handleClick, setMembers, otherUser, setOtherUser}: {
     setShowInvite: Dispatch<SetStateAction<boolean>>; 
     handleClick: () => void;
     setMembers: Dispatch<SetStateAction<{id:string;role:'admin'|'member'|'mod'}[]>>
+    otherUser: null|{id:string; name: string};
+    setOtherUser: Dispatch<SetStateAction<null|{id:string; name: string}>>
 }) {
     const [ inputVal, setInputVal ] = useState('')
     const dispatch = useAppDispatch()
@@ -60,9 +62,12 @@ export default function InviteUsers({setShowInvite, handleClick, setMembers}: {
                         </button>
                     </form>
                 </div>
-                <UserSearchList  setMembers={setMembers} />
+                <UserSearchList  
+                    setMembers={setMembers} 
+                    setOtherUser={setOtherUser}
+                />
                 <div
-                    className="w-fit text-3xl absolute p-4 right-6 bottom-6 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer"        
+                    className="w-fit text-3xl absolute p-4 right-6 bottom-6 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer"
                     onClick={handleClick}
                 >
                     <AiOutlineArrowRight className="fill-white" />

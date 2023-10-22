@@ -4,18 +4,21 @@ import { userData } from "@/types";
 import { useAppDispatch } from "@/redux/hooks";
 import { Dispatch, SetStateAction } from "react";
 
-export default function UserSearchList({setMembers}: {
+export default function UserSearchList({setMembers, setOtherUser}: {
     setMembers: Dispatch<SetStateAction<{id:string;role:'admin'|'mod'|'member'}[]>>
+    setOtherUser: Dispatch<SetStateAction<null|{id:string; name: string}>>
 }) {
     const { userSearches } = useAppSelector(s => s.rooms)
     const dispatch = useAppDispatch()
 
-    function handleClick(id:string, isChecked: boolean) {
+    function handleClick(id:string, isChecked: boolean, name:string) {
         if (isChecked) {
             setMembers(m => [...m, {id, role: 'member'}])
+            setOtherUser({id, name})
             return
         }
         setMembers(m => m.filter(u => u.id !== id))
+        setOtherUser(null)
     }
 
     return (
@@ -31,7 +34,7 @@ export default function UserSearchList({setMembers}: {
     )
 }
 
-function UserList({users, handleClick}: {users: userData[]; handleClick: (id:string,isChecked: boolean) => void}) {
+function UserList({users, handleClick}: {users: userData[]; handleClick: (id:string,isChecked: boolean, name:string) => void}) {
     
     return (
         <>
@@ -55,7 +58,7 @@ function UserList({users, handleClick}: {users: userData[]; handleClick: (id:str
 
 
 function UserSearchItems({name, userName, id, handleClick}: {
-    name:string; userName:string; id:string; handleClick: (id:string, isChecked: boolean) => void}) {
+    name:string; userName:string; id:string; handleClick: (id:string, isChecked: boolean, name:string) => void}) {
     return (
         <div className="w-full flex-grow p-2 flex flex-row gap-4 hover:bg-gray-200 rounded-lg cursor-pointer"
         >            
@@ -71,7 +74,7 @@ function UserSearchItems({name, userName, id, handleClick}: {
                     className="scale-[2] aspect-square"
                     onClick={(e) => {
                         const checked = e.currentTarget.checked
-                        handleClick(id, checked)
+                        handleClick(id, checked, name)
                     }}
                 />        
             </div>

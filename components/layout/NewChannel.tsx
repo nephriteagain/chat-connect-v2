@@ -6,18 +6,24 @@ import { BiArrowBack } from 'react-icons/bi'
 import { TbCameraPlus } from 'react-icons/tb'
 import { AiOutlineArrowRight } from 'react-icons/ai'
 import { Dispatch, SetStateAction } from 'react'
-import { createNewChannel } from "@/redux/thunks"
+import { createNewChannel, createNewPrivateChat } from "@/redux/thunks"
 
 import InviteUsers from "./InviteUsers"
 
-export default function NewChannel({setShowNewChannel, channelType}: {setShowNewChannel: Dispatch<SetStateAction<boolean>>; channelType: 'channel'|'group'|'private'}) {
+export default function NewChannel({
+    setShowNewChannel, channelType, showInvite, setShowInvite
+}: {setShowNewChannel: Dispatch<SetStateAction<boolean>>; 
+    channelType: 'channel'|'group'|'private'
+    showInvite: boolean;
+    setShowInvite: Dispatch<SetStateAction<boolean>>;
+}) {
     const [ nameFocused, setNameFocused ] = useState(false)
     const [ descFocused, setDescFocused ] = useState(false)
     const [ name, setName ] = useState('')
     const [ desc, setDesc ] = useState('')
-    const [ showInvite, setShowInvite ] = useState(false)
     const [ nameLength, setNameLength ] = useState(0)
     const [ members, setMembers ] = useState<{id:string; role:'admin'|'mod'|'member'}[]>([])
+    const [ otherUser, setOtherUser ] = useState<null|{id:string; name: string}>(null)
 
     const { user } = useAppSelector(s => s.user)
     const dispatch = useAppDispatch()
@@ -25,7 +31,17 @@ export default function NewChannel({setShowNewChannel, channelType}: {setShowNew
     async function handleClick() {
         const makerId = user?.id as string;
         try {
-            await dispatch(createNewChannel({makerId, name, desc, type: channelType, members}))
+            if (channelType === 'private') {
+                if (!otherUser?.id || !user?.name) return
+                await dispatch(createNewPrivateChat({
+                    userId: makerId, 
+                    otherUserId: otherUser.id, 
+                    userName: user.name, 
+                    otherUserName: otherUser.name 
+                }))
+            } else {
+                await dispatch(createNewChannel({makerId, name, desc, type: channelType, members}))
+            }
             setShowInvite(false)
             setShowNewChannel(false)
         } catch (error) {
@@ -123,6 +139,8 @@ export default function NewChannel({setShowNewChannel, channelType}: {setShowNew
                     setShowInvite={setShowInvite} 
                     handleClick={handleClick} 
                     setMembers={setMembers}
+                    otherUser={otherUser}
+                    setOtherUser={setOtherUser}
                 />            
             }
             </AnimatePresence>

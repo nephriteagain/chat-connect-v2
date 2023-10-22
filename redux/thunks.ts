@@ -33,6 +33,30 @@ export const createNewChannel = createAsyncThunk(
     }
 )
 
+export const createNewPrivateChat = createAsyncThunk(
+    'user/newPrivateChat',
+    async ({userId, otherUserId, userName, otherUserName}: {
+        userId: string; otherUserId: string; userName:string; otherUserName: string;
+    }) => {
+        if (!userId || !otherUserId || !userName || !otherUserName) {
+            return
+        }
+        try {
+            const response = await fetch('/api/channel/newPrivate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',                    
+                },
+                body: JSON.stringify({userId, otherUserId, userName, otherUserName})
+            })
+            const data = await response.json() as Awaited<{id:string}>
+            return data.id
+        } catch (error) {
+            console.error(error)
+        }
+    }
+)
+
 
 
 export const sendMessage = createAsyncThunk(
@@ -215,3 +239,4 @@ export const sendPrivateMessage = createAsyncThunk(
 
     }
 )
+
