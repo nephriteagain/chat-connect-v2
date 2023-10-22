@@ -1,4 +1,3 @@
-import { WriteBatch } from "firebase/firestore";
 import { db } from "@/db/firebase";
 import { writeBatch, doc, arrayUnion } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";

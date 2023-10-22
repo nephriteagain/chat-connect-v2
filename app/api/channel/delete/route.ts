@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/db/firebase';
-import { doc, writeBatch, getDoc, arrayRemove } from 'firebase/firestore';
+import { doc,  arrayRemove, runTransaction } from 'firebase/firestore';
 
 import type { room } from '@/types';
 
@@ -13,33 +13,32 @@ export async function POST(req: Request) {
     const bannerRef = doc(db, 'roomBanners', roomId)
     const userRef = doc(db, 'users', userId)
 
-    const document = await getDoc(roomRef)
-    if (!document.exists()) {
-        return NextResponse.json({error: 'document does not exist'}, {status: 404})
-    }
-    const data = document.data() as room    
-    if (data.makerId !== userId) {
-        return NextResponse.json({error: 'user not admin'}, {status: 403})
-    }
-    const batch = writeBatch(db)
-    batch.delete(roomRef)
-    batch.delete(bannerRef)
-    batch.update(userRef, {
-        channels: arrayRemove(`${roomId}`)
-    })
-    // delete the room record for each user
-    data.members.forEach(m => {
-        const userRef = doc(db, 'users', m.id)
-        batch.update(userRef, {
-            channels: arrayRemove(`${roomId}`)
-        })
-    })
     try {
-        await batch.commit()
-        return NextResponse.json({roomId}, {status:202})
+        const transaction = await runTransaction(db, async (transaction) => {
+            const document = await transaction.get(roomRef)
+            if (!document.exists()) {
+                return NextResponse.json({error: 'document does not exist'}, {status: 404})
+            }
+            const data = document.data() as room
+            if (data.makerId !== userId) {
+                return NextResponse.json({error: 'user not admin'}, {status: 403})
+            }
+            transaction.delete(roomRef)
+            transaction.delete(bannerRef)
+            transaction.update(userRef, {
+                channels: arrayRemove(roomId)
+            })
+            data.members.forEach(m => {
+                const userRef = doc(db, 'users', m.id)
+                transaction.update(userRef, {
+                    channels: arrayRemove(roomId)
+                })
+            })
+            return NextResponse.json({roomId}, {status:202})
+        })
+        return transaction
     } catch (error) {
-        console.error(error)
-        return NextResponse.json({error: 'server error'}, {status:500})
-    }
-
+        console.error('error')
+        return NextResponse.json({error: 'server error'}, {status: 500})
+    }    
 }
