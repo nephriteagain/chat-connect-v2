@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
         {id: userId, role: 'admin'},
         {id: otherUserId, role: 'admin'}
     ]
+    console.log({maker: userId, other: otherUserId})
 
     const banner1Ref = doc(db, 'roomBanners', userId)
     const banner2Ref = doc(db, 'roomBanners', otherUserId)

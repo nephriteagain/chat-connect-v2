@@ -19,15 +19,15 @@ export  function useSignin() {
             await runTransaction(db, async transaction => {
                 const document = await transaction.get(docRef)
                 if (!document.exists()) {
-                     transaction.set(docRef, {
+                    const userData = {
                         name: displayName,
                         email,
                         userName: (email?.slice(0,email.indexOf('@')) + '_' + generateRandomId(10)).toLowerCase(),
                         createdAt: Date.now(),
                         channels: []
-                    })
-                    const userData = await transaction.get(docRef)
-                    const payload = {...userData.data(), id: userData.id}
+                    }
+                    transaction.set(docRef, userData)
+                    const payload = {...userData, id: uid}
                     dispatch(getUser(payload))
                     return
                 }

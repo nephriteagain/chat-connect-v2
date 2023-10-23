@@ -24,7 +24,7 @@ export function Message({message}: {message: message}) {
     return (
         <div className="flex flex-row items-end gap-2 w-[500px]">
             <div className="bg-gray-400 flex items-center justify-center text-xl p-2 rounded-full w-12 aspect-square shadow-sm">
-                {sender[0]}
+                {name[0]}
             </div>
             <div className="w-fit min-w-[150px] max-w-[400px] bg-white p-2 rounded-lg shadow-sm">
                 <p className="font-semibold" >{name || sender}</p>

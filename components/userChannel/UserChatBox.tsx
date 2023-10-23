@@ -16,6 +16,7 @@ export default function UserChatBox() {
 
     const dispatch = useAppDispatch()
 
+    // TODO: this does not work :(
     async function handleSubmit(e: FormEvent) {
         e.preventDefault()
         if (inputText.length === 0 || !user || !userData || typeof receiverId !== 'string') return;
