@@ -1,18 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateRandomId } from "@/lib/helpers/randomIdGen";
 import { db } from "@/db/firebase";
-import { writeBatch, doc, getDoc } from "firebase/firestore";
+import { writeBatch, doc } from "firebase/firestore";
 
 export async function POST(req:NextRequest) {
     const { message, senderId, receiverId } : {
         message:string; senderId:string; receiverId:string
     } = await req.json()
 
-    console.log({
-        message,
-        senderId,
-        receiverId
-    })
+
     if (!message || !senderId || !receiverId) {
         return NextResponse.json({error: 'missing data'}, {status: 400})
     }
@@ -23,10 +19,8 @@ export async function POST(req:NextRequest) {
     const banner2Ref = doc(db, 'roomBanners', `${receiverId}${senderId}`)
 
 
-    const doc1 = await getDoc(doc(db, 'roomBanners', `${senderId}${receiverId}`))
-    const doc2 = await getDoc(doc(db, 'roomBanners', `${receiverId}${senderId}`))
-    console.log(doc1.data())
-    console.log(doc2.data())
+
+
     
 
     const batch = writeBatch(db)

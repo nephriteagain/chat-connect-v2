@@ -1,5 +1,4 @@
 import { useListenUserMessages } from "@/hooks/useListenUserMessages"
-import type { message } from "@/types"
 import { Message } from "../channel/Messages"
 
 export default function UserMessages() {

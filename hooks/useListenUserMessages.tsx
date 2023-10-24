@@ -7,16 +7,16 @@ import { getMessages } from "@/redux/userChannelSlice";
 import { message } from "@/types";
 
 export function useListenUserMessages() {
-    const { user } = useParams()
+    const { channel } = useParams()
 
     const { messages } = useAppSelector(s => s.userChannel)
     const { user : userData } = useAppSelector(s => s.user)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        if (typeof user !== 'string' || !userData?.id) return
+        if (typeof channel !== 'string' || !userData?.id) return
         // your id, then other id
-        const colRef = collection(db, `${user}${userData.id}`)
+        const colRef = collection(db, channel)
         const unsub = onSnapshot(colRef, snapshot => {
             if (snapshot.empty) {
                 dispatch(getMessages([]))
@@ -31,7 +31,7 @@ export function useListenUserMessages() {
         })
 
         return () => unsub()
-    }, [user])
+    }, [channel])
 
 
     return messages
