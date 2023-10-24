@@ -1,33 +1,33 @@
-import { db } from "@/db/firebase"
-import { doc, writeBatch } from "firebase/firestore"
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async  function POST(req:Request) {
-    const {sender, channelId, message, messageId } : {
+import { db } from "@/db/firebase";
+import { doc, writeBatch } from "firebase/firestore";
+
+export async function POST(req:NextRequest) {
+    const { sender, channelId, messageId } : {
         sender:string;
         channelId:string;
-        message:string;
         messageId:string;
     } = await req.json()
-    
-    if (!sender||!channelId||!message||!messageId) {
+
+    if (!sender||!channelId||!messageId) {
+        console.log('missing data', req.url)
         return NextResponse.json({error: 'missing data'}, {status:400})
     }
 
     const msgRef = doc(db, `${channelId}`,messageId)
     const bannerRef = doc(db, 'roomBanners', channelId)
     const batch = writeBatch(db)
-       
-    const msg = {     
+
+    const msg = {
         id: messageId,
         date: Date.now(),
         sender,
-        message,
+        message: 'DELETED',
         flags: {
-            edited:  true
+            deleted:true
         }
     }
-
     batch.set(msgRef, msg)
     batch.update(bannerRef, {
         lastMessage: msg
@@ -39,6 +39,4 @@ export async  function POST(req:Request) {
         console.error(error)
         return NextResponse.json({error: 'server error'},{status:500})
     }
-        
-    
 }

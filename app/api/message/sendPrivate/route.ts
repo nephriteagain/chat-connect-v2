@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateRandomId } from "@/lib/helpers/randomIdGen";
 import { db } from "@/db/firebase";
-import { writeBatch, doc, getDocs, collection } from "firebase/firestore";
+import { writeBatch, doc, } from "firebase/firestore";
 
 export async function POST(req:NextRequest) {
     const { message, senderId, receiverId } : {

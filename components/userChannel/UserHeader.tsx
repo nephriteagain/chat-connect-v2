@@ -1,16 +1,26 @@
 import { BiSearch } from 'react-icons/bi'
 import { MdVoiceChat } from 'react-icons/md'
-import { useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useGetUserData } from '@/hooks/useGetUserData';
+import { useAppSelector } from '@/redux/hooks';
 
 
 export default function UserHeader() {
-    const searchParams  = useSearchParams()
+    const { channel }  = useParams()
+    const { user : userInfo } = useAppSelector(s => s.user)
 
-    const userId = searchParams.get('user')
-    
-    
-    if (!userId) {
+    if (typeof channel !== 'string') {
+        return null
+    }
+    if (typeof userInfo === null) {
+        return null
+    }
+    const id = userInfo?.id || 'abc' as string
+
+    const selfId = channel.substring(0,id.length)
+    const userId = channel.substring(selfId.length)
+        
+    if (selfId !== userInfo?.id) {
         return null
     }
     const userData = useGetUserData(userId)

@@ -60,7 +60,9 @@ function ChatRoom({room}: {room: roomBanner}) {
                         {room?.lastMessage?.message || ''}
                         </span>
                         </> :
-                        'Channel created'
+                        type === 'channel' ? 'Channel created' :
+                        type === 'group' ? 'Group created' :
+                        'Chat created'
                     }
                     
                 </p>

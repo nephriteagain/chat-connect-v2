@@ -22,7 +22,12 @@ export type message = {
     date: number;
     sender: string;
     message: string;
+    flags?: flags;
+}
+
+export type flags = {
     edited?: boolean;
+    deleted?: boolean;
 }
 
 export type member = {

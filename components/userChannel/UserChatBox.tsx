@@ -8,7 +8,7 @@ import { sendPrivateMessage } from '@/redux/thunks'
 import { useParams } from 'next/navigation'
 
 export default function UserChatBox() {
-    const { user : receiverId } = useParams()
+    const { channel } = useParams()
     const [ inputText, setInputText ] = useState('')
 
     const { user } = useAppSelector(s => s.user)
@@ -19,7 +19,9 @@ export default function UserChatBox() {
     // TODO: this does not work :(
     async function handleSubmit(e: FormEvent) {
         e.preventDefault()
-        if (inputText.length === 0 || !user || !userData || typeof receiverId !== 'string') return;
+        if (inputText.length === 0 || !user || !userData || typeof channel !== 'string') return;
+        const selfId = user.id
+        const receiverId = channel.substring(selfId.length)
         try {
             await dispatch(sendPrivateMessage({
                 senderId: user.id, 
