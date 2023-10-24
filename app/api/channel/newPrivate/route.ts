@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
         {id: otherUserId, role: 'admin'}
     ]
 
-    const banner1Ref = doc(db, 'roomBanners', userId)
-    const banner2Ref = doc(db, 'roomBanners', otherUserId)
+    const banner1Ref = doc(db, 'roomBanners', `${userId}${otherUserId}`)
+    const banner2Ref = doc(db, 'roomBanners', `${otherUserId}${userId}`)
     const room1Ref = doc(db, 'rooms', `${userId}${otherUserId}`)
     const room2Ref = doc(db, 'rooms', `${otherUserId}${userId}`)
     const user1Ref = doc(db, 'users', userId)
