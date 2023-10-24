@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { BiArrowBack, BiSolidSend } from "react-icons/bi";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { Dispatch, SetStateAction, useState } from 'react'
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { searchUsers } from "@/redux/thunks";
 
 
@@ -17,6 +17,7 @@ export default function InviteUsers({setShowInvite, handleClick, setMembers, oth
 }) {
     const [ inputVal, setInputVal ] = useState('')
     const dispatch = useAppDispatch()
+    const { user } = useAppSelector(s => s.user)
 
     return (
         <motion.div
@@ -40,7 +41,8 @@ export default function InviteUsers({setShowInvite, handleClick, setMembers, oth
                             e.preventDefault()
                             if (inputVal.length === 0 || inputVal.length > 150) return
                             try {
-                                await dispatch(searchUsers(inputVal))                                
+                                if (!user?.id) return
+                                await dispatch(searchUsers({q:inputVal,id:user.id}))                                
                             } catch (error) {
                                 console.error(error)
                             }

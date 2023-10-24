@@ -19,11 +19,11 @@ export async function GET(req: NextRequest) {
         }
         const userData = document.data() as userData
         return NextResponse.json({user: {
-            name: userData.userName,
-            userName: userData.name,
+            name: userData.name,
+            userName: userData.userName,
         }}, {status: 200})
     } catch (error) {
         console.error(error)   
         return NextResponse.json({error: 'server error'}, {status: 500})
     }
-}
+}  

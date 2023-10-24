@@ -88,13 +88,14 @@ export const sendMessage = createAsyncThunk(
 
 export const searchChannels = createAsyncThunk(
     'rooms/search',
-    async (q: string) => {
+    async ({q,id}:{q:string;id:string}) => {
         if (q.length === 0) {
             return
         }
         const response = await fetch(`/api/search?search=${q}`)
         const data = await response.json() as Awaited<{rooms: room[]; users:userData[]}>
-        return data
+        const filtered = data.users.filter(u => u.id !== id)
+        return {rooms: data.rooms, users: filtered}
     }
 )
 
@@ -192,12 +193,13 @@ export const editMessage = createAsyncThunk(
 
 export const searchUsers = createAsyncThunk(
     'rooms/userSearch',
-    async (q:string) => {
+    async ({q, id}: {q:string, id:string}) => {
         if (q.length === 0 || q.length > 150) return
         try {
             const response = await fetch(`/api/search/user?search=${q}`)
-            const data = await response.json() as Awaited<{users:userData[]}>
-            return data.users
+            const data = await response.json() as Awaited<{users:userData[]}>            
+            const filtered = data.users.filter(u => u.id !== id)
+            return filtered
         } catch (error) {
             console.error(error)
         }
@@ -225,7 +227,7 @@ export const sendPrivateMessage = createAsyncThunk(
     }) => {
         if (message.length === 0) return
         try {
-            const response = await fetch('api/message/sendPrivate', {
+            const response = await fetch('/api/message/sendPrivate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

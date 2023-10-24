@@ -8,6 +8,11 @@ export async function POST(req:NextRequest) {
         message:string; senderId:string; receiverId:string
     } = await req.json()
 
+    console.log({
+        message,
+        senderId,
+        receiverId
+    })
     if (!message || !senderId || !receiverId) {
         return NextResponse.json({error: 'missing data'}, {status: 400})
     }

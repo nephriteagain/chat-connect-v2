@@ -1,7 +1,7 @@
 import { BiSearch, BiArrowBack, BiSolidSend } from 'react-icons/bi'
 
 import {  Dispatch, ForwardedRef, SetStateAction, } from "react"
-import { useAppDispatch } from '@/redux/hooks'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { searchChannels } from '@/redux/thunks'
 import Settings from './Settings'
 import { forwardRef } from 'react'
@@ -14,9 +14,11 @@ export default forwardRef(function SearchChannel(
     ref: ForwardedRef<HTMLInputElement>) {
 
     const dispatch = useAppDispatch()
+    const { user } = useAppSelector(s => s.user)
 
     function handleSearch(query:string) {
-        dispatch(searchChannels(query))
+        if (!user) return
+        dispatch(searchChannels({q:query, id:user.id}))
     }
 
 

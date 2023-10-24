@@ -5,11 +5,12 @@ import { useAppSelector } from "@/redux/hooks";
 import { ReactNode } from "react";
 import Image from "next/image";
 import { useSignin } from "@/hooks/useSignin";
+import { useListenUser } from "@/hooks/useListenUser";
 
 export default function AuthProvider({children}: {children: ReactNode}) {
     const { user } = useAppSelector(s => s.user)
     const signIn = useSignin()
-
+    const userData = useListenUser(user?.id)
 
     if (user === null) {
         return (

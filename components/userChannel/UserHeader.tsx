@@ -40,7 +40,7 @@ export default function UserHeader() {
                     {userData?.name || 'loading...'}
                 </p>
                 <p className='text-sm font-light opacity-80'>
-                    {userData?.userName || 'loading...'}
+                    {`@${userData?.userName}` || 'loading...'}
                 </p>
             </div>
             <div className='flex flex-row items-center gap-2 text-2xl'>
