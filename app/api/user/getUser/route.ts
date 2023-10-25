@@ -21,6 +21,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({user: {
             name: userData.name,
             userName: userData.userName,
+            id: document.id
         }}, {status: 200})
     } catch (error) {
         console.error(error)   

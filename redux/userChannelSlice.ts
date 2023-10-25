@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getUser } from "./thunks";
 
 const initialState : {
-    userData: null|{name:string;userName:string};
+    userData: null|{name:string;userName:string;id:string};
     messages: message[];
 } = {
     userData: null,

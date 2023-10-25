@@ -15,23 +15,17 @@ export async  function POST(req:Request) {
     }
 
     const msgRef = doc(db, `${channelId}`,messageId)
-    const bannerRef = doc(db, 'roomBanners', channelId)
     const batch = writeBatch(db)
        
     const msg = {     
-        id: messageId,
-        date: Date.now(),
-        sender,
         message,
         flags: {
             edited:  true
         }
     }
 
-    batch.set(msgRef, msg)
-    batch.update(bannerRef, {
-        lastMessage: msg
-    })
+    batch.update(msgRef, msg)
+
     try {
         await batch.commit()
         return NextResponse.json({status: 200})

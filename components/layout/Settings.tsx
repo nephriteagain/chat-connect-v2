@@ -19,12 +19,10 @@ export default function Settings() {
             <RxHamburgerMenu />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-            <DropdownMenuLabel>Settings</DropdownMenuLabel>
+            <DropdownMenuLabel>Options</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
+            <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuItem onClick={() => signOut(auth)}>
                 Logout
             </DropdownMenuItem>

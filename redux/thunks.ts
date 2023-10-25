@@ -212,7 +212,7 @@ export const getUser = createAsyncThunk(
         if (!id) return
         try {
             const response = await fetch(`/api/user/getUser?search=${id}`)
-            const data = await response.json() as Awaited<{user: {name:string;userName:string;}}>
+            const data = await response.json() as Awaited<{user: {name:string;userName:string;id:string}}>
             return data.user
         } catch (error) {
             console.error('error')
