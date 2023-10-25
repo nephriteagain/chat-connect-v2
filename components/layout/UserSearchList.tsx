@@ -2,11 +2,11 @@ import { useAppSelector } from "@/redux/hooks"
 import { userData } from "@/types";
 
 import { useAppDispatch } from "@/redux/hooks";
-import { Dispatch, SetStateAction } from "react";
+import { ReactDispatch } from "@/types";
 
 export default function UserSearchList({setMembers, setOtherUser}: {
-    setMembers: Dispatch<SetStateAction<{id:string;role:'admin'|'mod'|'member'}[]>>
-    setOtherUser: Dispatch<SetStateAction<null|{id:string; name: string}>>
+    setMembers: ReactDispatch<{id:string;role:'admin'|'mod'|'member'}[]>
+    setOtherUser: ReactDispatch<null|{id:string; name: string}>
 }) {
     const { userSearches } = useAppSelector(s => s.rooms)
     const dispatch = useAppDispatch()

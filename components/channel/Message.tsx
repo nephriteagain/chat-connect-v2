@@ -12,8 +12,13 @@ import {
 import { useAppSelector, useAppDispatch } from "@/redux/hooks"
 import { deleteMessage,deletePrivateMessage } from "@/redux/thunks"
 import { usePathname } from "next/navigation"
+import type { ReactDispatch, editMode } from "@/types"
 
-export default function Message({message}: {message: message}) {
+export default function Message({message, setEditMode, setInputText}: {
+    message: message; 
+    setEditMode:ReactDispatch<editMode>;
+    setInputText: ReactDispatch<string>;
+}) {
     const { id, date, sender, message: msg, flags } =  message
     const path = usePathname()
 
@@ -79,8 +84,11 @@ export default function Message({message}: {message: message}) {
                     <p className="text-sm opacity-60 text-right">{format(date, 'hh:mm a')}</p>
                     {Boolean(flags?.edited) && <p className="text-right text-sm scale-90 italic opacity-60">edited</p>}
                 </ContextMenuTrigger>            
-                <ContextMenuContent className="w-fit p-2">
-                    <ContextMenuItem>
+                <ContextMenuContent className={`w-fit p-2 ${Boolean(flags?.deleted)? 'hidden': ''}`}>
+                    <ContextMenuItem onClick={() => {
+                        setEditMode({editMode: true, message})
+                        setInputText(msg)
+                    }}>
                         Edit Message    
                     </ContextMenuItem>
                     <ContextMenuItem 

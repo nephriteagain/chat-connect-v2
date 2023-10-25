@@ -5,17 +5,18 @@ import { motion, AnimatePresence } from "framer-motion"
 import { BiArrowBack } from 'react-icons/bi'
 import { TbCameraPlus } from 'react-icons/tb'
 import { AiOutlineArrowRight } from 'react-icons/ai'
-import { Dispatch, SetStateAction } from 'react'
 import { createNewChannel, createNewPrivateChat } from "@/redux/thunks"
+
+import { ReactDispatch } from "@/types"
 
 import InviteUsers from "./InviteUsers"
 
 export default function NewChannel({
     setShowNewChannel, channelType, showInvite, setShowInvite
-}: {setShowNewChannel: Dispatch<SetStateAction<boolean>>; 
+}: {setShowNewChannel: ReactDispatch<boolean>; 
     channelType: 'channel'|'group'|'private'
     showInvite: boolean;
-    setShowInvite: Dispatch<SetStateAction<boolean>>;
+    setShowInvite: ReactDispatch<boolean>;
 }) {
     const [ nameFocused, setNameFocused ] = useState(false)
     const [ descFocused, setDescFocused ] = useState(false)

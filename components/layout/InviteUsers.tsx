@@ -5,15 +5,16 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { searchUsers } from "@/redux/thunks";
 
+import { ReactDispatch } from "@/types";
 
 import UserSearchList from "./UserSearchList";
 
 export default function InviteUsers({setShowInvite, handleClick, setMembers, otherUser, setOtherUser}: {
-    setShowInvite: Dispatch<SetStateAction<boolean>>; 
+    setShowInvite: ReactDispatch<boolean>; 
     handleClick: () => void;
-    setMembers: Dispatch<SetStateAction<{id:string;role:'admin'|'member'|'mod'}[]>>
+    setMembers: ReactDispatch<{id:string;role:'admin'|'member'|'mod'}[]>
     otherUser: null|{id:string; name: string};
-    setOtherUser: Dispatch<SetStateAction<null|{id:string; name: string}>>
+    setOtherUser: ReactDispatch<null|{id:string; name: string}>
 }) {
     const [ inputVal, setInputVal ] = useState('')
     const dispatch = useAppDispatch()

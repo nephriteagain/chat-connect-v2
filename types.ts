@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export type roomBanner = {
     id: string;
     name: string;
@@ -43,3 +45,10 @@ export type userData = {
     id: string;
     channels: string[];
 }
+
+export type editMode = {
+    editMode: boolean;
+    message: null|message
+}
+
+export type ReactDispatch<T> = Dispatch<SetStateAction<T>>

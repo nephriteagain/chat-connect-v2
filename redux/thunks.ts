@@ -160,22 +160,23 @@ export const leaveRoom =  createAsyncThunk(
 
 export const editMessage = createAsyncThunk(
     'channel/editMessage',
-    async ({userId, roomId, message, newMessage
+    async ({userId, roomId, message, newMessage, sender
     } : {
         userId: string;
         roomId: string;
-        message: message;
+        message: string;
         newMessage:string;
+        sender: string
     }) => {
         // editing msg that's not yours?
-        if (message.id !== userId) return
+        if (sender !== userId) return
 
         try {
             const payload = {
                 sender: userId,
                 channelId: roomId,
                 message : newMessage,
-                messageId: message.id
+                messageId: message
             }
             const response = await fetch('/api/message/edit', {
                 method: 'POST',

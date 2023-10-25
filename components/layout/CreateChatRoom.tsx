@@ -1,7 +1,7 @@
 import { RiPencilFill, RiGroupLine } from "react-icons/ri"
 import { PiSpeakerNoneDuotone } from 'react-icons/pi'
 import { MdOutlinePersonOutline } from 'react-icons/md'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { ReactDispatch } from "@/types"
 
 import {
     DropdownMenu,
@@ -14,9 +14,9 @@ import {
 
 export default function CreateChatRoom({
     setShowNewChannel, setChannelType, setShowInvite}: {
-    setShowNewChannel: Dispatch<SetStateAction<boolean>>; 
-    setChannelType: Dispatch<SetStateAction<'channel'|'group'|'private'>>
-    setShowInvite: Dispatch<SetStateAction<boolean>>;
+    setShowNewChannel: ReactDispatch<boolean>; 
+    setChannelType: ReactDispatch<'channel'|'group'|'private'>
+    setShowInvite: ReactDispatch<boolean>;
     }) {
 
     return (

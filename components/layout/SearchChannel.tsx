@@ -1,16 +1,17 @@
 import { BiSearch, BiArrowBack, BiSolidSend } from 'react-icons/bi'
 
-import {  Dispatch, ForwardedRef, SetStateAction, } from "react"
+import { ForwardedRef, } from "react"
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { searchChannels } from '@/redux/thunks'
 import Settings from './Settings'
 import { forwardRef } from 'react'
 
+import { ReactDispatch } from '@/types'
 
 
 export default forwardRef(function SearchChannel(
     {inputFocused, setInputFocused, inputVal, setInputVal}: 
-    {inputFocused: boolean; setInputFocused: Dispatch<SetStateAction<boolean>>; inputVal: string; setInputVal: Dispatch<SetStateAction<string>>}, 
+    {inputFocused: boolean; setInputFocused: ReactDispatch<boolean>; inputVal: string; setInputVal: ReactDispatch<string>}, 
     ref: ForwardedRef<HTMLInputElement>) {
 
     const dispatch = useAppDispatch()

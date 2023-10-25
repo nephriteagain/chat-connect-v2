@@ -1,13 +1,13 @@
 import CreateChatRoom from "./CreateChatRoom"
 import ChatRooms from "./ChatRooms"
 
-import { Dispatch, SetStateAction } from "react"
+import { ReactDispatch } from "@/types";
 
 export default function ChatRoomUI({
     setShowNewChannel, setChannelType, setShowInvite}: {
-        setShowNewChannel: Dispatch<SetStateAction<boolean>>; 
-        setChannelType: Dispatch<SetStateAction<'channel'|'group'|'private'>>
-        setShowInvite: Dispatch<SetStateAction<boolean>>;
+        setShowNewChannel: ReactDispatch<boolean>; 
+        setChannelType: ReactDispatch<'channel'|'group'|'private'>
+        setShowInvite: ReactDispatch<boolean>;
     }) {
     return (
         <>
