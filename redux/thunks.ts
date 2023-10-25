@@ -244,6 +244,34 @@ export const deletePrivateMessage = createAsyncThunk(
     }
 )
 
+export const editPrivateMessage = createAsyncThunk(
+    'channel/editPrivateMessage',
+    async ({ sender, receiver, message, messageId, senderId } : {
+        sender: string;
+        receiver: string;
+        message: string;
+        messageId: string;
+        senderId: string;
+    }) => {
+        if (message.length === 0) return
+        if (sender !== senderId) return
+
+        try {
+            const response = await fetch('/api/message/editPrivate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',                    
+                },
+                body: JSON.stringify({sender, receiver, message, messageId})                
+            })
+            const data = await response.json()
+            return data
+        } catch (error) {
+            console.error(error)   
+        }
+    }
+)
+
 export const searchUsers = createAsyncThunk(
     'rooms/userSearch',
     async ({q, id}: {q:string, id:string}) => {

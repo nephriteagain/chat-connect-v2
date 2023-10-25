@@ -47,6 +47,7 @@ export default function ChatBox({editMode, setEditMode, inputText, setInputText}
                 sender: editMode.message.sender
             }))
             setEditMode({editMode: false, message: null})
+            setInputText('')
         } catch (error) {
             console.error(error)
         }

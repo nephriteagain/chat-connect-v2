@@ -4,7 +4,12 @@ import { writeBatch, doc } from "firebase/firestore";
 
 // TODO: make this a transaction?
 export async function POST(req:NextRequest) {
-    const { sender, receiver, message, messageId } = await req.json()
+    const { sender, receiver, message, messageId } : {
+        sender: string;
+        receiver: string;
+        message: string;
+        messageId: string;
+    } = await req.json()
 
     if (!sender||!receiver||!message||!messageId)   {
         console.log('missing data', req.url)
