@@ -10,27 +10,51 @@ import {
 } from "@/components/ui/context-menu"
 
 import { useAppSelector, useAppDispatch } from "@/redux/hooks"
-import { deleteMessage } from "@/redux/thunks"
+import { deleteMessage,deletePrivateMessage } from "@/redux/thunks"
+import { usePathname } from "next/navigation"
 
 export default function Message({message}: {message: message}) {
     const { id, date, sender, message: msg, flags } =  message
+    const path = usePathname()
 
     const name = useGetSenderName(sender, [sender])
     const dispatch = useAppDispatch()
     const { user } = useAppSelector(s => s.user)
     const { channel } = useAppSelector(s => s.channel)
-
+    const { userData } = useAppSelector(s => s.userChannel)
+    
     async function deleteMessageHandler() {
-        if (!user || user.id !== sender || !channel) return
+        
+
+        const regex = /^\/c\/.*/;
+
+        if (regex.test(path)) {
+            if (!user || user.id !== sender || !channel) {
+                console.log("missing args")
+                return
+            }
+            try {
+                await dispatch(deleteMessage({
+                    sender: sender,
+                    channelId: channel.id,
+                    messageId: id
+                }))
+            } catch (error) {
+                console.error(error)
+            }
+            return
+        }
+        if (!userData || !user || sender !== user.id) return        
         try {
-            await dispatch(deleteMessage({
-                sender: sender,
-                channelId: channel.id,
+            await dispatch(deletePrivateMessage({
+                sender: user.id,
+                receiver: userData.id,
                 messageId: id
             }))
         } catch (error) {
             console.error(error)
         }
+      
     }
 
     return (
