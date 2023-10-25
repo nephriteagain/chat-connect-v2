@@ -191,6 +191,33 @@ export const editMessage = createAsyncThunk(
     }
 )
 
+export const deleteMessage = createAsyncThunk(
+    'channel/deleteMessage',
+    async ({sender, channelId, messageId}: {
+        sender: string;
+        channelId: string;
+        messageId: string
+    }) => {
+        if (!sender||!channelId||!messageId) {
+            return
+        }
+        try {
+            const response = await fetch('/api/message/delete',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({sender,channelId,messageId})
+            })
+            const data = await response.json()
+            return data
+        } catch (error) {
+            console.error(error)
+        }
+        
+    }
+)
+
 export const searchUsers = createAsyncThunk(
     'rooms/userSearch',
     async ({q, id}: {q:string, id:string}) => {

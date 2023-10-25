@@ -1,5 +1,5 @@
 import { useListenUserMessages } from "@/hooks/useListenUserMessages"
-import { Message } from "../channel/Messages"
+import Message from "../channel/Message"
 
 export default function UserMessages() {
     const messages = useListenUserMessages()

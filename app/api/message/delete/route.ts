@@ -11,6 +11,7 @@ export async function POST(req:NextRequest) {
     } = await req.json()
 
     if (!sender||!channelId||!messageId) {
+        console.log(sender, channelId, messageId)
         console.log('missing data', req.url)
         return NextResponse.json({error: 'missing data'}, {status:400})
     }
