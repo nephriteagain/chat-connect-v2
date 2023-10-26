@@ -10,8 +10,12 @@ import { ReactDispatch } from '@/types'
 
 
 export default forwardRef(function SearchChannel(
-    {inputFocused, setInputFocused, inputVal, setInputVal}: 
-    {inputFocused: boolean; setInputFocused: ReactDispatch<boolean>; inputVal: string; setInputVal: ReactDispatch<string>}, 
+    {inputFocused, setInputFocused, inputVal, setInputVal, setShowProfile}: {
+    inputFocused: boolean; 
+    setInputFocused: ReactDispatch<boolean>; 
+    inputVal: string; 
+    setInputVal: ReactDispatch<string>; 
+    setShowProfile: ReactDispatch<boolean> },
     ref: ForwardedRef<HTMLInputElement>) {
 
     const dispatch = useAppDispatch()
@@ -41,7 +45,7 @@ export default forwardRef(function SearchChannel(
                 {
                     (inputFocused || inputVal.length > 0) ? 
                     <BiArrowBack /> :
-                    <Settings />
+                    <Settings  setShowProfile={setShowProfile} />
                 }
             </div>
             <div className='relative text-lg group flex-grow'>

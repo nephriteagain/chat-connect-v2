@@ -12,6 +12,7 @@ import NewChannel from '@/components/layout/NewChannel'
 import SearchChannel from '@/components/layout/SearchChannel'
 import ChatRoomUI from '@/components/layout/ChatRoomUI'
 import SearchListUI from '@/components/layout/SearchListUI'
+import Profile from '@/components/layout/Profile'
 
 import { store } from '@/redux/store'
 import { Provider } from 'react-redux/es/exports'
@@ -30,6 +31,7 @@ export default function RootLayout({
     const [ inputFocused, setInputFocused ] = useState(false)
     const [ inputVal, setInputVal ] = useState('')
     const [ channelType, setChannelType ] = useState<'channel'|'group'|'private'>('group')
+    const [ showProfile, setShowProfile ] = useState(false)
 
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -52,12 +54,18 @@ export default function RootLayout({
                           setShowInvite={setShowInvite} 
                     /> }
                     </AnimatePresence>
+                    <AnimatePresence>
+                      { showProfile &&
+                        <Profile setShowProfile={setShowProfile} />
+                      }
+                    </AnimatePresence>
                     <SearchChannel                        
                       inputFocused={inputFocused} 
                       setInputFocused={setInputFocused}  
                       ref={inputRef}     
                       inputVal={inputVal}                
                       setInputVal={setInputVal}
+                      setShowProfile={setShowProfile}
                     />
                     
                     <div>
