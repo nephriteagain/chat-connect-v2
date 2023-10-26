@@ -333,7 +333,10 @@ export const updateUserData = createAsyncThunk(
         userId:string;
         authId:string;
     }) => {
-        if (authId !== userId) return
+        if (authId !== userId) {
+            console.error('unauthorized')
+            return
+        }
         try {
             const response = await fetch('/api/user/updateData', {
                 method: 'POST',

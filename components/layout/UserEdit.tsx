@@ -3,8 +3,12 @@ import { BsCheck2 } from 'react-icons/bs'
 
 import { useState, FormEvent, useEffect } from 'react'
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import type { ReactDispatch } from "@/types";
+
+import { updateUserData } from "@/redux/thunks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { auth } from "@/db/firebase";
 
 
 // TODO: finish tommorow
@@ -30,11 +34,52 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
 
     const [ validForm, setValidForm ] = useState(true)
 
+    const { user } = useAppSelector(s => s.user)
+    const dispatch = useAppDispatch()
+
+    async function handleUpdateUser(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+        if (!user) {
+            console.error('userData missing')
+            return
+        }
+        if (!auth.currentUser) {
+            console.error('unauthorized')
+            return
+        }
+        if (!validForm) {
+            console.error('form invalid!')
+            return
+        }
+        const firstName = fName
+            .split(' ')
+            .filter(word => word.length > 1)
+            .join(' ')
+        const lastName = lName
+            .split(' ')
+            .filter(word  => word.length > 1)
+            .join(' ')
+        const name = `${firstName} ${lastName}`   
+        try {
+            await dispatch(updateUserData({
+                name,
+                bio: biography,
+                userName: uName,
+                userId: user.id,
+                authId: auth.currentUser?.uid
+            }))
+            setShowUserEdit(false)
+        } catch (error) {
+            console.error('error')   
+        }
+
+    }
+
     function checkIfValid() : boolean {
         // checks alphabets, number and underscore
         
         if (!userNameAvailable)  {
-            console.log('username unavailable')
+            console.log({userNameAvailable})
             return false            
         }
         if (fName.length === 0 || fName.length > 70) return false
@@ -43,8 +88,9 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
         if (biography.length > 500) return false
         
         const regex = /^[A-Za-z0-9_]*$/
-        const fTest = regex.test(fName)
-        const lTest = regex.test(lName)
+        const regexWithWhiteSpace = /^[A-Za-z0-9_\s]*$/
+        const fTest = regexWithWhiteSpace.test(fName)
+        const lTest = regexWithWhiteSpace.test(lName)
         const uTest = regex.test(uName)
         if (!fTest || !lTest || !uTest) {
             return false
@@ -53,15 +99,6 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
         return true
     }
 
-    function handleSubmit(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault()
-        const data = {
-            fName,
-            lName,
-            uName,
-            biography
-        }
-    }
 
     async function checkUserNameIfAvailable(check:string)  {
         if (check.length < 5) return 
@@ -78,13 +115,11 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
 
 
     useEffect(() => {
-        console.log('form effect')
         const isValid = checkIfValid()
         setValidForm(isValid)
     }, [fName, lName, uName, userNameAvailable])
 
     useEffect(() => {
-        console.log('available name check effect')
         setUserNameAvailable(userName === uName)
     }, [uName])
 
@@ -111,7 +146,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                 {firstName[0]}{lastName[0]}
             </div>
             <form className="py-4 flex flex-col gap-4"
-                onSubmit={handleSubmit}
+                onSubmit={handleUpdateUser}
             >
                 <div className="w-full relative">
                     <motion.p  
@@ -178,33 +213,51 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                         className={`absolute bg-white z-20 py-[2px] px-1 pointer-events-none   ${!userFocus && uName.length === 0 ? 'text-lg left-2 top-2 opacity-60' : 'text-sm left-2 -top-2 text-blue-400'}`}>
                         Username
                     </motion.p>
-                    <input 
+                    <motion.input 
+                        layout
                         type="text" 
                         required 
                         maxLength={70} 
                         minLength={5}
                         value={uName}
                         onChange={(e) => {
-                            setUName(e.currentTarget.value)
+                            const regex = /^[A-Za-z0-9_]*$/
+                            if (regex.test(e.currentTarget.value)) {
+                                setUName(e.currentTarget.value)
+                            }
                            
                         }}
                         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-blue-400"
                         onFocus={() => setUserFocus(true)}
                         onBlur={() => setUserFocus(false)}
                     />
-                    <div className="w-fit flex items-center justify-center">
+                    <motion.div layout className="w-fit flex items-center justify-center">
+                        <AnimatePresence>
                         {
                             userNameAvailable ?
-                            <div className="p-3 aspect-square bg-green-400 rounded-full shadow-md drop-shadow-md">
+                            <motion.div 
+                                className="p-3 aspect-square bg-green-400 rounded-full shadow-md drop-shadow-md"
+                                initial={{opacity: 0}}
+                                animate={{opacity: 1}}
+                                exit={{opacity: 0}}
+                                transition={{duration: 100, ease: 'easeInOut'}}
+                            >
                                 <BsCheck2 className="fill-white text-xl" />
-                            </div> :
-                            <button className="py-[10px] px-2 border-2 border-blue-400 rounded-xl text-blue-600 hover:bg-blue-400 hover:text-blue-800 transition-all duration-150 shadow-md drop-shadow-md"
-                                onClick={async () => checkUserNameIfAvailable(uName)}
+                            </motion.div> :
+                            <motion.div                             
+                                className="py-[10px] px-2 border-2 border-blue-400 rounded-xl text-blue-600 hover:bg-blue-400 hover:text-blue-800 transition-all duration-150 shadow-md drop-shadow-md cursor-pointer"
+                                initial={{opacity: 0}}
+                                animate={{opacity: 1}}
+                                exit={{opacity: 0}}
+                                transition={{duration: 100, ease: 'easeInOut'}}
+
+                            onClick={async () => checkUserNameIfAvailable(uName)}
                             >
                                 check
-                            </button>
+                            </motion.div>
                         }
-                    </div>
+                        </AnimatePresence>
+                    </motion.div>
                 </div>
                 <div className="w-5/6">
                     <p className="text-sm opacity-60 font-semibold">
@@ -214,7 +267,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                 
                 <button type="submit"
                     className="absolute bottom-4 right-4 text-2xl p-4 rounded-full aspect-square bg-blue-400 hover:bg-blue-500 shadow-sm drop-shadow-sm transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={validForm}
+                    disabled={!validForm}
                 >
                     <BsCheck2 className="fill-white" />
                 </button>
