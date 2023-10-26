@@ -66,7 +66,7 @@ export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch
                 >
                     <BiArrowBack />
                 </div >
-                <p className='flex-grow text-xl font-semibold'>Settings</p>
+                <p className='flex-grow text-xl font-semibold'>Profile</p>
                 <div className='p-2 hover:bg-gray-100 rounded-full text-2xl text-gray-500'
                     onClick={() => setShowUserEdit(true)}
                 >
@@ -76,8 +76,8 @@ export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch
                     <PopoverTrigger className='p-2 hover:bg-gray-100 rounded-full text-2xl text-gray-500'>
                         <CiMenuKebab />
                     </PopoverTrigger>
-                    <PopoverContent className='z-[1000] w-fit px-2 py-2 cursor-pointer'>
-                        <div className='px-2 py-1 flex flex-row items-center gap-4 hover:bg-gray-200 rounded-md'
+                    <PopoverContent className='z-[1000] w-fit px-2 py-2 cursor-pointer text-red-600'>
+                        <div className='px-2 py-1 flex flex-row items-center gap-4 hover:bg-red-100 rounded-md'
                             onClick={() => signOut(auth)}
                         >
                             <IoLogOutOutline />
