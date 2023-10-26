@@ -324,3 +324,29 @@ export const sendPrivateMessage = createAsyncThunk(
     }
 )
 
+export const updateUserData = createAsyncThunk(
+    'user/update',
+    async ({name, bio = '', userName, userId, authId}: {
+        name:string;
+        bio:string;
+        userName:string;
+        userId:string;
+        authId:string;
+    }) => {
+        if (authId !== userId) return
+        try {
+            const response = await fetch('/api/user/updateData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',                    
+                },
+                body: JSON.stringify({name, bio, userName, userId})
+            })
+            const data = await response.json() as Awaited<{userData: userData}>
+            return data
+        } catch (error) {
+            console.error(error)
+        }
+    }
+)
+

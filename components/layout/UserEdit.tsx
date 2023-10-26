@@ -1,7 +1,7 @@
 import { BiArrowBack } from "react-icons/bi";
 import { BsCheck2 } from 'react-icons/bs'
 
-import { useState } from 'react'
+import { useState, FormEvent } from 'react'
 
 import { motion } from "framer-motion";
 import type { ReactDispatch } from "@/types";
@@ -23,6 +23,16 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
     const [ lastFocus, setLastFocus ] = useState(false)
     const [ userFocus, setUserFocus ] = useState(false)
     const [ bioFocus, setBioFocus ] = useState(false)
+
+    function handleSubmit(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+        const data = {
+            fName,
+            lName,
+            uName,
+            biography
+        }
+    }
 
     return (
         <motion.div 
@@ -46,17 +56,18 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
             <div className="text-2xl font-bold w-32 bg-gray-500 rounded-full aspect-square flex items-center justify-center text-white shadow-md drop-shadow-md">
                 {firstName[0]}{lastName[0]}
             </div>
-            <form className="py-4 flex flex-col gap-4">
+            <form className="py-4 flex flex-col gap-4"
+                onSubmit={handleSubmit}
+            >
                 <div className="w-full relative">
                     <motion.p  
                         layout
                         transition={{duration:0.15}}
                         className={`absolute bg-white z-20 py-[2px] px-1 pointer-events-none   ${!nameFocus && fName.length === 0 ? 'text-lg left-2 top-2 opacity-60' : 'text-sm left-2 -top-2 text-blue-400'}`}>
-                        Channel name
+                        First Name
                     </motion.p>
                     <input 
                         type="text" 
-                        pattern="[A-Za-z]+" 
                         required 
                         value={fName}
                         minLength={1}
@@ -76,7 +87,6 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                     </motion.p>
                     <input 
                         type="text" 
-                        pattern="[A-Za-z]+" 
                         required 
                         value={lName}
                         minLength={1}
