@@ -14,10 +14,11 @@ import { deleteMessage,deletePrivateMessage } from "@/redux/thunks"
 import { usePathname } from "next/navigation"
 import type { ReactDispatch, editMode } from "@/types"
 
-export default function Message({message, setEditMode, setInputText}: {
+export default function Message({message, setEditMode, setInputText, focusInput}: {
     message: message; 
     setEditMode:ReactDispatch<editMode>;
     setInputText: ReactDispatch<string>;
+    focusInput: () => void
 }) {
     const { id, date, sender, message: msg, flags } =  message
     const path = usePathname()
@@ -88,6 +89,9 @@ export default function Message({message, setEditMode, setInputText}: {
                     <ContextMenuItem onClick={() => {
                         setEditMode({editMode: true, message})
                         setInputText(msg)
+                        setTimeout(() => {
+                            focusInput()
+                        },100)
                     }}>
                         Edit Message    
                     </ContextMenuItem>

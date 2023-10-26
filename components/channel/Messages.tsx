@@ -4,7 +4,7 @@ import Message from "./Message"
 
 import type { editMode, ReactDispatch } from "@/types"
 
-export default function Messages({setEditMode,setInputText}: {setEditMode:ReactDispatch<editMode>; setInputText:ReactDispatch<string>}) {
+export default function Messages({setEditMode,setInputText, focusInput}: {setEditMode:ReactDispatch<editMode>; setInputText:ReactDispatch<string>; focusInput: () => void}) {
     const messages = useListenMessages()
 
         
@@ -16,6 +16,7 @@ export default function Messages({setEditMode,setInputText}: {setEditMode:ReactD
                     key={m.id} 
                     setEditMode={setEditMode}
                     setInputText={setInputText}
+                    focusInput={focusInput}
                 />
             })}
         </div>

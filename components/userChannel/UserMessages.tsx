@@ -2,7 +2,7 @@ import { useListenUserMessages } from "@/hooks/useListenUserMessages"
 import Message from "../channel/Message"
 import type { ReactDispatch, editMode } from "@/types";
 
-export default function UserMessages({setEditMode,setInputText}: {setEditMode:ReactDispatch<editMode>; setInputText:ReactDispatch<string>}) {
+export default function UserMessages({setEditMode,setInputText, focusInput}: {setEditMode:ReactDispatch<editMode>; setInputText:ReactDispatch<string>; focusInput: () => void}) {
     const messages = useListenUserMessages()
 
     return (
@@ -13,6 +13,7 @@ export default function UserMessages({setEditMode,setInputText}: {setEditMode:Re
                     key={m.id}
                     setEditMode={setEditMode}  
                     setInputText={setInputText}
+                    focusInput={focusInput}
                 />
             })}
         </div>
