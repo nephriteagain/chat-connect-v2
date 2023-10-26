@@ -20,13 +20,14 @@ export default function Settings({setShowProfile}: {setShowProfile: ReactDispatc
             <RxHamburgerMenu />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-            <DropdownMenuLabel>Options</DropdownMenuLabel>
+            <DropdownMenuLabel>Settings</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setShowProfile(true)}>
                 Profile
             </DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => signOut(auth)}>
+            <DropdownMenuItem onClick={() => signOut(auth)}
+                className="text-red-600 focus:bg-red-100 focus:text-red-800"
+            >
                 Logout
             </DropdownMenuItem>
         </DropdownMenuContent>
