@@ -9,6 +9,8 @@ import { IoLogOutOutline } from 'react-icons/io5'
 import { useAppSelector } from '@/redux/hooks'
 import { ReactDispatch } from '@/types'
 
+import { motion } from 'framer-motion'
+
 import {
     Popover,
     PopoverContent,
@@ -18,8 +20,15 @@ import {
 import { signOut } from 'firebase/auth'
 import { auth }  from '@/db/firebase'
 
+import { useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
+
+import UserEdit from './UserEdit'
 
 export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch<boolean>}) {
+
+    const [ showUserEdit, setShowUserEdit ] = useState(false)
+
     const { user } = useAppSelector(s => s.user)
 
     if (!user) {
@@ -27,11 +36,30 @@ export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch
         return null
     }
 
-    const firstInitial = user.name.split(' ')[0][0]?.toUpperCase() || 'U'
-    const lastInitial = user.name.split(' ')[0][1]?.toUpperCase() || ''
+    const nameSplit = user.name.split(' ')
+
+    const firstInitial = nameSplit[0][0]?.toUpperCase() || 'U'
+    const lastInitial = nameSplit[nameSplit.length-1][0]?.toUpperCase() || ''
 
     return (
-        <div className="absolute top-0 left-0 bg-white z-[100] w-full h-full flex flex-col items-center gap-10 p-4">
+        <motion.div 
+            initial={{x:'100%'}}
+            animate={{x:'0%'}}
+            exit={{x:'100%'}}
+            transition={{duration: 0.2}}
+            className="absolute top-0 left-0 bg-white z-[100] w-full h-full flex flex-col items-center gap-10 p-4"
+        >
+            <AnimatePresence>
+                {  showUserEdit && 
+                    <UserEdit 
+                        firstName={nameSplit[0]}
+                        lastName={nameSplit[nameSplit.length-1]}
+                        userName={user.userName}
+                        bio={user.bio}
+                        setShowUserEdit={setShowUserEdit}
+                    />
+                }
+            </AnimatePresence>
             <div className='flex flex-row gap-4 items-center w-full'>
                 <div className='p-2 hover:bg-gray-100 rounded-full text-2xl text-gray-500'
                     onClick={() => setShowProfile(false)}
@@ -39,7 +67,9 @@ export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch
                     <BiArrowBack />
                 </div >
                 <p className='flex-grow text-xl font-semibold'>Settings</p>
-                <div className='p-2 hover:bg-gray-100 rounded-full text-2xl text-gray-500'>
+                <div className='p-2 hover:bg-gray-100 rounded-full text-2xl text-gray-500'
+                    onClick={() => setShowUserEdit(true)}
+                >
                     <HiOutlinePencil />
                 </div>
                 <Popover>
@@ -70,6 +100,6 @@ export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch
                 </div>
             </div>
             
-        </div>
+        </motion.div>
     )
 }

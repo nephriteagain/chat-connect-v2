@@ -44,6 +44,7 @@ export type userData = {
     createdAt: number;
     id: string;
     channels: string[];
+    bio?: string;
 }
 
 export type editMode = {
