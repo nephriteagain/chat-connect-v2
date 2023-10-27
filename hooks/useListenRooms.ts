@@ -28,7 +28,6 @@ export function useListenRooms() {
                 const room = doc.data() as roomBanner           
                 roomList.push(room)
             })
-            console.log(roomList)
             dispatch(getRooms(roomList))
         })
         return () => unsub()

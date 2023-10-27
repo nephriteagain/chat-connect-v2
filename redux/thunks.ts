@@ -143,7 +143,7 @@ export const leaveRoom =  createAsyncThunk(
     'room/leaveRoom',
     async ({userId, roomId}: {userId: string; roomId: string}) => {
         try {
-            const response = await fetch('api/channel/leave', {
+            const response = await fetch('/api/channel/leave', {
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json'

@@ -19,27 +19,35 @@ export default function RoomSettings() {
     const { channel } = useAppSelector(s => s.channel)
 
 
-    async function handleClick() {
-        if (!user || !channel) return
-        if ((channel.type === 'channel'||channel.type === 'group') && 
-            user.id === channel.makerId) {
-            try {
-                await dispatch(deleteRoom({userId: user.id, roomId: channel.id}))
-                router.replace('/')
-            } catch (error) {
-                console.error(error    )
-            }
-        }
-        if ((channel.type === 'channel'||channel.type === 'group') && 
-            user.id !== channel.makerId) {
-            try {
-                await dispatch(leaveRoom({userId: user.id, roomId: channel.id}))                    
-                router.replace('/')
-            } catch (error) {
-                console.error(error)
-            }
-        }
 
+    async function handleDeleteRoom() {
+        if (!user || !channel) {
+            console.error('missing userData or channelData')
+            return
+        }
+        if (user.id !== channel.makerId) {
+            console.error('unauthorized')
+            return
+        }
+        try {
+            await dispatch(deleteRoom({userId: user.id, roomId: channel.id}))
+            router.replace('/')
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    async function handleLeaveRoom() {
+        if (!user || !channel) {
+            console.error('missing userData or channelData')
+            return 
+        }
+        try {
+            await dispatch(leaveRoom({userId: user.id, roomId: channel.id}))
+            router.replace('/')
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (
@@ -47,26 +55,22 @@ export default function RoomSettings() {
         <DropdownMenuTrigger className="aspect-square p-2 hover:bg-[#e6e6e6] rounded-full flex items-center justify-center">
             <CiMenuKebab />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
-            <DropdownMenuItem>coming soon...</DropdownMenuItem>
-            <DropdownMenuItem>coming soon...</DropdownMenuItem>
-            <DropdownMenuItem>coming soon...</DropdownMenuItem>
-            <DropdownMenuItem>coming soon...</DropdownMenuItem>
+        <DropdownMenuContent>            
             {
              Boolean(channel?.type === 'channel' && channel.makerId === user?.id) &&
-                <DeleteChannel handleClick={handleClick} />
+                <DeleteChannel handleClick={handleDeleteRoom} />
             }
             {
             Boolean(channel?.type === 'group' && channel.makerId === user?.id) &&
-                <DeleteGroup handleClick={handleClick} />
+                <DeleteGroup handleClick={handleDeleteRoom} />
             }
             {
             Boolean(channel?.type === 'channel' && channel.makerId !== user?.id) &&
-                <LeaveChannel handleClick={handleClick} />
+                <LeaveChannel handleClick={handleLeaveRoom} />
             }
             {
             Boolean(channel?.type === 'group' && channel.makerId !== user?.id) &&
-                <LeaveGroup handleClick={handleClick} />
+                <LeaveGroup handleClick={handleLeaveRoom} />
             }
                 
         </DropdownMenuContent>

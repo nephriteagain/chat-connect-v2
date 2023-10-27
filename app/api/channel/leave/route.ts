@@ -18,13 +18,20 @@ export async function POST(req:Request) {
         const transaction = await runTransaction(db, async transaction => {
             const document = await transaction.get(roomRef)
             if (!document.exists()) {
+                console.log('document does not exsit')
                 return NextResponse.json({error: 'document does not exist'}, {status: 404})
             }
             const data = document.data() as room;
+            if (data.makerId === userId) {
+                console.error('unauthorized')
+                return NextResponse.json({error: 'unauthorized'}, {status: 401})
+            }
+
             const members = data.members;
             const user = members.find(u => u.id === userId)
 
             if (!user) {
+                console.error('user not a member')
                 return NextResponse.json({error: 'user not a member'}, {status:404})
             }
 
@@ -35,6 +42,7 @@ export async function POST(req:Request) {
             transaction.update(userRef, {
                 channels: arrayRemove(roomId)
             })
+            console.log('leave room success')
             return NextResponse.json({roomId}, {status:202})
         })
         return transaction

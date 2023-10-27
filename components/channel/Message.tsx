@@ -79,7 +79,7 @@ export default function Message({message, setEditMode, setInputText, focusInput}
             <ContextMenu>
                 <ContextMenuTrigger className="w-fit min-w-[150px] max-w-[400px] bg-white p-2 rounded-lg shadow-sm">
                     <p className="font-semibold" >{name || sender}</p>
-                    <p className={msg=== 'DELETED'? 'text-red-800 line-through': ''}>
+                    <p className={(Boolean(flags?.deleted))? 'text-red-800 line-through': ''}>
                         {msg}
                     </p>
                     <p className="text-sm opacity-60 text-right">{format(date, 'hh:mm a')}</p>

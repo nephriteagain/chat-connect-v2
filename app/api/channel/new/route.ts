@@ -23,6 +23,7 @@ export async function POST(req: Request) {
         return NextResponse.json({error: 'missing data'},{status:400})        
     }
     members.push({id:makerId, role: 'admin'})
+    console.log(members)
     const rId = generateRandomId(15)
     const bannerRef = doc(db,'roomBanners', rId)
     const roomRef = doc(db, 'rooms', rId)
@@ -47,6 +48,12 @@ export async function POST(req: Request) {
     })
     batch.update(userRef, {
         channels: arrayUnion(rId)
+    })
+    members.forEach(m => {
+        const memberRef =doc(db, 'users', m.id)
+        batch.update(memberRef, {
+            channels: arrayUnion(rId)
+        })
     })
     try {            
         await batch.commit()        
