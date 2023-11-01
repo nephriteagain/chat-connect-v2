@@ -65,7 +65,7 @@ export default function Message({message, setEditMode, setInputText, focusInput}
 
     return (
         
-        <div className="flex flex-row items-end gap-2 w-[500px]">
+        <div className="flex flex-row items-end gap-2 w-full px-4 sm:px-0 sm:w-[500px]">
             <ContextMenu>
                 <ContextMenuTrigger className="bg-gray-400 flex items-center justify-center text-xl p-2 rounded-full w-12 aspect-square shadow-sm">
                     {name[0]}

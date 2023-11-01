@@ -7,6 +7,11 @@
         box-sizing: border-box;
     }
 
+    body {
+        overflow-x: hidden;
+        width: 100vw !important;
+    }
+
     /* Style the scrollbar track */
     ::-webkit-scrollbar {
         width: 6px; /* Set the width of the scrollbar */

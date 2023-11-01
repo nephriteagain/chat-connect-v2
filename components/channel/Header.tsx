@@ -1,13 +1,11 @@
-import { BiSearch } from 'react-icons/bi'
-import { MdVoiceChat } from 'react-icons/md'
-
+import { BiSearch, BiArrowBack } from 'react-icons/bi'
 import { useListenRoom } from "@/hooks/useListenRoom";
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { joinRoom } from '@/redux/thunks';
 
 import RoomSettings from './RoomSettings';
 
-export default function Header() {
+export default function Header({hideChat}: {hideChat: () => void}) {
     const channel = useListenRoom()
     const { user } = useAppSelector(s => s.user)
     const dispatch = useAppDispatch()
@@ -19,9 +17,14 @@ export default function Header() {
     }
 
    return (
-        <div className="py-1 px-4 flex flex-row items-center gap-2 border-b border-slate-300 shadow-sm drop-shadow-sm">
+        <div className="py-1 px-4 flex flex-row items-center gap-2 border-b border-slate-300 shadow-sm drop-shadow-sm bg-white">
+            <div className='sm:hidden  p-2 aspect-square text-3xl hover:bg-gray-100 rounded-full'
+                onClick={hideChat}
+            >
+                <BiArrowBack className="opacity-70" />
+            </div>
             <div className="w-[45px] aspect-square rounded-full bg-green-500 flex items-center justify-center text-white">
-                K
+                {channel?.name[0].toUpperCase() || 'K'}
             </div>
             <div className='me-auto'>
                 <p className='font-semibold'>
@@ -40,9 +43,6 @@ export default function Header() {
                 >
                     JOIN
                 </button>}
-                <span className='aspect-square p-2 hover:bg-[#e6e6e6] rounded-full flex items-center justify-center'>
-                    <MdVoiceChat />              
-                </span>
                 <span className='aspect-square p-2 hover:bg-[#e6e6e6] rounded-full flex items-center justify-center'>
                     <BiSearch />
                 </span>            

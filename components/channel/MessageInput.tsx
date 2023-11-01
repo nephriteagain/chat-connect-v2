@@ -9,7 +9,7 @@ export default memo(forwardRef(function MessageInput ({onChange, inputText, edit
     return (
         <input
             type='text' 
-            className={`px-12 py-4 w-[450px] focus:outline-none shadow-md drop-shadow-md ${editMode.editMode ? 'rounded-b-lg' : 'rounded-lg'} transition-all duration-150`} 
+            className={`px-12 py-4 w-full  sm:w-[450px] focus:outline-none shadow-md drop-shadow-md ${editMode.editMode ? 'rounded-b-lg' : 'rounded-lg'} transition-all duration-150`} 
             placeholder='Message'
             onChange={(e) => onChange(e.currentTarget.value)}
             value={inputText}

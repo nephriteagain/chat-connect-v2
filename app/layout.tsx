@@ -44,7 +44,7 @@ export default function RootLayout({
           <Provider store={store}>
             <AuthProvider>
             <body className={`${inter.className} flex flex-row overflow-y-hidden`}>
-                <nav className='relative w-[420px] h-screen px-1 border border-slate-300 overflow-x-hidden'>
+                <nav className='relative sm:max-w-[420px] w-full h-screen px-1 border border-slate-300 overflow-x-hidden'>
                     <AnimatePresence>
                     { showNewChannel && 
                         <NewChannel 
@@ -68,7 +68,7 @@ export default function RootLayout({
                       setShowProfile={setShowProfile}
                     />
                     
-                    <div>
+                    <div className=''>
                         {
                         (inputFocused || inputVal.length > 0) ? 
                         <SearchListUI /> :
@@ -80,7 +80,7 @@ export default function RootLayout({
                         }
                     </div>
                 </nav>
-                <div className='flex-grow'>
+                <div className='flex-grow'>                    
                     {children}
                 </div>
             </body>

@@ -20,7 +20,7 @@ export default function Chat() {
     }
 
     return (
-        <div className="relative flex-grow w-full bg-slate-300 flex flex-col items-center">
+        <div className="relative flex-grow w-screen sm:w-full bg-slate-300 flex flex-col items-center">
                 <Messages 
                     setEditMode={setEditMode}
                     setInputText={setInputText}
