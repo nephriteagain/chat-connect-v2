@@ -5,8 +5,14 @@ import { useAppSelector } from '@/redux/hooks';
 
 
 export default function UserHeader({hideChat}:{hideChat: () => void}) {
-    const { channel }  = useParams()
+    const { channel } : {channel:string}  = useParams()
     const { user : userInfo } = useAppSelector(s => s.user)
+    const id = userInfo?.id || 'abc' as string
+    
+    const selfId = channel.substring(0,id.length)
+    const userId = channel.substring(selfId.length)
+
+    const userData = useGetUserData(userId)
 
     if (typeof channel !== 'string') {
         return null
@@ -14,15 +20,12 @@ export default function UserHeader({hideChat}:{hideChat: () => void}) {
     if (typeof userInfo === null) {
         return null
     }
-    const id = userInfo?.id || 'abc' as string
 
-    const selfId = channel.substring(0,id.length)
-    const userId = channel.substring(selfId.length)
+    
         
     if (selfId !== userInfo?.id) {
         return null
     }
-    const userData = useGetUserData(userId)
 
     if (!userData) {
         return null
