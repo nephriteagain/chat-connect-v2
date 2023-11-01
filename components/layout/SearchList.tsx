@@ -70,11 +70,35 @@ export function UserList({users}:{users: userData[]}) {
     
 }
 
+
+
 function UserSearchItems({name, userName, id}: {name:string; userName:string; id:string}) {
+    const { user } = useAppSelector(s => s.user)
     const router = useRouter()
+
+    async function directMessage(id:string, userName:string) {
+        if (user) {
+            const response = await fetch('/api/user/directMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: user.id,
+                    otherUserId: id,
+                    userName: user.userName,
+                    otherUserName: userName
+                })
+            })
+            if (response.status === 302) {
+                router.push(`/u/${user.id}${id}`)
+            }
+        }
+    }
+
     return (
         <div className="w-full p-2 flex flex-row gap-4 hover:bg-gray-200 rounded-lg cursor-pointer"
-            onClick={() => router.push(`/u/${id}`)}
+            onClick={() => directMessage(id, userName)}
         >            
             <div className="w-12 aspect-square bg-blue-400 rounded-full shadow-md flex items-center justify-center font-bold">                
                 {userName[0].toLocaleUpperCase()}

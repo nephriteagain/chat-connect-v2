@@ -11,7 +11,7 @@ import {
 
 import { useAppSelector, useAppDispatch } from "@/redux/hooks"
 import { deleteMessage,deletePrivateMessage } from "@/redux/thunks"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import type { ReactDispatch, editMode } from "@/types"
 
 export default function Message({message, setEditMode, setInputText, focusInput}: {
@@ -22,6 +22,7 @@ export default function Message({message, setEditMode, setInputText, focusInput}
 }) {
     const { id, date, sender, message: msg, flags } =  message
     const path = usePathname()
+    const router = useRouter()
 
     const name = useGetSenderName(sender, [sender])
     const dispatch = useAppDispatch()
@@ -63,18 +64,38 @@ export default function Message({message, setEditMode, setInputText, focusInput}
       
     }
 
+    async function directMessage(id:string, userName:string) {
+        if (user) {
+            const response = await fetch('/api/user/directMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: user.id,
+                    otherUserId: id,
+                    userName: user.userName,
+                    otherUserName: userName
+                })
+            })
+            if (response.status === 302) {
+                router.push(`/u/${user.id}${id}`)
+            }
+        }
+    }
+
     return (
         
         <div className="flex flex-row items-end gap-2 w-full px-4 sm:px-0 sm:w-[500px]">
             <ContextMenu>
-                <ContextMenuTrigger className="bg-gray-400 flex items-center justify-center text-xl p-2 rounded-full w-12 aspect-square shadow-sm">
+                <ContextMenuTrigger className="bg-gray-400 flex items-center justify-center text-xl p-2 rounded-full w-12 aspect-square shadow-sm cursor-pointer">
                     {name[0]}
                 </ContextMenuTrigger>
-                <ContextMenuContent className="w-fit p-2">
-                    <ContextMenuItem>
+                { user?.id !== sender && <ContextMenuContent className="w-fit p-2">
+                    <ContextMenuItem onClick={() => directMessage(sender, userData?.userName as string)}>
                         Send Message
                     </ContextMenuItem>
-                </ContextMenuContent>
+                </ContextMenuContent>}
             </ContextMenu>
             <ContextMenu>
                 <ContextMenuTrigger className="w-fit min-w-[150px] max-w-[400px] bg-white p-2 rounded-lg shadow-sm">
