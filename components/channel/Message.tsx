@@ -106,7 +106,7 @@ export default function Message({message, setEditMode, setInputText, focusInput}
                     <p className="text-sm opacity-60 text-right">{format(date, 'hh:mm a')}</p>
                     {Boolean(flags?.edited) && <p className="text-right text-sm scale-90 italic opacity-60">edited</p>}
                 </ContextMenuTrigger>            
-                <ContextMenuContent className={`w-fit p-2 ${Boolean(flags?.deleted)? 'hidden': ''}`}>
+                {user?.id === sender && <ContextMenuContent className={`w-fit p-2 ${Boolean(flags?.deleted)? 'hidden': ''}`}>
                     <ContextMenuItem onClick={() => {
                         setEditMode({editMode: true, message})
                         setInputText(msg)
@@ -122,7 +122,7 @@ export default function Message({message, setEditMode, setInputText, focusInput}
                     >
                         Delete Message
                     </ContextMenuItem>
-                </ContextMenuContent>
+                </ContextMenuContent>}
             </ContextMenu>
         </div>
         

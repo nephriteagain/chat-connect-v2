@@ -41,7 +41,7 @@ function ChatRoom({room}: {room: roomBanner}) {
             }}
         >
             <div className='basis-1/6 flex items-center justify-center'>
-                <div className="w-[85%] aspect-square rounded-full bg-neutral-700 text-white text-2xl flex items-center justify-center">                
+                <div className="w-[85%] max-h-20 aspect-square rounded-full bg-neutral-700 text-white text-2xl flex items-center justify-center">                
                     {room.name[0]}
                 </div>
             </div>
