@@ -11,6 +11,7 @@ import { ReactDispatch } from '@/types'
 
 import { motion } from 'framer-motion'
 
+
 import {
     Popover,
     PopoverContent,
@@ -25,11 +26,13 @@ import { AnimatePresence } from 'framer-motion'
 
 import UserEdit from './UserEdit'
 
+import { useGetImageURL } from '@/hooks/useGetImageURL'
+
 export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch<boolean>}) {
 
     const [ showUserEdit, setShowUserEdit ] = useState(false)
-
     const { user } = useAppSelector(s => s.user)
+    const imageURL = useGetImageURL(user?.profile)
 
     if (!user) {
         console.log('user not found')
@@ -40,6 +43,7 @@ export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch
 
     const firstInitial = nameSplit[0][0]?.toUpperCase() || 'U'
     const lastInitial = nameSplit[nameSplit.length-1][0]?.toUpperCase() || ''
+    
 
     return (
         <motion.div 
@@ -86,8 +90,15 @@ export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch
                     </PopoverContent>
                 </Popover>
             </div>
-            <div className='font-bold text-2xl rounded-full text-white bg-gray-500 shadow-md drop-shadow-md  w-32 aspect-square flex items-center justify-center'>
-                {firstInitial}{lastInitial}
+            <div className='relative font-bold text-2xl rounded-full text-white bg-gray-500 shadow-md drop-shadow-md  w-32 aspect-square flex items-center justify-center'>
+                { Boolean(!user?.profile) ?
+                `${firstInitial}${lastInitial}` :
+                <img 
+                    src={imageURL}
+                    alt='profile picture'
+                    className="absolute w-full h-full rounded-full"
+                />
+                }
             </div>
             <div className='w-full text-lg'>
                 <div className='flex flex-row gap-4 items-center py-1'>

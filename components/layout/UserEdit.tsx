@@ -2,7 +2,7 @@ import { BiArrowBack } from "react-icons/bi";
 import { BsCheck2 } from 'react-icons/bs'
 import { LuImagePlus } from 'react-icons/lu'
 
-import { useState, FormEvent, useEffect } from 'react'
+import { useState, FormEvent, useEffect, ChangeEvent } from 'react'
 
 import { motion, AnimatePresence } from "framer-motion";
 import type { ReactDispatch } from "@/types";
@@ -10,7 +10,7 @@ import type { ReactDispatch } from "@/types";
 import { updateUserData } from "@/redux/thunks";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { auth } from "@/db/firebase";
-
+import { useGetImageURL } from "@/hooks/useGetImageURL";
 
 // TODO: finish tommorow
 export default function UserEdit({firstName, lastName, userName, bio, setShowUserEdit}: {
@@ -37,6 +37,8 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
     const [ validForm, setValidForm ] = useState(true)
 
     const { user } = useAppSelector(s => s.user)
+    
+    const imageURL = useGetImageURL(user?.profile)
     const dispatch = useAppDispatch()
 
     async function handleUpdateUser(e: FormEvent<HTMLFormElement>) {
@@ -116,6 +118,28 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
         return setUserNameAvailable(false)
     }
 
+    function changeProfile(e: ChangeEvent<HTMLInputElement>) {
+        const val : FileList|null = e.currentTarget.files
+        if (val) {
+            const file = val[0]
+            if (file && file.size > 5_000_000) {
+                console.error('file too large!')
+            }
+            if (file) {
+                console.log(file.type)
+                const reader =  new FileReader()
+                reader.onload = event => {
+                    const fileAsDataURL = event.target?.result
+                    if (typeof fileAsDataURL === 'string') {
+                        setProfile({type: file.type, data: fileAsDataURL})
+                    }
+                }
+                reader.readAsDataURL(file)
+            }
+        }
+    
+    }
+
 
     useEffect(() => {
         const isValid = checkIfValid()
@@ -125,8 +149,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
     useEffect(() => {
         setUserNameAvailable(userName === uName)
     }, [uName])
-
-
+    
 
     return (
         <motion.div 
@@ -158,28 +181,16 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                     className="absolute w-full h-full z-20 opacity-0" 
                     accept="image/png,image/jpeg"
                     // value={profile}
-                    onChange={(e) => {
-                        const val : FileList|null = e.currentTarget.files
-                        if (val) {
-                            const file = val[0]
-                            if (file && file.size > 5_000_000) {
-                                console.error('file too large!')
-                            }
-                            if (file) {
-                                console.log(file.type)
-                                const reader =  new FileReader()
-                                reader.onload = event => {
-                                    const fileAsDataURL = event.target?.result
-                                    if (typeof fileAsDataURL === 'string') {
-                                        setProfile({type: file.type, data: fileAsDataURL})
-                                    }
-                                }
-                                reader.readAsDataURL(file)
-                            }
-                        }
-                    }}
+                    onChange={changeProfile}
                 />
-                {firstName[0]}{lastName[0]}
+                { Boolean(!user?.profile) ? `${firstName[0]}${lastName[0]}` :
+                    <img 
+                        src={imageURL}
+                        alt=''
+                        className="absolute w-full h-full rounded-full"                        
+                    />
+                }
+            
             </div>
             <form className="py-4 flex flex-col gap-4"
                 onSubmit={handleUpdateUser}

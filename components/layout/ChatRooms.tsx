@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 
 
 
-
 export default function ChatRooms() {
     const rooms = useListenRooms()
 
@@ -22,7 +21,6 @@ export default function ChatRooms() {
 }
 
 function ChatRoom({room}: {room: roomBanner}) {
-
 
 
     const router = useRouter()
