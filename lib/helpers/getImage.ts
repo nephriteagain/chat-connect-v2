@@ -14,6 +14,7 @@ class FirebaseImages {
 
         const profileRef = ref(storage, url)
         try {
+            console.log('refetching image')
             const imageURL = await getDownloadURL(profileRef)
             this.images[url] = imageURL
             return imageURL

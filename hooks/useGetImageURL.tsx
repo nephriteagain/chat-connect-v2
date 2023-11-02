@@ -14,7 +14,6 @@ export function useGetImageURL(profile:string|undefined) {
     }
 
     useEffect(() => {
-        console.log('refetching image')
         if (profile) {
             getURL(profile)
         }

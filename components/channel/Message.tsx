@@ -1,5 +1,7 @@
 import type { message } from "@/types"
 import { useGetSenderName } from "@/hooks/useGetSenderName"
+import { useGetProfileURL } from "@/hooks/useGetProfileURL"
+import { useGetImageURL } from "@/hooks/useGetImageURL"
 import { format } from "date-fns"
 
 import {
@@ -25,6 +27,8 @@ export default function Message({message, setEditMode, setInputText, focusInput}
     const router = useRouter()
 
     const name = useGetSenderName(sender, [sender])
+    const profileURL = useGetProfileURL(sender)
+    const imageURL = useGetImageURL(profileURL)
     const dispatch = useAppDispatch()
     const { user } = useAppSelector(s => s.user)
     const { channel } = useAppSelector(s => s.channel)
@@ -88,8 +92,13 @@ export default function Message({message, setEditMode, setInputText, focusInput}
         
         <div className="flex flex-row items-end gap-2 w-full px-4 sm:px-0 sm:w-[500px]">
             <ContextMenu>
-                <ContextMenuTrigger className="bg-gray-400 flex items-center justify-center text-xl p-2 rounded-full w-12 aspect-square shadow-sm cursor-pointer">
-                    {name[0]}
+                <ContextMenuTrigger className="relative bg-gray-400 flex items-center justify-center text-xl p-2 rounded-full w-12 aspect-square shadow-sm cursor-pointer">
+                    {Boolean(imageURL) ? <img 
+                        src={imageURL}
+                        alt=''
+                        className="absolute w-full h-full rounded-full shadow-sm drop-shadow-sm"
+                        /> :
+                    name[0]}
                 </ContextMenuTrigger>
                 { user?.id !== sender && <ContextMenuContent className="w-fit p-2">
                     <ContextMenuItem onClick={() => directMessage(sender, userData?.userName as string)}>
