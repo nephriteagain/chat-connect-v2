@@ -34,15 +34,19 @@ export async function POST(req: NextRequest) {
                 const user = await transaction.get(userRef)
                 if (!user.exists()) {
                     throw new Error('user does not exist')
-                }
-                transaction.update(userRef, {
-                    name,
-                    bio,
-                    userName
-                })
+                }                
                 if (profile) {
                     transaction.update(userRef, {
-                        profile: profileURL
+                        profile: profileURL,
+                        name,
+                        bio,
+                        userName
+                    })
+                } else {
+                    transaction.update(userRef, {
+                        name,
+                        bio,
+                        userName
                     })
                 }
                 

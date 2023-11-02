@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, ChangeEvent , useRef} from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 
 import { motion, AnimatePresence } from "framer-motion"
@@ -25,6 +25,10 @@ export default function NewChannel({
     const [ nameLength, setNameLength ] = useState(0)
     const [ members, setMembers ] = useState<{id:string; role:'admin'|'mod'|'member'}[]>([])
     const [ otherUser, setOtherUser ] = useState<null|{id:string; name: string}>(null)
+    const [ profile, setProfile ] = useState<null|{type:string;data:string}>(null)
+    const [ fileData, setFileData ] = useState('')
+
+    const imageRef = useRef<HTMLImageElement>(null)
 
     const { user } = useAppSelector(s => s.user)
     const dispatch = useAppDispatch()
@@ -41,13 +45,36 @@ export default function NewChannel({
                     otherUserName: otherUser.name 
                 }))
             } else {
-                await dispatch(createNewChannel({makerId, name, desc, type: channelType, members}))
+                await dispatch(createNewChannel({makerId, name, desc, type: channelType, members, profile}))
             }
             setShowInvite(false)
             setShowNewChannel(false)
         } catch (error) {
             console.error(error)
         }
+    }
+
+    function changeProfile(e: ChangeEvent<HTMLInputElement>) {
+        const val : FileList|null = e.currentTarget.files
+        if (val) {
+            const file = val[0]
+            if (file && file.size > 5_000_000) {
+                console.error('file too large!')
+            }
+            if (file) {
+                console.log(file.type)
+                const reader =  new FileReader()
+                reader.onload = event => {
+                    const fileAsDataURL = event.target?.result
+                    if (typeof fileAsDataURL === 'string') {
+                        setProfile({type: file.type, data: fileAsDataURL})
+                        setFileData(fileAsDataURL)
+                    }
+                }
+                reader.readAsDataURL(file)
+            }
+        }
+    
     }
     
     return (
@@ -71,8 +98,21 @@ export default function NewChannel({
                 </p>
             </div>
             <div className="flex flex-col items-center justify-center pt-9 px-2 gap-8">
-                <div className="bg-blue-600 rounded-full w-[130px] aspect-square flex items-center justify-center">
-                    <TbCameraPlus className="stroke-white text-5xl hover:scale-125 transition-transform duration-200" />
+                <div className="relative bg-blue-600 rounded-full w-[130px] aspect-square flex items-center justify-center group">
+                    <TbCameraPlus className="z-10 stroke-white text-5xl group-hover:scale-125 transition-transform duration-200 drop-shadow-md" />
+                    <input 
+                        type="file" 
+                        name="profile" 
+                        id="profile"
+                        className="absolute w-full h-full z-20 opacity-0" 
+                        accept="image/png,image/jpeg"
+                        onChange={changeProfile}
+                    />
+                    <img 
+                        src={fileData}
+                        alt=''
+                        className="absolute w-full h-full rounded-full"
+                    />
                 </div>
                 <div className="w-full h-fit relative">
                     <motion.p  

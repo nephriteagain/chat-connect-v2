@@ -9,13 +9,15 @@ export const createNewChannel = createAsyncThunk(
         name,
         desc = '',
         type,
-        members = []
+        members = [],
+        profile
     }: {
         makerId: string; 
         name: string; 
         type: 'channel'|'group'|'private';
         desc?: string;
-        members?: {id:string; role:string}[]
+        members?: {id:string; role:string}[];
+        profile: null|{type:string; data:string}
     }) => {
         try {
             const response = await fetch('/api/channel/new', {
@@ -23,7 +25,7 @@ export const createNewChannel = createAsyncThunk(
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({makerId, name, desc, type, members})
+                body: JSON.stringify({makerId, name, desc, type, members, profile})
             })
             const data = await response.json() as Awaited<{id:string}>
             return data.id

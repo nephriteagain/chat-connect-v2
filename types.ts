@@ -6,6 +6,7 @@ export type roomBanner = {
     type: 'channel'|'group'|'private'
     lastMessage?: message
     at: string;
+    profile?:string;
 }
 
 export type room = {
@@ -17,6 +18,7 @@ export type room = {
     members: member[]
     createdAt: number;
     makerId: string;
+    profile?: string;
 }
 
 export type message = {

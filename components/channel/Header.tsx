@@ -4,17 +4,22 @@ import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { joinRoom } from '@/redux/thunks';
 
 import RoomSettings from './RoomSettings';
+import { useGetImageURL } from '@/hooks/useGetImageURL';
 
 export default function Header({hideChat}: {hideChat: () => void}) {
     const channel = useListenRoom()
+
     const { user } = useAppSelector(s => s.user)
     const dispatch = useAppDispatch()
+
+    const imageURL = useGetImageURL(channel?.profile)
 
     const joinedRoom = Boolean(user?.channels.some(c => c === channel?.id))
 
     if (!channel) {
         return null
     }
+    
 
    return (
         <div className="py-1 px-4 flex flex-row items-center gap-2 border-b border-slate-300 shadow-sm drop-shadow-sm bg-white">
@@ -23,8 +28,14 @@ export default function Header({hideChat}: {hideChat: () => void}) {
             >
                 <BiArrowBack className="opacity-70" />
             </div>
-            <div className="w-[45px] aspect-square rounded-full bg-green-500 flex items-center justify-center text-white">
-                {channel?.name[0].toUpperCase() || 'K'}
+            <div className="relative w-[45px] aspect-square rounded-full bg-green-500 flex items-center justify-center text-white">
+                { Boolean(imageURL) ? <img 
+                    src={imageURL}
+                    alt=''
+                    className="absolute w-full h-full rounded-full shadow-sm drop-shadow-sm"
+                    /> :
+                    channel?.name[0].toUpperCase() || 'K'
+                }
             </div>
             <div className='me-auto'>
                 <p className='font-semibold'>

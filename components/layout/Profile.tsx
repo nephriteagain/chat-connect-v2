@@ -95,7 +95,7 @@ export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch
                 `${firstInitial}${lastInitial}` :
                 <img 
                     src={imageURL}
-                    alt='profile picture'
+                    alt=''
                     className="absolute w-full h-full rounded-full"
                 />
                 }
