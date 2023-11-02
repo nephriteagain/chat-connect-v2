@@ -45,6 +45,7 @@ export type userData = {
     id: string;
     channels: string[];
     bio?: string;
+    profile?: string;
 }
 
 export type editMode = {

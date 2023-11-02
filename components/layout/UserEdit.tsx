@@ -1,5 +1,6 @@
 import { BiArrowBack } from "react-icons/bi";
 import { BsCheck2 } from 'react-icons/bs'
+import { LuImagePlus } from 'react-icons/lu'
 
 import { useState, FormEvent, useEffect } from 'react'
 
@@ -29,6 +30,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
     const [ lastFocus, setLastFocus ] = useState(false)
     const [ userFocus, setUserFocus ] = useState(false)
     const [ bioFocus, setBioFocus ] = useState(false)
+    const [ profile, setProfile ] = useState<null|{type: string,data:string}>(null)
 
     const [ userNameAvailable, setUserNameAvailable ] = useState(true)
 
@@ -66,7 +68,8 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                 bio: biography,
                 userName: uName,
                 userId: user.id,
-                authId: auth.currentUser?.uid
+                authId: auth.currentUser?.uid,
+                profile
             }))
             setShowUserEdit(false)
         } catch (error) {
@@ -123,6 +126,8 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
         setUserNameAvailable(userName === uName)
     }, [uName])
 
+
+
     return (
         <motion.div 
             initial={{x:'100%'}}
@@ -142,7 +147,38 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                     Edit Profile
                 </p>
             </div>
-            <div className="text-2xl font-bold w-32 bg-gray-500 rounded-full aspect-square flex items-center justify-center text-white shadow-md drop-shadow-md">
+            <div className="relative text-2xl font-bold w-32 bg-gray-500 rounded-full aspect-square flex items-center justify-center text-white shadow-md drop-shadow-md group">
+                <div className="absolute z-10 text-5xl  group-hover:scale-150 transition-all duration-150">
+                    <LuImagePlus  className="drop-shadow-md " />
+                </div>
+                <input 
+                    type="file" 
+                    name="profile" 
+                    id="profile"
+                    className="absolute w-full h-full z-20 opacity-0" 
+                    accept="image/png,image/jpeg"
+                    // value={profile}
+                    onChange={(e) => {
+                        const val : FileList|null = e.currentTarget.files
+                        if (val) {
+                            const file = val[0]
+                            if (file && file.size > 5_000_000) {
+                                console.error('file too large!')
+                            }
+                            if (file) {
+                                console.log(file.type)
+                                const reader =  new FileReader()
+                                reader.onload = event => {
+                                    const fileAsDataURL = event.target?.result
+                                    if (typeof fileAsDataURL === 'string') {
+                                        setProfile({type: file.type, data: fileAsDataURL})
+                                    }
+                                }
+                                reader.readAsDataURL(file)
+                            }
+                        }
+                    }}
+                />
                 {firstName[0]}{lastName[0]}
             </div>
             <form className="py-4 flex flex-col gap-4"

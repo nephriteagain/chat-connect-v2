@@ -326,12 +326,13 @@ export const sendPrivateMessage = createAsyncThunk(
 
 export const updateUserData = createAsyncThunk(
     'user/update',
-    async ({name, bio = '', userName, userId, authId}: {
+    async ({name, bio = '', userName, userId, authId, profile}: {
         name:string;
         bio:string;
         userName:string;
         userId:string;
         authId:string;
+        profile:null|{type:string; data:string};
     }) => {
         if (authId !== userId) {
             console.error('unauthorized')
@@ -343,7 +344,7 @@ export const updateUserData = createAsyncThunk(
                 headers: {
                     'Content-Type': 'application/json',                    
                 },
-                body: JSON.stringify({name, bio, userName, userId})
+                body: JSON.stringify({name, bio, userName, userId, profile})
             })
             const data = await response.json() as Awaited<{userData: userData}>
             return data
