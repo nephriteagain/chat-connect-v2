@@ -3,7 +3,8 @@ import { db } from '@/db/firebase'
 import { getDoc, doc } from 'firebase/firestore'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { addProfiles } from '@/redux/namesSlice'
-import { userData } from '@/types'
+
+import { ProfileURLS } from '@/lib/helpers/imagePromise'
 
 export function useGetProfileURL(id:string|undefined) {
     const [ profile, setProfile ] = useState('')
@@ -12,26 +13,19 @@ export function useGetProfileURL(id:string|undefined) {
     const dispatch = useAppDispatch()
 
     async function getProfile() {
-        if (!id) return;
-        const localProfile = profiles[id]
-        if (localProfile || localProfile === '') {
-            console.log('image cached locally')
-            setProfile(localProfile)
+        if (!id) return
+        if (profiles.hasOwnProperty(id)) {
+            console.log('cached image from state' + id)
+            setProfile(profiles[id])
             return
         }
-        const docRef = doc(db, 'users', id)
         try {
-            console.log('refetching image')
-            const document = await getDoc(docRef)
-            if (!document.exists()) return;
-            const data = document.data() as userData
-            const { profile : prof } = data
-            if (prof) {
-                dispatch(addProfiles({key:id, value: prof}))
-                setProfile(prof)
-            }
+            const profileURL = await ProfileURLS.getURL(id)
+            setProfile(profileURL)
+            dispatch(addProfiles({key: id, value: profile}))
+            return
         } catch (error) {
-            console.error('error')
+            console.error(error)
         }
         
     }
