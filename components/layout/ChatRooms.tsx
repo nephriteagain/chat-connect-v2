@@ -46,9 +46,8 @@ function ChatRoom({id, roomName, type, lastMessage, at, profile}: {
 
     const name = useGetSenderName(lastMessage?.sender, [lastMessage?.sender])
     const secondHalf = id.slice(Math.floor(id.length/2))
-    const URL = type === 'private' ?
-        useGetProfileURL(secondHalf) : 
-        profile
+    const profileURL = useGetProfileURL(secondHalf)
+    const URL = type === 'private' ? profileURL : profile
     const imageURL = useGetImageURL(URL)
 
     return (
