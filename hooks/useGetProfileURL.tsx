@@ -15,6 +15,7 @@ export function useGetProfileURL(id:string|undefined) {
         if (!id) return;
         const localProfile = profiles[id]
         if (localProfile || localProfile === '') {
+            console.log('image cached locally')
             setProfile(localProfile)
             return
         }

@@ -1,6 +1,8 @@
 import { BiSearch, BiArrowBack } from 'react-icons/bi'
 import { useParams } from 'next/navigation';
 import { useGetUserData } from '@/hooks/useGetUserData';
+import { useGetProfileURL } from '@/hooks/useGetProfileURL';
+import { useGetImageURL } from '@/hooks/useGetImageURL';
 import { useAppSelector } from '@/redux/hooks';
 
 
@@ -13,6 +15,8 @@ export default function UserHeader({hideChat}:{hideChat: () => void}) {
     const userId = channel.substring(selfId.length)
 
     const userData = useGetUserData(userId)
+    const profileURL = useGetProfileURL(userId)
+    const imageURL = useGetImageURL(profileURL)
 
     if (typeof channel !== 'string') {
         return null
@@ -39,8 +43,16 @@ export default function UserHeader({hideChat}:{hideChat: () => void}) {
             >
                 <BiArrowBack className="opacity-70" />
             </div>
-            <div className="w-[45px] aspect-square rounded-full bg-green-500 flex items-center justify-center text-white">
-                {userData?.userName[0]?.toUpperCase() || 'L'}
+            <div className="relative w-[45px] aspect-square rounded-full bg-green-500 flex items-center justify-center text-white">
+                {
+                Boolean(imageURL) ? 
+                <img 
+                    src={imageURL}
+                    alt=''
+                    className="absolute w-full h-full rounded-full" 
+                /> :
+                userData?.userName[0]?.toUpperCase() || 'L'
+                }
             </div>
             <div className='me-auto'>
                 <p className='font-semibold'>

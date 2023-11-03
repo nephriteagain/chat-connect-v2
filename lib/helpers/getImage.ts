@@ -9,6 +9,7 @@ class FirebaseImages {
     public async getImage(url:string) {
         const localImage = this.images[url]
         if (localImage) {
+            console.log('image cached')
             return localImage
         }
 

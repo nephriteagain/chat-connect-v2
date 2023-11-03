@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { useListenRooms } from '@/hooks/useListenRooms';
 import { useGetSenderName } from '@/hooks/useGetSenderName';
 import { useGetImageURL } from '@/hooks/useGetImageURL';
+import { useGetProfileURL } from '@/hooks/useGetProfileURL';
 import { useRouter } from 'next/navigation';
 import type { message } from '@/types';
 
@@ -44,7 +45,11 @@ function ChatRoom({id, roomName, type, lastMessage, at, profile}: {
     const router = useRouter()
 
     const name = useGetSenderName(lastMessage?.sender, [lastMessage?.sender])
-    const imageURL = useGetImageURL(profile)
+    const secondHalf = id.slice(Math.floor(id.length/2))
+    const URL = type === 'private' ?
+        useGetProfileURL(secondHalf) : 
+        profile
+    const imageURL = useGetImageURL(URL)
 
     return (
         <div className="flex flex-row gap-1 relative hover:bg-[#e6e6e6] rounded-lg p-2 cursor-pointer"

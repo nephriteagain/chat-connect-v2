@@ -13,16 +13,23 @@ export function useGetSenderName(id: string|undefined, dependencies?: any[], ) {
         if (id == undefined) return
         const localName = names[id]
         if (localName) {
+            console.log('name cached')
             setName(localName)
             return
         }
         const docRef = doc(db, 'users', id)
-        const document = await getDoc(docRef)
-        if (!document.exists()) return
-        const data = document.data()
-        const { name } = data
-        dispatch(addNames({key:id, value: name}))
-        setName(name)
+        try {
+            console.log('refetching name')
+            const document = await getDoc(docRef)
+            if (!document.exists()) return
+            const data = document.data()
+            const { name } = data
+            dispatch(addNames({key:id, value: name}))
+            setName(name)
+        } catch (error) {
+            console.error(error)
+        }
+        
     }
 
     useEffect(() => {
