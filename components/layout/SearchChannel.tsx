@@ -1,12 +1,14 @@
 import { BiSearch, BiArrowBack, BiSolidSend } from 'react-icons/bi'
 
-import { ForwardedRef, } from "react"
+import { ForwardedRef, useState } from "react"
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { searchChannels } from '@/redux/thunks'
 import Settings from './Settings'
 import { forwardRef } from 'react'
 
 import { ReactDispatch } from '@/types'
+
+import Loader from '../common/Loader'
 
 
 export default forwardRef(function SearchChannel(
@@ -18,12 +20,21 @@ export default forwardRef(function SearchChannel(
     setShowProfile: ReactDispatch<boolean> },
     ref: ForwardedRef<HTMLInputElement>) {
 
+    const [ isLoading, setIsLoading ] = useState(false)
+
     const dispatch = useAppDispatch()
     const { user } = useAppSelector(s => s.user)
 
-    function handleSearch(query:string) {
+    async function handleSearch(query:string) {
         if (!user) return
-        dispatch(searchChannels({q:query, id:user.id}))
+        try {
+            setIsLoading(true)
+            await dispatch(searchChannels({q:query, id:user.id}))
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
 
@@ -72,8 +83,11 @@ export default forwardRef(function SearchChannel(
             <button 
                 type='submit' 
                 className='p-2 hover:bg-gray-100 rounded-full text-2xl'
+                disabled={isLoading}
             >
-                <BiSolidSend className="fill-blue-400" />
+                <Loader isLoading={isLoading} className='fill-blue-400'>
+                    <BiSolidSend className="fill-blue-400" />
+                </Loader>
             </button>
         </div>
         </form>

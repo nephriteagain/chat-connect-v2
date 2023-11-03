@@ -1,4 +1,4 @@
-import { useState, ChangeEvent , useRef} from "react"
+import { useState, ChangeEvent } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 
 import { motion, AnimatePresence } from "framer-motion"
@@ -28,7 +28,6 @@ export default function NewChannel({
     const [ profile, setProfile ] = useState<null|{type:string;data:string}>(null)
     const [ fileData, setFileData ] = useState('')
 
-    const imageRef = useRef<HTMLImageElement>(null)
 
     const { user } = useAppSelector(s => s.user)
     const dispatch = useAppDispatch()

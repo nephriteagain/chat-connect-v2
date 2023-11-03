@@ -1,22 +1,26 @@
 import { motion } from "framer-motion";
 import { BiArrowBack, BiSolidSend } from "react-icons/bi";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { searchUsers } from "@/redux/thunks";
 
 import { ReactDispatch } from "@/types";
 
 import UserSearchList from "./UserSearchList";
+import Loader from "../common/Loader";
 
 export default function InviteUsers({setShowInvite, handleClick, setMembers, otherUser, setOtherUser}: {
     setShowInvite: ReactDispatch<boolean>; 
-    handleClick: () => void;
+    handleClick: () => Promise<void>;
     setMembers: ReactDispatch<{id:string;role:'admin'|'member'|'mod'}[]>
     otherUser: null|{id:string; name: string};
     setOtherUser: ReactDispatch<null|{id:string; name: string}>
 }) {
     const [ inputVal, setInputVal ] = useState('')
+    const [ isLoading, setIsLoading ] = useState(false)
+    const [ searchLoading, setSearchLoading ] = useState(false)
+
     const dispatch = useAppDispatch()
     const { user } = useAppSelector(s => s.user)
 
@@ -43,9 +47,12 @@ export default function InviteUsers({setShowInvite, handleClick, setMembers, oth
                             if (inputVal.length === 0 || inputVal.length > 150) return
                             try {
                                 if (!user?.id) return
+                                setSearchLoading(true)
                                 await dispatch(searchUsers({q:inputVal,id:user.id}))                                
                             } catch (error) {
                                 console.error(error)
+                            } finally {
+                                setSearchLoading(false)
                             }
                         }}
                     >
@@ -60,8 +67,11 @@ export default function InviteUsers({setShowInvite, handleClick, setMembers, oth
                         <button 
                             type='submit' 
                             className='p-2 hover:bg-gray-100 rounded-full text-2xl'
+                            disabled={searchLoading}
                             >
-                            <BiSolidSend className="fill-blue-400" />
+                            <Loader isLoading={searchLoading} className="fill-blue-400">
+                                <BiSolidSend className="fill-blue-400" />
+                            </Loader>
                         </button>
                     </form>
                 </div>
@@ -70,10 +80,20 @@ export default function InviteUsers({setShowInvite, handleClick, setMembers, oth
                     setOtherUser={setOtherUser}
                 />
                 <div
-                    className="w-fit text-3xl absolute p-4 right-6 bottom-6 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer"
-                    onClick={handleClick}
+                    className="w-fit text-3xl absolute p-4 right-6 bottom-6 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer"                    
+                    onClick={async() => {
+                        if (isLoading) return
+                        try {
+                            setIsLoading(true)
+                            await handleClick()
+                        } finally {
+                            setIsLoading(false)
+                        }
+                    }}
                 >
-                    <AiOutlineArrowRight className="fill-white" />
+                    <Loader isLoading={isLoading}>
+                        <AiOutlineArrowRight className="fill-white" />
+                    </Loader>
                 </div>                
             </motion.div>
     )

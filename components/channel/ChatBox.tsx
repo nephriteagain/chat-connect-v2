@@ -7,9 +7,10 @@ import { RxCross1 } from 'react-icons/rx'
 import { FormEvent } from 'react'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { sendMessage, editMessage } from '@/redux/thunks'
-import { forwardRef, ForwardedRef } from 'react'
+import { forwardRef, ForwardedRef, useState } from 'react'
 
 import MessageInput from './MessageInput'
+import Loader from '../common/Loader'
 
 
 import type { editMode, ReactDispatch } from '@/types'
@@ -21,6 +22,7 @@ export default forwardRef(function ChatBox({editMode, setEditMode, inputText, se
 
     const { user } = useAppSelector(s => s.user)
     const { channel } = useAppSelector(s => s.channel)
+    const [ isLoading, setIsLoading ] = useState(false)
 
     const dispatch = useAppDispatch()
 
@@ -33,7 +35,8 @@ export default forwardRef(function ChatBox({editMode, setEditMode, inputText, se
             return;
         }
         if (!editMode.editMode) {
-            try {            
+            try {
+                setIsLoading(true)
                 await dispatch(sendMessage({
                     sender: user.id, 
                     channelId: channel.id,
@@ -42,6 +45,8 @@ export default forwardRef(function ChatBox({editMode, setEditMode, inputText, se
                 setInputText("")
             } catch (error) {
                 console.error(error)   
+            } finally {
+                setIsLoading(false)
             }
             console.log('message sent')
             return
@@ -56,7 +61,8 @@ export default forwardRef(function ChatBox({editMode, setEditMode, inputText, se
             return
         }
 
-        try {                
+        try {
+            setIsLoading(true)     
             await dispatch(editMessage({
                 userId: user.id,
                 roomId: channel.id,
@@ -68,6 +74,8 @@ export default forwardRef(function ChatBox({editMode, setEditMode, inputText, se
             setInputText('')
         } catch (error) {
             console.error(error)
+        } finally {
+            setIsLoading(false)
         }
        
     }
@@ -117,13 +125,18 @@ export default forwardRef(function ChatBox({editMode, setEditMode, inputText, se
                         <TbPaperclip   />
                     </span>
                 </div>                
-                <button type='submit' className='bg-[#3390ec] rounded-full  flex items-center justify-center p-4 text-white text-xl cursor-pointer hover:bg-[#334cec]'
+                <button 
+                    type='submit' 
+                    className=' bg-[#3390ec] rounded-full  flex items-center justify-center p-4 text-white text-xl cursor-pointer hover:bg-[#334cec]'
+                    disabled={isLoading}
                 >
+                    <Loader isLoading={isLoading}>
                     {
                         inputText.length === 0 ?
                         <FaMicrophone /> :
                         <BiSolidSend />
                     }
+                    </Loader>
                 </button>
             </form>
         </div>

@@ -12,6 +12,8 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { auth } from "@/db/firebase";
 import { useGetImageURL } from "@/hooks/useGetImageURL";
 
+import Loader from "../common/Loader";
+
 // TODO: finish tommorow
 export default function UserEdit({firstName, lastName, userName, bio, setShowUserEdit}: {
     firstName: string;
@@ -35,6 +37,8 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
     const [ userNameAvailable, setUserNameAvailable ] = useState(true)
 
     const [ validForm, setValidForm ] = useState(true)
+    const [ isLoading, setIsLoading ] = useState(false)
+    const [ userNameLoading, setUserNameLoading ] = useState(false)
 
     const { user } = useAppSelector(s => s.user)
     
@@ -65,6 +69,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
             .join(' ')
         const name = `${firstName} ${lastName}`   
         try {
+            setIsLoading(true)
             await dispatch(updateUserData({
                 name,
                 bio: biography,
@@ -76,6 +81,8 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
             setShowUserEdit(false)
         } catch (error) {
             console.error('error')   
+        } finally {
+            setIsLoading(false)
         }
 
     }
@@ -84,7 +91,6 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
         // checks alphabets, number and underscore
         
         if (!userNameAvailable)  {
-            console.log({userNameAvailable})
             return false            
         }
         if (fName.length === 0 || fName.length > 70) return false
@@ -107,13 +113,17 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
 
     async function checkUserNameIfAvailable(check:string)  {
         if (check.length < 5) return 
+        if (userNameLoading) return
         try {
+            setUserNameLoading(true)
             const response = await fetch(`/api/user/checkUserName?check=${check}`)
             const data = await response.json() as Awaited<{check:boolean}>
             return setUserNameAvailable(data.check)
         } catch (error) {
             console.error(error)
             console.error('something went wrong during the fetching')            
+        } finally {
+            setUserNameLoading(false)
         }
         return setUserNameAvailable(false)
     }
@@ -287,7 +297,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                                 initial={{opacity: 0}}
                                 animate={{opacity: 1}}
                                 exit={{opacity: 0}}
-                                transition={{duration: 100, ease: 'easeInOut'}}
+                                transition={{duration: 0.2, ease: 'easeInOut'}}
                             >
                                 <BsCheck2 className="fill-white text-xl" />
                             </motion.div> :
@@ -296,11 +306,13 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                                 initial={{opacity: 0}}
                                 animate={{opacity: 1}}
                                 exit={{opacity: 0}}
-                                transition={{duration: 100, ease: 'easeInOut'}}
+                                transition={{duration: 0.2, ease: 'easeInOut'}}
 
-                            onClick={async () => checkUserNameIfAvailable(uName)}
-                            >
-                                check
+                                onClick={async () => checkUserNameIfAvailable(uName)}
+                                >
+                                <Loader isLoading={userNameLoading} className="text-xl fill-blue-600">
+                                    check
+                                </Loader>
                             </motion.div>
                         }
                         </AnimatePresence>
@@ -314,9 +326,11 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                 
                 <button type="submit"
                     className="absolute bottom-4 right-4 text-2xl p-4 rounded-full aspect-square bg-blue-400 hover:bg-blue-500 shadow-sm drop-shadow-sm transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={!validForm}
+                    disabled={!validForm || isLoading}
                 >
+                    <Loader isLoading={isLoading} className="fill-white">
                     <BsCheck2 className="fill-white" />
+                    </Loader>
                 </button>
             </form>
         </motion.div>
