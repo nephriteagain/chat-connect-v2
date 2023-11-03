@@ -1,5 +1,6 @@
 import { useAppSelector } from "@/redux/hooks"
 import { useRouter } from "next/navigation"
+import { motion } from "framer-motion"
 
 import type { room, userData } from "@/types"
 
@@ -7,7 +8,12 @@ export default function SearchList() {
     const { roomSearches, userSearches } = useAppSelector(s => s.rooms)
 
     return (
-        <div className="flex flex-col gap-1">
+        <motion.div className="flex flex-col gap-1"
+            initial={{opacity:0}}
+            animate={{opacity:1}}
+            exit={{opacity:0}}
+            transition={{duration:0.15}}
+        >
             <p className="text-sm opacity-60 italic" key={'rooms'}>rooms</p>
             <hr key={'hr-1'} />
             <RoomList rooms={roomSearches} />
@@ -15,7 +21,7 @@ export default function SearchList() {
             <p className="text-sm opacity-60 italic" key={'users'}>users</p>
             <hr key={'hr-3'} />
             <UserList users={userSearches} />
-        </div>
+        </motion.div>
 
     )
 }

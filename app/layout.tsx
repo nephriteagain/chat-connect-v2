@@ -69,15 +69,17 @@ export default function RootLayout({
                     />
                     
                     <div className=''>
+                        <AnimatePresence>
                         {
                         (inputFocused || inputVal.length > 0) ? 
-                        <SearchListUI /> :
-                        <ChatRoomUI 
-                          setShowNewChannel={setShowNewChannel} 
-                          setChannelType={setChannelType} 
-                          setShowInvite={setShowInvite}
-                        />
+                            <SearchListUI /> :
+                            <ChatRoomUI 
+                                setShowNewChannel={setShowNewChannel} 
+                                setChannelType={setChannelType} 
+                                setShowInvite={setShowInvite}
+                            />
                         }
+                        </AnimatePresence>
                     </div>
                 </nav>
                 <div className='flex-grow'>                    
