@@ -23,6 +23,7 @@ import { auth }  from '@/db/firebase'
 
 import { useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 
 import UserEdit from './UserEdit'
 
@@ -33,6 +34,8 @@ export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch
     const [ showUserEdit, setShowUserEdit ] = useState(false)
     const { user } = useAppSelector(s => s.user)
     const imageURL = useGetImageURL(user?.profile)
+
+    const router = useRouter()
 
     if (!user) {
         console.log('user not found')
@@ -82,7 +85,10 @@ export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch
                     </PopoverTrigger>
                     <PopoverContent className='z-[1000] w-fit px-2 py-2 cursor-pointer text-red-600'>
                         <div className='px-2 py-1 flex flex-row items-center gap-4 hover:bg-red-100 rounded-md'
-                            onClick={() => signOut(auth)}
+                            onClick={async () => {
+                                await signOut(auth)
+                                router.push('/')
+                            }}
                         >
                             <IoLogOutOutline />
                             <p>Log Out</p>

@@ -3,25 +3,29 @@ import { ref, getDownloadURL } from 'firebase/storage'
 
 class FirebaseImages {
     private images : Record<string, string>
+    private imagePromises : Record<string,Promise<string>>
     constructor() {
         this.images = {}
+        this.imagePromises = {}
     }
-    public async getImage(url:string) {
-        const localImage = this.images[url]
-        if (localImage) {
+    public async getImage(url:string) : Promise<string> {
+        if (this.images.hasOwnProperty(url)) {
+            const localImage = this.images[url]
             console.log('image cached')
             return localImage
         }
-
-        const profileRef = ref(storage, url)
-        try {
-            console.log('refetching image')
-            const imageURL = await getDownloadURL(profileRef)
+        if (this.imagePromises.hasOwnProperty(url)) { 
+            console.log('awaiting image')
+            const promiseImage = this.imagePromises[url]
+            const imageURL = await promiseImage
             this.images[url] = imageURL
             return imageURL
-        } catch (error) {
-            console.error(error)
         }
+
+        const profileRef = ref(storage, url)
+        console.log('refetching image')            
+        this.imagePromises[url] = getDownloadURL(profileRef)
+        return this.getImage(url)
     }
 }
 

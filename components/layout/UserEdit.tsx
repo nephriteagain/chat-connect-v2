@@ -33,6 +33,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
     const [ userFocus, setUserFocus ] = useState(false)
     const [ bioFocus, setBioFocus ] = useState(false)
     const [ profile, setProfile ] = useState<null|{type: string,data:string}>(null)
+    const [ fileData, setFileData ] =useState('')
 
     const [ userNameAvailable, setUserNameAvailable ] = useState(true)
 
@@ -140,8 +141,13 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                 const reader =  new FileReader()
                 reader.onload = event => {
                     const fileAsDataURL = event.target?.result
+                    if (file.size > 5_000_000) {
+                        console.error('file too large')
+                        return
+                    }
                     if (typeof fileAsDataURL === 'string') {
                         setProfile({type: file.type, data: fileAsDataURL})
+                        setFileData(fileAsDataURL)
                     }
                 }
                 reader.readAsDataURL(file)
@@ -195,7 +201,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                 />
                 { Boolean(!user?.profile) ? `${firstName[0]}${lastName[0]}` :
                     <img 
-                        src={imageURL}
+                        src={fileData ? fileData :imageURL}
                         alt=''
                         className="absolute w-full h-full rounded-full"                        
                     />
