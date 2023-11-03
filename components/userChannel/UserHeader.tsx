@@ -5,6 +5,7 @@ import { useGetProfileURL } from '@/hooks/useGetProfileURL';
 import { useGetImageURL } from '@/hooks/useGetImageURL';
 import { useAppSelector } from '@/redux/hooks';
 
+import Image from 'next/image';
 
 export default function UserHeader({hideChat}:{hideChat: () => void}) {
     const { channel } : {channel:string}  = useParams()
@@ -46,10 +47,12 @@ export default function UserHeader({hideChat}:{hideChat: () => void}) {
             <div className="relative w-[45px] aspect-square rounded-full bg-green-500 flex items-center justify-center text-white">
                 {
                 Boolean(imageURL) ? 
-                <img 
+                <Image
                     src={imageURL}
                     alt=''
                     className="absolute w-full h-full rounded-full" 
+                    width={300}
+                    height={300}
                 /> :
                 userData?.userName[0]?.toUpperCase() || 'L'
                 }

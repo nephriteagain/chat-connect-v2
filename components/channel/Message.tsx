@@ -15,6 +15,7 @@ import { useAppSelector, useAppDispatch } from "@/redux/hooks"
 import { deleteMessage,deletePrivateMessage } from "@/redux/thunks"
 import { usePathname, useRouter } from "next/navigation"
 import type { ReactDispatch, editMode } from "@/types"
+import Image from "next/image"
 
 export default function Message({message, setEditMode, setInputText, focusInput}: {
     message: message; 
@@ -93,10 +94,12 @@ export default function Message({message, setEditMode, setInputText, focusInput}
         <div className="flex flex-row items-end gap-2 w-full px-4 sm:px-0 sm:w-[500px]">
             <ContextMenu>
                 <ContextMenuTrigger className="relative bg-gray-400 flex items-center justify-center text-xl p-2 rounded-full w-12 aspect-square shadow-sm cursor-pointer">
-                    {Boolean(imageURL) ? <img 
+                    {Boolean(imageURL) ? <Image
                         src={imageURL}
                         alt=''
                         className="absolute w-full h-full rounded-full shadow-sm drop-shadow-sm"
+                        width={200}
+                        height={200}
                         /> :
                     name[0]}
                 </ContextMenuTrigger>

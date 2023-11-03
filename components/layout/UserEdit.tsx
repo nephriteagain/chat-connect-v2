@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { auth } from "@/db/firebase";
 import { useGetImageURL } from "@/hooks/useGetImageURL";
 
+import Image from "next/image";
 import Loader from "../common/Loader";
 
 // TODO: finish tommorow
@@ -200,10 +201,12 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                     onChange={changeProfile}
                 />
                 { Boolean(!user?.profile) ? `${firstName[0]}${lastName[0]}` :
-                    <img 
+                    <Image
                         src={fileData ? fileData :imageURL}
                         alt=''
-                        className="absolute w-full h-full rounded-full"                        
+                        className="absolute w-full h-full rounded-full"
+                        width={500}
+                        height={500}
                     />
                 }
             

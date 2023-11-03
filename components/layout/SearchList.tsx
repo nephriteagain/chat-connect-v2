@@ -4,6 +4,11 @@ import { motion } from "framer-motion"
 
 import type { room, userData } from "@/types"
 
+import { useGetImageURL } from "@/hooks/useGetImageURL"
+import { useGetProfileURL } from "@/hooks/useGetProfileURL"
+
+import Image from "next/image"
+
 export default function SearchList() {
     const { roomSearches, userSearches } = useAppSelector(s => s.rooms)
 
@@ -30,26 +35,37 @@ function RoomList({rooms}: {rooms: room[]}) {
     return (
         <>
         {rooms.map(s => {
-            const { id, name, members } = s
+            const { id, name, members, profile } = s
                 return <RoomSearchItem 
                 key={id} 
                 id={id}
                 name={name} 
                 members={members.length} 
+                profile={profile}
                 />        
             })}
         </>
     )
 }
 
-function RoomSearchItem({name, members, id}: {name: string; members: number; id: string}) {
+function RoomSearchItem({name, members, id, profile=''}: {name: string; members: number; id: string; profile?: string}) {
+    const url = typeof profile === undefined ? '' : profile
+    const imageURL = useGetImageURL(url)
+
     const router = useRouter()
     return (
         <div className="w-full p-2 flex flex-row gap-4 hover:bg-gray-200 rounded-lg cursor-pointer"
             onClick={() => router.push(`/c/${id}`)}
         >            
-            <div className="w-12 aspect-square bg-blue-400 rounded-full shadow-md flex items-center justify-center font-bold">                
-                {name[0].toLocaleUpperCase()}
+            <div className="relative w-12 aspect-square bg-blue-400 rounded-full shadow-md flex items-center justify-center font-bold">                
+                {Boolean(imageURL) ? <Image
+                    src={imageURL}
+                    alt=''
+                    className="absolute w-full h-full rounded-full shadow-sm drop-shadow-sm"
+                    width={300}
+                    height={300}
+                /> :
+                name[0].toLocaleUpperCase()}
             </div>
             <div className="flex flex-col">
                 <p className="font-semibold text-lg">{name}</p>
@@ -82,6 +98,9 @@ function UserSearchItems({name, userName, id}: {name:string; userName:string; id
     const { user } = useAppSelector(s => s.user)
     const router = useRouter()
 
+    const profileURL = useGetProfileURL(id)
+    const imageURL = useGetImageURL(profileURL)
+
     async function directMessage(id:string, userName:string) {
         if (user) {
             const response = await fetch('/api/user/directMessage', {
@@ -106,8 +125,15 @@ function UserSearchItems({name, userName, id}: {name:string; userName:string; id
         <div className="w-full p-2 flex flex-row gap-4 hover:bg-gray-200 rounded-lg cursor-pointer"
             onClick={() => directMessage(id, userName)}
         >            
-            <div className="w-12 aspect-square bg-blue-400 rounded-full shadow-md flex items-center justify-center font-bold">                
-                {userName[0].toLocaleUpperCase()}
+            <div className="relative w-12 aspect-square bg-blue-400 rounded-full shadow-md flex items-center justify-center font-bold">                
+                {Boolean(imageURL) ? <Image
+                    src={imageURL}
+                    alt=''
+                    className="absolute w-full h-full rounded-full shadow-sm drop-shadow-sm"
+                    width={300}
+                    height={300}
+                /> :
+                userName[0].toLocaleUpperCase()}
             </div>
             <div className="flex flex-col">
                 <p className="font-semibold text-lg">{name}</p>

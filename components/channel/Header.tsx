@@ -5,6 +5,7 @@ import { joinRoom } from '@/redux/thunks';
 
 import RoomSettings from './RoomSettings';
 import { useGetImageURL } from '@/hooks/useGetImageURL';
+import Image from 'next/image';
 
 export default function Header({hideChat}: {hideChat: () => void}) {
     const channel = useListenRoom()
@@ -29,10 +30,12 @@ export default function Header({hideChat}: {hideChat: () => void}) {
                 <BiArrowBack className="opacity-70" />
             </div>
             <div className="relative w-[45px] aspect-square rounded-full bg-green-500 flex items-center justify-center text-white">
-                { Boolean(imageURL) ? <img 
+                { Boolean(imageURL) ? <Image
                     src={imageURL}
                     alt=''
                     className="absolute w-full h-full rounded-full shadow-sm drop-shadow-sm"
+                    width={300}
+                    height={300}
                     /> :
                     channel?.name[0].toUpperCase() || 'K'
                 }

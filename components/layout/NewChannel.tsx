@@ -10,6 +10,7 @@ import { createNewChannel, createNewPrivateChat } from "@/redux/thunks"
 import { ReactDispatch } from "@/types"
 
 import InviteUsers from "./InviteUsers"
+import Image from "next/image"
 
 export default function NewChannel({
     setShowNewChannel, channelType, showInvite, setShowInvite
@@ -107,10 +108,12 @@ export default function NewChannel({
                         accept="image/png,image/jpeg"
                         onChange={changeProfile}
                     />
-                    <img 
+                    <Image
                         src={fileData}
                         alt=''
                         className="absolute w-full h-full rounded-full"
+                        width={300}
+                        height={300}
                     />
                 </div>
                 <div className="w-full h-fit relative">

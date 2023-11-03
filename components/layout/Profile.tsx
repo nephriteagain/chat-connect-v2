@@ -10,6 +10,7 @@ import { useAppSelector } from '@/redux/hooks'
 import { ReactDispatch } from '@/types'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 
 import {
@@ -98,11 +99,13 @@ export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch
             </div>
             <div className='relative font-bold text-2xl rounded-full text-white bg-gray-500 shadow-md drop-shadow-md  w-32 aspect-square flex items-center justify-center'>
                 { Boolean(!user?.profile) ?
-                `${firstInitial}${lastInitial}` :
-                <img 
+                `${firstInitial}${lastInitial}` :        
+                <Image 
                     src={imageURL}
-                    alt=''
                     className="absolute w-full h-full rounded-full"
+                    alt=''
+                    width={500}
+                    height={500}
                 />
                 }
             </div>

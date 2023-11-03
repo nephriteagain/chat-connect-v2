@@ -7,6 +7,7 @@ import { useGetImageURL } from '@/hooks/useGetImageURL';
 import { useGetProfileURL } from '@/hooks/useGetProfileURL';
 import { useRouter } from 'next/navigation';
 import type { message } from '@/types';
+import Image from 'next/image';
 
 
 
@@ -62,10 +63,12 @@ function ChatRoom({id, roomName, type, lastMessage, at, profile}: {
         >
             <div className='basis-1/6 flex items-center justify-center'>
                 <div className="relative w-[85%] max-h-20 aspect-square rounded-full bg-neutral-700 text-white text-2xl flex items-center justify-center">                
-                    { Boolean(imageURL) ? <img 
+                    { Boolean(imageURL) ? <Image
                     src={imageURL}
                     alt=''
                     className="absolute w-full h-full rounded-full shadow-sm drop-shadow-sm"
+                    width={200}
+                    height={200}
                     /> :
                     roomName[0]}
                 </div>
