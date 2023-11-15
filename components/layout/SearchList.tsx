@@ -6,8 +6,10 @@ import type { room, userData } from "@/types"
 
 import { useGetImageURL } from "@/hooks/useGetImageURL"
 import { useGetProfileURL } from "@/hooks/useGetProfileURL"
+import { useMouseLoading } from "@/hooks/useMouseLoading"
 
 import Image from "next/image"
+import Link from "next/link"
 
 export default function SearchList() {
     const { roomSearches, userSearches } = useAppSelector(s => s.rooms)
@@ -50,12 +52,18 @@ function RoomList({rooms}: {rooms: room[]}) {
 
 function RoomSearchItem({name, members, id, profile=''}: {name: string; members: number; id: string; profile?: string}) {
     const url = typeof profile === undefined ? '' : profile
+
+    const loading = useMouseLoading()
+    
+
     const imageURL = useGetImageURL(url)
 
     const router = useRouter()
     return (
-        <div className="w-full p-2 flex flex-row gap-4 hover:bg-gray-200 rounded-lg cursor-pointer"
-            onClick={() => router.push(`/c/${id}`)}
+        <Link 
+            href={`/c/${id}`}
+            className="w-full p-2 flex flex-row gap-4 hover:bg-gray-200 rounded-lg"
+            onClick={loading}
         >            
             <div className="relative w-12 aspect-square bg-blue-400 rounded-full shadow-md flex items-center justify-center font-bold">                
                 {Boolean(imageURL) ? <Image
@@ -71,7 +79,7 @@ function RoomSearchItem({name, members, id, profile=''}: {name: string; members:
                 <p className="font-semibold text-lg">{name}</p>
                 <p className="opacity-60 text-sm">{members} {members > 1 ? 'members' : 'member'}</p>
             </div>
-        </div>
+        </Link>
     )
 }
 
@@ -101,6 +109,8 @@ function UserSearchItems({name, userName, id}: {name:string; userName:string; id
     const profileURL = useGetProfileURL(id)
     const imageURL = useGetImageURL(profileURL)
 
+    const loading = useMouseLoading()
+
     async function directMessage(id:string, userName:string) {
         if (user) {
             const response = await fetch('/api/user/directMessage', {
@@ -116,6 +126,7 @@ function UserSearchItems({name, userName, id}: {name:string; userName:string; id
                 })
             })
             if (response.status === 302) {
+                loading()
                 router.push(`/u/${user.id}${id}`)
             }
         }

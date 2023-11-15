@@ -5,15 +5,16 @@ import { useListenRooms } from '@/hooks/useListenRooms';
 import { useGetSenderName } from '@/hooks/useGetSenderName';
 import { useGetImageURL } from '@/hooks/useGetImageURL';
 import { useGetProfileURL } from '@/hooks/useGetProfileURL';
-import { useRouter } from 'next/navigation';
+import { useMouseLoading } from '@/hooks/useMouseLoading';
 import type { message } from '@/types';
 import Image from 'next/image';
-
+import Link from 'next/link';
 
 
 
 export default function ChatRooms() {
     const rooms = useListenRooms()
+
 
     return (
         <div className='overflow-y-scroll'>
@@ -42,8 +43,7 @@ function ChatRoom({id, roomName, type, lastMessage, at, profile}: {
     profile?:string;
 }) {
 
-
-    const router = useRouter()
+    const loading = useMouseLoading()
 
     const name = useGetSenderName(lastMessage?.sender, [lastMessage?.sender])
     const secondHalf = id.slice(Math.floor(id.length/2))
@@ -52,14 +52,10 @@ function ChatRoom({id, roomName, type, lastMessage, at, profile}: {
     const imageURL = useGetImageURL(URL)
 
     return (
-        <div className="flex flex-row gap-1 relative hover:bg-[#e6e6e6] rounded-lg p-2 cursor-pointer"
-            onClick={() => {
-                if (type !== 'private') {
-                    router.push(`/c/${id}`)                    
-                } else {
-                    router.push(`/u/${id}`)
-                }
-            }}
+        <Link 
+            href={type !== 'private' ? `/c/${id}` : `/u/${id}`}
+            className="flex flex-row gap-1 relative hover:bg-[#e6e6e6] rounded-lg p-2"
+            onClick={loading}
         >
             <div className='basis-1/6 flex items-center justify-center'>
                 <div className="relative w-[85%] max-h-20 aspect-square rounded-full bg-neutral-700 text-white text-2xl flex items-center justify-center">                
@@ -102,6 +98,6 @@ function ChatRoom({id, roomName, type, lastMessage, at, profile}: {
                    </p>
                 }                
             </div>
-        </div>
+        </Link>
     )
 }

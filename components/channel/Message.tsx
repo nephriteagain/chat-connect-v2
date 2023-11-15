@@ -2,6 +2,7 @@ import type { message } from "@/types"
 import { useGetSenderName } from "@/hooks/useGetSenderName"
 import { useGetProfileURL } from "@/hooks/useGetProfileURL"
 import { useGetImageURL } from "@/hooks/useGetImageURL"
+import { useMouseLoading } from "@/hooks/useMouseLoading"
 import { format } from "date-fns"
 
 import {
@@ -35,6 +36,8 @@ export default function Message({message, setEditMode, setInputText, focusInput}
     const { channel } = useAppSelector(s => s.channel)
     const { userData } = useAppSelector(s => s.userChannel)
     
+    const loading = useMouseLoading()
+
     async function deleteMessageHandler() {
         
 
@@ -84,6 +87,7 @@ export default function Message({message, setEditMode, setInputText, focusInput}
                 })
             })
             if (response.status === 302) {
+                loading()
                 router.push(`/u/${user.id}${id}`)
             }
         }
