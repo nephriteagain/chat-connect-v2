@@ -15,6 +15,8 @@ import Image from "next/image";
 
 const title = 'ChatConnect'
 
+const slogan = `"Where Conversations Thrive, Connections Flourish!"`
+
 export default function AuthProvider({children}: {children: ReactNode}) {
     const { user } = useAppSelector(s => s.user)
     const signIn = useSignin()
@@ -54,7 +56,9 @@ export default function AuthProvider({children}: {children: ReactNode}) {
                         })}
                         <BsFillChatLeftTextFill className=" inline ms-4 hover:scale-110 hover:fill-green-600 transition-all duration-150" />
                     </h1>
-                    <p className="text-center italic text-sm opacity-60">"Where Conversations Thrive, Connections Flourish!"</p>
+                    <p className="text-center italic text-sm opacity-60">
+                        {slogan}
+                    </p>
                 </div>
                 
                 <div 
