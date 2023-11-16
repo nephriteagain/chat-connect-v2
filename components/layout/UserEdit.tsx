@@ -174,12 +174,14 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
             animate={{x:'0%'}}
             exit={{x:'100%'}}
             transition={{duration: 0.2}}
-            className="z-[9999] p-4 absolute top-0 left-0 w-full h-full bg-white flex flex-col gap-6 items-center"
+            className="z-[9999] p-4 absolute top-0 left-0 w-full h-full bg-myBackground flex flex-col gap-6 items-center"
         >
             <div className="flex flex-row gap-8 items-center w-full pb-2">
                 <div 
                     onClick={() => setShowUserEdit(false)} 
-                    className="text-2xl text-gray-500 p-2 rounded-full hover:bg-gray-200"
+                    className="text-2xl text-myAccent p-2 rounded-full hover:bg-mySecondary transition-all duration-150"
+                    role="button"
+                    tabIndex={0}
                 >
                     <BiArrowBack />
                 </div>
@@ -218,7 +220,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                     <motion.p  
                         layout
                         transition={{duration:0.15}}
-                        className={`absolute bg-white z-20 py-[2px] px-1 pointer-events-none   ${!nameFocus && fName.length === 0 ? 'text-lg left-2 top-2 opacity-60' : 'text-sm left-2 -top-2 text-blue-400'}`}>
+                        className={`absolute bg-myBackground z-20 py-[2px] px-1 pointer-events-none   ${!nameFocus && fName.length === 0 ? 'text-lg left-2 top-2 opacity-60' : 'text-sm left-2 -top-2 text-myPrimary'}`}>
                         First Name
                     </motion.p>
                     <input 
@@ -228,7 +230,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                         minLength={1}
                         maxLength={70}
                         onChange={(e) => setFName(e.currentTarget.value)}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-blue-400"
+                        className="w-full p-3 border border-myAccent bg-myBackground rounded-lg focus:outline-myAccent"
                         onFocus={() => setNameFocus(true)}
                         onBlur={() => setNameFocus(false)}
                     />
@@ -237,7 +239,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                     <motion.p  
                         layout
                         transition={{duration:0.15}}
-                        className={`absolute bg-white z-20 py-[2px] px-1 pointer-events-none   ${!lastFocus && lName.length === 0 ? 'text-lg left-2 top-2 opacity-60' : 'text-sm left-2 -top-2 text-blue-400'}`}>
+                        className={`absolute bg-myBackground z-20 py-[2px] px-1 pointer-events-none   ${!lastFocus && lName.length === 0 ? 'text-lg left-2 top-2 opacity-60' : 'text-sm left-2 -top-2 text-myPrimary'}`}>
                         Last Name
                     </motion.p>
                     <input 
@@ -247,7 +249,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                         minLength={1}
                         maxLength={70}
                         onChange={(e) => setLName(e.currentTarget.value)}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-blue-400"
+                        className="w-full p-3 border border-myAccent bg-myBackground rounded-lg focus:outline-myAccent"
                         onFocus={() => setLastFocus(true)}
                         onBlur={() => setLastFocus(false)}
                     />
@@ -256,7 +258,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                     <motion.p  
                         layout
                         transition={{duration:0.15}}
-                        className={`absolute bg-white z-20 py-[2px] px-1 pointer-events-none   ${!bioFocus && biography.length === 0 ? 'text-lg left-2 top-2 opacity-60' : 'text-sm left-2 -top-2 text-blue-400'}`}>
+                        className={`absolute bg-myBackground z-20 py-[2px] px-1 pointer-events-none   ${!bioFocus && biography.length === 0 ? 'text-lg left-2 top-2 opacity-60' : 'text-sm left-2 -top-2 text-myPrimary'}`}>
                         Bio (optional)
                     </motion.p>
                     <input 
@@ -264,19 +266,19 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                         maxLength={500}
                         value={biography}
                         onChange={(e) => setBiography(e.currentTarget.value)}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-blue-400"
+                        className="w-full p-3 border border-myAccent bg-myBackground rounded-lg focus:outline-myAccent"
                         onFocus={() => setBioFocus(true)}
                         onBlur={() => setBioFocus(false)}
                     />
                 </div>
-                <p className="font-semibold text-blue-400">
+                <p className="font-semibold text-myPrimary">
                     Username
                 </p>
                 <div className="w-full relative flex flex-row gap-2 items-center">
                     <motion.p  
                         layout
                         transition={{duration:0.15}}
-                        className={`absolute bg-white z-20 py-[2px] px-1 pointer-events-none   ${!userFocus && uName.length === 0 ? 'text-lg left-2 top-2 opacity-60' : 'text-sm left-2 -top-2 text-blue-400'}`}>
+                        className={`absolute bg-myBackground z-20 py-[2px] px-1 pointer-events-none   ${!userFocus && uName.length === 0 ? 'text-lg left-2 top-2 opacity-60' : 'text-sm left-2 -top-2 text-myPrimary'}`}>
                         Username
                     </motion.p>
                     <motion.input 
@@ -293,7 +295,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                             }
                            
                         }}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-blue-400"
+                        className="w-full p-3 border border-myAccent bg-myBackground rounded-lg focus:outline-myAccent"
                         onFocus={() => setUserFocus(true)}
                         onBlur={() => setUserFocus(false)}
                     />
@@ -302,16 +304,16 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                         {
                             userNameAvailable ?
                             <motion.div 
-                                className="p-3 aspect-square bg-green-400 rounded-full shadow-md drop-shadow-md"
+                                className="p-3 aspect-square bg-myAccent rounded-full shadow-md drop-shadow-md"
                                 initial={{opacity: 0}}
                                 animate={{opacity: 1}}
                                 exit={{opacity: 0}}
                                 transition={{duration: 0.2, ease: 'easeInOut'}}
                             >
-                                <BsCheck2 className="fill-white text-xl" />
+                                <BsCheck2 className="fill-mySecondary text-xl" />
                             </motion.div> :
                             <motion.div                             
-                                className="py-[10px] px-2 border-2 border-blue-400 rounded-xl text-blue-600 hover:bg-blue-400 hover:text-blue-800 transition-all duration-150 shadow-md drop-shadow-md cursor-pointer"
+                                className="py-[10px] px-2 border-2 border-myPrimary rounded-xl text-myPrimary  transition-all duration-150 shadow-md drop-shadow-md cursor-pointer"
                                 initial={{opacity: 0}}
                                 animate={{opacity: 1}}
                                 exit={{opacity: 0}}
@@ -319,7 +321,7 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
 
                                 onClick={async () => checkUserNameIfAvailable(uName)}
                                 >
-                                <Loader isLoading={userNameLoading} className="text-xl fill-blue-600">
+                                <Loader isLoading={userNameLoading} className="text-xl fill-myAccent">
                                     check
                                 </Loader>
                             </motion.div>
@@ -334,11 +336,11 @@ export default function UserEdit({firstName, lastName, userName, bio, setShowUse
                 </div>
                 
                 <button type="submit"
-                    className="absolute bottom-4 right-4 text-2xl p-4 rounded-full aspect-square bg-blue-400 hover:bg-blue-500 shadow-sm drop-shadow-sm transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="absolute bottom-4 right-4 text-2xl p-4 rounded-full aspect-square bg-myAccent hover:bg-myPrimary shadow-sm drop-shadow-sm transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={!validForm || isLoading}
                 >
-                    <Loader isLoading={isLoading} className="fill-white">
-                    <BsCheck2 className="fill-white" />
+                    <Loader isLoading={isLoading} className="fill-mySecondary">
+                    <BsCheck2 className="fill-mySecondary" />
                     </Loader>
                 </button>
             </form>

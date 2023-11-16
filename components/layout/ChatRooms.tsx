@@ -54,7 +54,7 @@ function ChatRoom({id, roomName, type, lastMessage, at, profile}: {
     return (
         <Link 
             href={type !== 'private' ? `/c/${id}` : `/u/${id}`}
-            className="flex flex-row gap-1 relative hover:bg-[#e6e6e6] rounded-lg p-2"
+            className="flex flex-row gap-1 relative hover:bg-myPrimary hover:text-black rounded-lg p-2 transition-all duration-150"
             onClick={loading}
         >
             <div className='basis-1/6 flex items-center justify-center'>

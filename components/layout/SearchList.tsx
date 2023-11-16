@@ -58,11 +58,10 @@ function RoomSearchItem({name, members, id, profile=''}: {name: string; members:
 
     const imageURL = useGetImageURL(url)
 
-    const router = useRouter()
     return (
         <Link 
             href={`/c/${id}`}
-            className="w-full p-2 flex flex-row gap-4 hover:bg-gray-200 rounded-lg"
+            className="w-full p-2 flex flex-row gap-4 hover:bg-myPrimary hover:text-black rounded-lg transition-all duration-150"
             onClick={loading}
         >            
             <div className="relative w-12 aspect-square bg-blue-400 rounded-full shadow-md flex items-center justify-center font-bold">                
@@ -133,7 +132,7 @@ function UserSearchItems({name, userName, id}: {name:string; userName:string; id
     }
 
     return (
-        <div className="w-full p-2 flex flex-row gap-4 hover:bg-gray-200 rounded-lg cursor-pointer"
+        <div className="w-full p-2 flex flex-row gap-4 hover:bg-myPrimary hover:text-black rounded-lg cursor-pointer transition-all duration-150"
             onClick={() => directMessage(id, userName)}
         >            
             <div className="relative w-12 aspect-square bg-blue-400 rounded-full shadow-md flex items-center justify-center font-bold">                

@@ -9,7 +9,6 @@ export default function UserSearchList({setMembers, setOtherUser}: {
     setOtherUser: ReactDispatch<null|{id:string; name: string}>
 }) {
     const { userSearches } = useAppSelector(s => s.rooms)
-    const dispatch = useAppDispatch()
 
     function handleClick(id:string, isChecked: boolean, name:string) {
         if (isChecked) {
@@ -60,9 +59,9 @@ function UserList({users, handleClick}: {users: userData[]; handleClick: (id:str
 function UserSearchItems({name, userName, id, handleClick}: {
     name:string; userName:string; id:string; handleClick: (id:string, isChecked: boolean, name:string) => void}) {
     return (
-        <div className="w-full flex-grow p-2 flex flex-row gap-4 hover:bg-gray-200 rounded-lg cursor-pointer"
+        <div className="w-full flex-grow p-2 flex flex-row gap-4 hover:bg-myPrimary hover:text-black rounded-lg cursor-pointer transition-all duration-150"
         >            
-            <div className="w-12 aspect-square bg-blue-400 rounded-full shadow-md flex items-center justify-center font-bold">                
+            <div className="w-12 aspect-square bg-myAccent text-black rounded-full shadow-md flex items-center justify-center font-bold">                
                 {userName[0].toLocaleUpperCase()}
             </div>
             <div className="flex flex-col">

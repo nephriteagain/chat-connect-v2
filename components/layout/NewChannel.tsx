@@ -83,10 +83,10 @@ export default function NewChannel({
             animate={{x:'0%'}}
             exit={{x:'100%'}}
             transition={{duration: 0.2}}
-            className="w-full h-full bg-white z-50 absolute top-0 left-0 p-2"
+            className="w-full h-full bg-myBackground z-50 absolute top-0 left-0 p-2"
         >
             <div className="flex flex-row gap-6 text-xl items-center">
-                <div className="text-3xl text-gray-500 rounded-full p-2 hover:bg-gray-100"
+                <div className="text-3xl text-myAccent rounded-full p-2 hover:bg-mySecondary transition-all duration-150"
                     onClick={() => {
                         setShowNewChannel(false)
                     }}
@@ -98,7 +98,7 @@ export default function NewChannel({
                 </p>
             </div>
             <div className="flex flex-col items-center justify-center pt-9 px-2 gap-8">
-                <div className="relative bg-blue-600 rounded-full w-[130px] aspect-square flex items-center justify-center group">
+                <div className="relative bg-myPrimary rounded-full w-[130px] aspect-square flex items-center justify-center group">
                     <TbCameraPlus className="z-10 stroke-white text-5xl group-hover:scale-125 transition-transform duration-200 drop-shadow-md" />
                     <input 
                         type="file" 
@@ -116,16 +116,16 @@ export default function NewChannel({
                         height={300}
                     />
                 </div>
-                <div className="w-full h-fit relative">
+                <div className="w-full h-fit relative text-myText">
                     <motion.p  
                         layout
                         transition={{duration:0.15}}
-                        className={`absolute bg-white z-20 py-[2px] px-1 pointer-events-none   ${!nameFocused ? 'text-lg left-6 top-4 opacity-60' : 'text-sm left-6 -top-2 text-blue-600'}`}>
+                        className={`absolute bg-myBackground z-20 py-[2px] px-1 pointer-events-none   ${!nameFocused ? 'text-lg left-6 top-4 opacity-60' : 'text-sm left-6 -top-2 text-myPrimary'}`}>
                         Channel name
                     </motion.p>
                     <input 
                         type="text" 
-                        className="px-6 w-full border border-gray-200 py-4 text-lg rounded-lg focus:outline-blue-600" 
+                        className="px-6 w-full border bg-myBackground border-myPrimary py-4 text-lg rounded-lg focus:outline-myAccent" 
                         onFocus={() => setNameFocused(true)}
                         onBlur={(e) => {
                             if (e.currentTarget.value.length === 0) {
@@ -139,16 +139,16 @@ export default function NewChannel({
 
                     />
                 </div>
-                <div className="w-full relative h-fit">
+                <div className="w-full relative h-fit text-myText">
                     <motion.p  
                         layout
                         transition={{duration:0.15}}
-                        className={`absolute bg-white z-20 py-[2px] px-1 pointer-events-none   ${!descFocused ? 'text-lg left-6 top-4 opacity-60' : 'text-sm left-6 -top-2 text-blue-600'}`}>
+                        className={`absolute bg-myBackground z-20 py-[2px] px-1 pointer-events-none   ${!descFocused ? 'text-lg left-6 top-4 opacity-60' : 'text-sm left-6 -top-2 text-myPrimary'}`}>
                             Description (optional)
                     </motion.p>
                     <input 
                         type="text" 
-                        className="px-6 w-full border border-gray-200 py-4 text-lg rounded-lg focus:outline-blue-600" 
+                        className="px-6 w-full border bg-myBackground border-myPrimary py-4 text-lg rounded-lg focus:outline-myAccent" 
                         onFocus={() => setDescFocused(true)}
                         onBlur={(e) => {
                             if (e.currentTarget.value.length === 0) {
@@ -167,7 +167,7 @@ export default function NewChannel({
                         animate={{x: 6}}
                         exit={{x: '110%'}}
                         transition={{duration: 0.2}}
-                        className="w-fit text-3xl absolute p-4 right-6 bottom-6 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer"
+                        className="w-fit text-3xl absolute p-4 right-6 bottom-6 rounded-full bg-myAccent hover:bg-myPrimary cursor-pointer transition-all duration-150"
                         onClick={() => setShowInvite(true)}
                         >
                     <AiOutlineArrowRight  className="fill-white" />

@@ -55,7 +55,7 @@ export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch
             animate={{x:'0%'}}
             exit={{x:'100%'}}
             transition={{duration: 0.2}}
-            className="absolute top-0 left-0 bg-white z-[100] w-full h-full flex flex-col items-center gap-10 p-4"
+            className="absolute top-0 left-0 bg-myBackground z-[100] w-full h-full flex flex-col items-center gap-10 p-4"
         >
             <AnimatePresence>
                 {  showUserEdit && 
@@ -69,23 +69,23 @@ export default function Profile({setShowProfile}: {setShowProfile: ReactDispatch
                 }
             </AnimatePresence>
             <div className='flex flex-row gap-4 items-center w-full'>
-                <div className='p-2 hover:bg-gray-100 rounded-full text-2xl text-gray-500'
+                <div className='p-2 hover:bg-mySecondary rounded-full text-2xl text-myAccent transition-all duration-150'
                     onClick={() => setShowProfile(false)}
                 >
                     <BiArrowBack />
                 </div >
                 <p className='flex-grow text-xl font-semibold'>Profile</p>
-                <div className='p-2 hover:bg-gray-100 rounded-full text-2xl text-gray-500'
+                <div className='p-2 hover:bg-mySecondary rounded-full text-2xl text-myAccent  transition-all duration-150'
                     onClick={() => setShowUserEdit(true)}
                 >
                     <HiOutlinePencil />
                 </div>
                 <Popover>
-                    <PopoverTrigger className='p-2 hover:bg-gray-100 rounded-full text-2xl text-gray-500'>
+                    <PopoverTrigger className='p-2 hover:bg-mySecondary rounded-full text-2xl text-myAccent transition-all duration-150'>
                         <CiMenuKebab />
                     </PopoverTrigger>
-                    <PopoverContent className='z-[1000] w-fit px-2 py-2 cursor-pointer text-red-600'>
-                        <div className='px-2 py-1 flex flex-row items-center gap-4 hover:bg-red-100 rounded-md'
+                    <PopoverContent className='z-[1000] w-fit px-2 py-2 cursor-pointer text-red-300 hover:text-red-500 bg-mySecondary border-myAccent transition-all duration-150'>
+                        <div className='px-2 py-1 flex flex-row items-center gap-4 rounded-md'
                             onClick={async () => {
                                 await signOut(auth)
                                 router.push('/')

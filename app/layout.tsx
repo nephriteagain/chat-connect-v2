@@ -43,8 +43,8 @@ export default function RootLayout({
         <html lang="en">
           <Provider store={store}>
             <AuthProvider>
-            <body className={`${inter.className} flex flex-row overflow-y-hidden`}>
-                <nav className='relative sm:max-w-[420px] w-full h-screen px-1 border border-slate-300 overflow-x-hidden'>
+            <body className={`${inter.className} text-myText flex flex-row overflow-y-hidden`}>
+                <nav className='bg-myBackground relative sm:max-w-[420px] w-full h-screen px-1 overflow-x-hidden'>
                     <AnimatePresence>
                     { showNewChannel && 
                         <NewChannel 
@@ -82,7 +82,7 @@ export default function RootLayout({
                         </AnimatePresence>
                     </div>
                 </nav>
-                <div className='flex-grow'>                    
+                <div className='flex-grow bg-mySecondary'>                    
                     {children}
                 </div>
             </body>

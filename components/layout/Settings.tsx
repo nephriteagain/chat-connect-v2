@@ -23,9 +23,9 @@ export default function Settings({setShowProfile}: {setShowProfile: ReactDispatc
         <DropdownMenuTrigger className="flex items-center justify-center">
             <RxHamburgerMenu />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="bg-mySecondary text-myText border-myAccent">
             <DropdownMenuLabel>Settings</DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-myAccent" />
             <DropdownMenuItem onClick={() => setShowProfile(true)}>
                 Profile
             </DropdownMenuItem>
@@ -33,7 +33,7 @@ export default function Settings({setShowProfile}: {setShowProfile: ReactDispatc
                 signOut(auth)
                 router.push('/')
             }}
-                className="text-red-600 focus:bg-red-100 focus:text-red-800"
+                className="text-red-300 focus:bg-red-100 focus:text-red-800"
             >
                 Logout
             </DropdownMenuItem>

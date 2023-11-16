@@ -21,8 +21,8 @@ export default function CreateChatRoom({
 
     return (
         <DropdownMenu>
-        <DropdownMenuTrigger className='z-20 absolute right-4 bottom-4 p-4 aspect-square rounded-full text-2xl bg-[#3390ec] hover:bg-[#337dec] cursor-pointer'>
-            <RiPencilFill className="fill-white" />
+        <DropdownMenuTrigger className='z-20 absolute right-4 bottom-4 p-4 aspect-square rounded-full text-2xl bg-myAccent hover:bg-myPrimary cursor-pointer transition-all duration-150'>
+            <RiPencilFill className="fill-mySecondary" />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="font-semibold rounded-lg">
             <DropdownMenuItem onClick={() => {

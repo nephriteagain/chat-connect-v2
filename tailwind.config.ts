@@ -31,11 +31,11 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       colors: {
-        myText: '#f6fbfe',
-        myBackground: '#051e29',
-        myPrimary: '#4F709C',
-        mySecondary: '#072b3b',
-        myAccent: '#E5D283'
+        myText: '#EEEEEE',
+        myBackground: '#222831',
+        myPrimary: '#00ADB5',
+        mySecondary: '#393E46',
+        myAccent: '#08D9D6'
       },
       backgroundImage: {
         'background': "url('/bg.jpg')"

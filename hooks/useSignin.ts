@@ -1,7 +1,7 @@
 import { useEffect,  } from 'react';
 import { auth, provider, db } from "@/db/firebase";
 import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
-import { getDoc, doc, runTransaction } from 'firebase/firestore'
+import { getDoc, doc, runTransaction, arrayUnion } from 'firebase/firestore'
 import { useAppDispatch } from '@/redux/hooks';
 import { getUser } from '@/redux/userSlice';
 import { User } from 'firebase/auth';
@@ -19,14 +19,23 @@ export  function useSignin() {
             await runTransaction(db, async transaction => {
                 const document = await transaction.get(docRef)
                 if (!document.exists()) {
+                    const publicRoomId = 'KSaiVLa8jjcGoMf';
+                    const publicRoomRef =  doc(db, 'rooms', publicRoomId)
+
                     const userData = {
                         name: displayName,
                         email,
                         userName: (email?.slice(0,email.indexOf('@')) + '_' + generateRandomId(10)).toLowerCase(),
                         createdAt: Date.now(),
-                        channels: []
+                        channels: [publicRoomId]
                     }
                     transaction.set(docRef, userData)
+                    transaction.update(publicRoomRef, {
+                        members: arrayUnion({
+                            id: uid, 
+                            role: 'member'
+                        })
+                    })
                     const payload = {...userData, id: uid}
                     dispatch(getUser(payload))
                     return

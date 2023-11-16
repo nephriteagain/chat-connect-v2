@@ -46,7 +46,7 @@ export default forwardRef(function SearchChannel(
             handleSearch(inputVal)
         }}>
         <div className='flex flex-row text-lg py-1 items-center gap-1'>
-            <div className='text-2xl p-2 rounded-full hover:bg-neutral-100'
+            <div className='text-2xl p-2 rounded-full text-myAccent hover:bg-mySecondary transition-all duration-150'
                 onClick={() => {
                     if (inputVal.length > 0) {
                         setInputVal('')
@@ -67,7 +67,7 @@ export default forwardRef(function SearchChannel(
                     id='search'
                     type='text' 
                     placeholder='Search' 
-                    className='w-full ps-10 py-2 rounded-3xl border border-slate-200 focus:outline-blue-600'
+                    className='bg-mySecondary w-full placeholder:text-myText ps-10 py-2 rounded-3xl focus:outline-blue-600'
                     onFocus={() => setInputFocused(true)}                  
                     onBlur={() => setInputFocused(false)}
                     // TODO: edit this
@@ -82,11 +82,11 @@ export default forwardRef(function SearchChannel(
             </div>
             <button 
                 type='submit' 
-                className='p-2 hover:bg-gray-100 rounded-full text-2xl'
+                className='p-2 hover:bg-mySecondary rounded-full text-2xl transition-all duration-150'
                 disabled={isLoading}
             >
-                <Loader isLoading={isLoading} className='fill-blue-400'>
-                    <BiSolidSend className="fill-blue-400" />
+                <Loader isLoading={isLoading} className='fill-myAccent'>
+                    <BiSolidSend className="fill-myAccent" />
                 </Loader>
             </button>
         </div>
