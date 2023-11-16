@@ -24,7 +24,7 @@ export default function CreateChatRoom({
         <DropdownMenuTrigger className='z-20 absolute right-4 bottom-4 p-4 aspect-square rounded-full text-2xl bg-myAccent hover:bg-myPrimary cursor-pointer transition-all duration-150'>
             <RiPencilFill className="fill-mySecondary" />
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="font-semibold rounded-lg">
+        <DropdownMenuContent className="font-semibold rounded-lg bg-mySecondary text-myText">
             <DropdownMenuItem onClick={() => {
                 setShowNewChannel(true)
                 setChannelType('channel')
