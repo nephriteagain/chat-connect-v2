@@ -52,10 +52,10 @@ export default function RoomSettings() {
 
     return (
         <DropdownMenu>
-        <DropdownMenuTrigger className="aspect-square p-2 hover:bg-[#e6e6e6] rounded-full flex items-center justify-center">
+        <DropdownMenuTrigger className="aspect-square p-2 hover:bg-myAccent rounded-full flex items-center justify-center transition-all duration-150">
             <CiMenuKebab />
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="">   
+        <DropdownMenuContent className="bg-mySecondary border-myAccent">   
             {
             Boolean(channel?.type === 'channel' && channel.makerId === user?.id) &&
                 <DestructiveOption onClick={handleDeleteRoom} name={channel?.name}>

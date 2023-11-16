@@ -21,7 +21,7 @@ export default function Page() {
 
     return (
         <AnimatePresence>
-        { isShowChat && <motion.main className='z-[322] sm:static absolute top-0 left-0 sm:w-full w-screen h-screen flex flex-col'
+        { isShowChat && <motion.main className='bg-mySecondary z-[322] sm:static absolute top-0 left-0 sm:w-full w-screen h-screen flex flex-col'
                 initial={{x:'100vw'}}
                 animate={{x: 0}}
                 exit={{x: '100vw'}}

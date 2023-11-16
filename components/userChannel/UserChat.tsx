@@ -19,7 +19,7 @@ export default function UserChat() {
 
 
     return (
-        <div className="relative flex-grow w-full bg-slate-300 flex flex-col items-center">
+        <div className="relative flex-grow w-full bg-mySecondary flex flex-col items-center">
                 <UserMessages
                     setEditMode={setEditMode} 
                     setInputText={setInputText}

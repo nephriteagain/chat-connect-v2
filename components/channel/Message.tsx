@@ -18,6 +18,8 @@ import { usePathname, useRouter } from "next/navigation"
 import type { ReactDispatch, editMode } from "@/types"
 import Image from "next/image"
 
+import { motion } from "framer-motion"
+
 export default function Message({message, setEditMode, setInputText, focusInput}: {
     message: message; 
     setEditMode:ReactDispatch<editMode>;
@@ -95,7 +97,12 @@ export default function Message({message, setEditMode, setInputText, focusInput}
 
     return (
         
-        <div className="flex flex-row items-end gap-2 w-full px-4 sm:px-0 sm:w-[500px]">
+        <motion.div 
+            className=" flex flex-row items-end gap-2 w-full px-4 sm:px-0 sm:w-[500px]"
+            initial={{opacity:0}}
+            animate={{opacity:1}}
+            transition={{duration: 0.2}}
+        >
             <ContextMenu>
                 <ContextMenuTrigger className="relative bg-gray-400 flex items-center justify-center text-xl p-2 rounded-full w-12 aspect-square shadow-sm cursor-pointer">
                     {Boolean(imageURL) ? <Image
@@ -107,22 +114,22 @@ export default function Message({message, setEditMode, setInputText, focusInput}
                         /> :
                     name[0]}
                 </ContextMenuTrigger>
-                { user?.id !== sender && <ContextMenuContent className="w-fit p-2">
+                { user?.id !== sender && <ContextMenuContent className="w-fit p-2 bg-mySecondary text-myText border-myAccent">
                     <ContextMenuItem onClick={() => directMessage(sender, userData?.userName as string)}>
                         Send Message
                     </ContextMenuItem>
                 </ContextMenuContent>}
             </ContextMenu>
             <ContextMenu>
-                <ContextMenuTrigger className="w-fit min-w-[150px] max-w-[400px] bg-white p-2 rounded-lg shadow-sm">
+                <ContextMenuTrigger className="w-fit min-w-[150px] max-w-[400px] bg-myBackground p-2 rounded-lg shadow-sm">
                     <p className="font-semibold" >{name || sender}</p>
-                    <p className={(Boolean(flags?.deleted))? 'text-red-800 line-through': ''}>
+                    <p className={(Boolean(flags?.deleted))? 'text-red-500 line-through': ''}>
                         {msg}
                     </p>
                     <p className="text-sm opacity-60 text-right">{format(date, 'hh:mm a')}</p>
                     {Boolean(flags?.edited) && <p className="text-right text-sm scale-90 italic opacity-60">edited</p>}
                 </ContextMenuTrigger>            
-                {user?.id === sender && <ContextMenuContent className={`w-fit p-2 ${Boolean(flags?.deleted)? 'hidden': ''}`}>
+                {user?.id === sender && <ContextMenuContent className={`w-fit p-2 ${Boolean(flags?.deleted)? 'hidden': ''} bg-mySecondary text-myText border-myAccent`}>
                     <ContextMenuItem onClick={() => {
                         setEditMode({editMode: true, message})
                         setInputText(msg)
@@ -133,14 +140,14 @@ export default function Message({message, setEditMode, setInputText, focusInput}
                         Edit Message    
                     </ContextMenuItem>
                     <ContextMenuItem 
-                        className="text-red-600 focus:bg-red-200 focus:text-red-800"
+                        className="text-red-200 focus:text-red-600 focus:bg-red-200"
                         onClick={deleteMessageHandler}
                     >
                         Delete Message
                     </ContextMenuItem>
                 </ContextMenuContent>}
             </ContextMenu>
-        </div>
+        </motion.div>
         
     )
 }

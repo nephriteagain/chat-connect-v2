@@ -4,7 +4,7 @@ import { BiSolidSend } from 'react-icons/bi'
 import { HiOutlinePencil } from 'react-icons/hi'
 import { RxCross1 } from 'react-icons/rx'
 
-import {  FormEvent, forwardRef, ForwardedRef } from 'react'
+import {  FormEvent, forwardRef, ForwardedRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { sendPrivateMessage, editPrivateMessage } from '@/redux/thunks'
 import { useParams } from 'next/navigation'
@@ -12,6 +12,7 @@ import { useParams } from 'next/navigation'
 import type { editMode, ReactDispatch } from '@/types'
 
 import MessageInput from '../channel/MessageInput'
+import Loader from '../common/Loader'
 
 // TODO find the bug here
 export default forwardRef(function UserChatBox({editMode, setEditMode, inputText, setInputText}: {
@@ -25,6 +26,8 @@ export default forwardRef(function UserChatBox({editMode, setEditMode, inputText
 
     const dispatch = useAppDispatch()
 
+    const [ isLoading, setIsLoading ] = useState(false)
+
     async function handleSubmit(e: FormEvent) {
         e.preventDefault()
         console.log('sending message')
@@ -37,6 +40,7 @@ export default forwardRef(function UserChatBox({editMode, setEditMode, inputText
         if (!editMode.editMode) {
             console.log('normal mode')
             try {
+                setIsLoading(true)
                 await dispatch(sendPrivateMessage({
                     senderId: user.id, 
                     receiverId,
@@ -47,6 +51,8 @@ export default forwardRef(function UserChatBox({editMode, setEditMode, inputText
 
             } catch (error) {
                 console.error(error)   
+            } finally {
+                setIsLoading(false)
             }
             return
         }
@@ -75,7 +81,7 @@ export default forwardRef(function UserChatBox({editMode, setEditMode, inputText
 
 
     return (
-        <div className='w-full flex items-center justify-center'>
+        <div className='w-full flex items-center justify-center text-black'>
             <form onSubmit={handleSubmit} className='flex flex-row gap-2'>
                 <div className='relative'>
                     {editMode?.editMode && <div className='absolute -top-full h-full flex flex-row gap-3 items-center  bg-white w-[450px] px-4 py-3 rounded-t-lg shadow-md'>
@@ -108,13 +114,18 @@ export default forwardRef(function UserChatBox({editMode, setEditMode, inputText
                         <TbPaperclip   />
                     </span>
                 </div>                
-                <button type='submit' className='bg-[#3390ec] rounded-full  flex items-center justify-center p-4 text-white text-xl cursor-pointer hover:bg-[#334cec]'
+                <button 
+                    type='submit' 
+                    className='bg-myAccent rounded-full  flex items-center justify-center p-4 text-mySecondary text-xl cursor-pointer hover:bg-myPrimary disabled:opacity-60'
+                    disabled={isLoading}
                 >
+                    <Loader isLoading={isLoading}>
                     {
                         inputText.length === 0 ?
                         <FaMicrophone /> :
                         <BiSolidSend />
                     }
+                    </Loader>
                 </button>
             </form>
         </div>

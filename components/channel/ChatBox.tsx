@@ -90,7 +90,7 @@ export default forwardRef(function ChatBox({editMode, setEditMode, inputText, se
     }
 
     return (
-        <div className='w-full flex items-center justify-center'>
+        <div className='w-full flex items-center justify-center text-black'>
             <form onSubmit={handleSubmit} className='flex flex-row gap-2'>
                 <div className='relative'>
                     {editMode?.editMode && <div className='absolute -top-full h-full flex flex-row gap-3 items-center  bg-white w-[450px] px-4 py-3 rounded-t-lg shadow-md'>
@@ -111,7 +111,7 @@ export default forwardRef(function ChatBox({editMode, setEditMode, inputText, se
                         <RxCross1/>
                         </div>
                     </div>}
-                    <span className=" absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 z-20 text-2xl rounded-full p-1 hover:bg-neutral-200">
+                    <span className=" absolute left-3 top-1/2 -translate-y-1/2 text-mySecondary z-20 text-2xl rounded-full p-1 hover:bg-gray-200 transition-all duration-150">
                         <FaRegSmile   />
                     </span>
                     <MessageInput 
@@ -120,14 +120,14 @@ export default forwardRef(function ChatBox({editMode, setEditMode, inputText, se
                         editMode={editMode}
                         ref={ref}
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 z-20 text-2xl rounded-full p-1 hover:bg-neutral-200">
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-mySecondary z-20 text-2xl rounded-full p-1 hover:bg-gray-200 transition-all duration-150">
                         
                         <TbPaperclip   />
                     </span>
                 </div>                
                 <button 
                     type='submit' 
-                    className=' bg-[#3390ec] rounded-full  flex items-center justify-center p-4 text-white text-xl cursor-pointer hover:bg-[#334cec]'
+                    className=' bg-myAccent rounded-full  flex items-center justify-center p-4 text-mySecondary text-xl cursor-pointer hover:bg-myPrimary transition-all duration-150 disabled:opacity-60'
                     disabled={isLoading}
                 >
                     <Loader isLoading={isLoading}>

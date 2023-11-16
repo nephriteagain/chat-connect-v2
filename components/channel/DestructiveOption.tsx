@@ -34,7 +34,7 @@ export default function DestructiveOption(
     return (
 
         <AlertDialog>
-            <AlertDialogTrigger className="px-2 py-1 text-red-600 hover:text-red-600 hover:bg-red-100">
+            <AlertDialogTrigger className="px-2 py-1 text-red-200 hover:text-red-500 transition-all duration-150">
                 {children}
             </AlertDialogTrigger>
             <AlertDialogContent>

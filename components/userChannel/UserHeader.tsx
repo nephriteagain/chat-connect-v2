@@ -38,13 +38,13 @@ export default function UserHeader({hideChat}:{hideChat: () => void}) {
     
 
    return (
-        <div className="py-1 px-4 flex flex-row items-center gap-2 border-b border-slate-300 shadow-sm drop-shadow-sm bg-white">
+        <div className="py-1 px-4 flex flex-row items-center gap-2 border-b border-slate-300 shadow-sm drop-shadow-sm bg-myPrimary text-myBackground">
             <div className='sm:hidden  p-2 aspect-square text-3xl hover:bg-gray-100 rounded-full'
                 onClick={hideChat}
             >
                 <BiArrowBack className="opacity-70" />
             </div>
-            <div className="relative w-[45px] aspect-square rounded-full bg-green-500 flex items-center justify-center text-white">
+            <div className="relative w-[45px] aspect-square rounded-full bg-myBackground  flex items-center justify-center text-white">
                 {
                 Boolean(imageURL) ? 
                 <Image
@@ -66,7 +66,7 @@ export default function UserHeader({hideChat}:{hideChat: () => void}) {
                 </p>
             </div>
             <div className='flex flex-row items-center gap-2 text-2xl'>
-                <span className='aspect-square p-2 hover:bg-[#e6e6e6] rounded-full flex items-center justify-center'>
+                <span className='aspect-square p-2 hover:bg-myAccent rounded-full flex items-center justify-center'>
                     <BiSearch />
                 </span>            
             </div>
